@@ -48,8 +48,10 @@ def evaluate(item, x):
     return 1
 
 
+
 def cover(item, x):
     return evaluate(item, x)
+
 
 
 def classify(items, x):
@@ -239,80 +241,6 @@ def foldrm(data, ratio=0.5):
     return ret
 
 
-def foldrmGPU(data, ratio=0.5):
-    ret = []
-    # Accumulators for timings
-    overall_most = 0
-    overall_split = 0
-    overall_learn = 0
-    overall_covers1 = 0
-    overall_setop = 0
-    total_loops = 0
-    overall_best_item=0
-    overall_covers=0 
-    overall_fold = 0 
-    total_time = 0 
-    learn_rule_loops = 0
-    while len(data) > 0:
-        total_loops += 1
-
-        start_most = timer()
-        l = most(data)
-        end_most = timer()
-        overall_most += end_most - start_most
-        
-        start_split = timer()
-        e_plus, e_minus = split_data_by_item(data, l)
-        end_split = timer()
-        overall_split += end_split - start_split
-
-        start_learn = timer()
-        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule(e_plus, e_minus, [], ratio)
-        overall_best_item+=best_item
-        overall_covers+=coversTime
-        overall_fold+=foldTime
-        total_time+=timeTotal
-        learn_rule_loops+=loops
-        end_learn = timer()
-        overall_learn += end_learn - start_learn
-        
-        start_covers1 = timer()
-        e_tp = [e_plus[i] for i in range(len(e_plus)) if not cover(rule, e_plus[i])]
-        end_covers1 = timer()
-        overall_covers1 += end_covers1 - start_covers1
-
-        if len(e_tp) == len(e_plus):
-            break
-
-        start_setop = timer()
-        data = e_tp + [e_minus[i] for i in range(len(e_minus)) if not cover(rule, e_minus[i])]
-        end_setop = timer()
-
-        overall_setop += end_setop - start_setop
-        
-        # Append rule with selected literal
-        rule = l, rule[1], rule[2], rule[3]
-        ret.append(rule)
-    
-    # Total time spent
-    total_time = overall_most + overall_split + overall_learn + overall_covers1 + overall_setop
-
-    print(f"Timing summary after {total_loops} loops:")
-    print(f"most:        {overall_most:.4f}s ({100 * overall_most/total_time:.1f}%)")
-    print(f"split_data:  {overall_split:.4f}s ({100 * overall_split/total_time:.1f}%)")
-    print(f"learn_rule:  {overall_learn:.4f}s ({100 * overall_learn/total_time:.1f}%)")
-    
-    print(f"----learn_rule summary after {learn_rule_loops} loops:")
-    print(f"----best_item: {overall_best_item:.4f}s ({100 * overall_best_item/total_time:.1f}%)")
-    print(f"----cover:     {overall_covers:.4f}s ({100 * overall_covers/total_time:.1f}%)")
-    print(f"----fold:      {overall_fold:.4f}s ({100 * overall_fold/total_time:.1f}%)")
-    print(f"----Total:     {total_time:.4f}s")
-
-    print(f"cover check: {overall_covers1:.4f}s ({100 * overall_covers1/total_time:.1f}%)")
-    print(f"set op:      {overall_setop:.4f}s ({100 * overall_setop/total_time:.1f}%)")
-    print(f"Total:       {total_time:.4f}s")
-
-    return ret
 
 def learn_rule(data_pos, data_neg, used_items=[], ratio=0.5):
     items = []
