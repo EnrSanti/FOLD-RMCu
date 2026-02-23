@@ -9,4 +9,4 @@ This is CUDA parallel version of the FOLD-RM algorithm which is built for binary
 - Main.py -> launches train and test on a single dataset
 - Run_tests.py -> launches (absolutely rudimental) the training on the selected (4) tests both on the default serial version (model.fit) and on CUDA (model.fitGPU), compares the times and the final hypothesis obtained (they must be equal since the datasets are NOW slpit into train and test statically and not randomly).
 
-### Si, il readme è molto alla buona per ora
+### Si, il readme è molto alla buona per ora :)

@@ -3407,3 +3407,5 @@ def MINITEST():
     data = model.load_data('data/MINITEST/covtype.csv')
     print('\n% weight lifting dataset', np.shape(data))
     return model, data
+
+#---------------------------
