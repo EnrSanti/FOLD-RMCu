@@ -53,7 +53,10 @@ class Classifier:
     def print_asp(self, simple=False):
         for r in self.asp(simple):
             print(r)
-
+    
+    def get_asp(self, simple=False):
+        return "\n".join(self.asp(simple))
+    
     def explain(self, x):
         ret = ''
         pos = []
