@@ -336,8 +336,8 @@ def minitest_for_debugging():
 def main():
     
     #compare_times()
-    #fast_check()
-    minitest_for_debugging()
+    fast_check()
+    #minitest_for_debugging()
 
 if __name__ == '__main__':
     main()

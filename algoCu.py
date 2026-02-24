@@ -69,6 +69,43 @@ def preprocess_gpu(data):
     print(reverse_index_T)
 
     return sorted_T, reverse_index_T
+
+def embed_data(data):
+    num_cols = len(data[0])
+    categorical_cols = []
+
+    for col in range(num_cols):
+        for row in data:
+            val = row[col]
+            if val != '?':
+                if isinstance(val, str):
+                    categorical_cols.append(col)
+                break  # Found a value to decide type, stop scanning this column
+    
+    uniques = {col: set() for col in categorical_cols}
+
+    for row in data:
+        for col in categorical_cols:
+            uniques[col].add(row[col])
+
+    # Create mapping per column
+    mappings = {
+        col: {val: i for i, val in enumerate(sorted(uniques[col]))}
+        for col in categorical_cols
+    }
+    return encode_data(data,mappings,categorical_cols)
+    
+def encode_data(data, mappings,categorical_cols):
+    encoded = []
+
+    for row in data:
+        new_row = list(row)
+        for col, mapping in mappings.items():
+            new_row[col] = mapping[new_row[col]]
+        encoded.append(new_row)
+
+    return encoded,mappings,categorical_cols
+
 def foldrmGPU(data, ratio=0.5):
     ret = []
     # Accumulators for timings
@@ -83,8 +120,18 @@ def foldrmGPU(data, ratio=0.5):
     overall_fold = 0 
     total_time = 0 
     learn_rule_loops = 0
+    print(data)
+    reverse_index_T=[]
 
-    sorted_T, reverse_index_T = preprocess_gpu(data)
+    embedded_data,mapping,categorical_cols=embed_data(data)
+
+    print(categorical_cols)
+    print(mapping)
+    print(embedded_data)
+    print(data)
+    #original_sorted_T, reverse_index_T = preprocess_gpu(data)
+    #orignal_training_data=data
+    #original_data_indexes = list(range(len(data)))
     while len(data) > 0:
         total_loops += 1
 
@@ -94,14 +141,14 @@ def foldrmGPU(data, ratio=0.5):
         overall_most += end_most - start_most
         
         start_split = timer()
-        e_plus, e_minus = split_data_by_item(data, l)
+        e_plus, e_minus = split_data_by_item_gpu(data, l)
         end_split = timer()
         overall_split += end_split - start_split
 
         start_learn = timer()
         print("TOTAL DATA: "+str(len(data)))
         print("e+ e-: "+str(len(e_plus))+" "+str(len(e_minus)))
-        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(e_plus, e_minus, [], ratio)
+        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(e_plus, e_minus, reverse_index_T, [], ratio)
         overall_best_item+=best_item
         overall_covers+=coversTime
         overall_fold+=foldTime
@@ -149,7 +196,7 @@ def foldrmGPU(data, ratio=0.5):
     return ret
 
 
-def learn_rule_gpu(data_pos, data_neg, used_items=[], ratio=0.5):
+def learn_rule_gpu(data_pos, data_neg, rev_index, used_items=[], ratio=0.5):
     items = []
     learn_rule_loops = 0
 
@@ -192,7 +239,7 @@ def learn_rule_gpu(data_pos, data_neg, used_items=[], ratio=0.5):
             if len(data_neg) > 0 and t[0] != -1:
                 # ===== fold timing =====
                 start_fold = timer()
-                ab = fold_gpu(data_neg, data_pos, used_items + items, ratio)
+                ab = fold_gpu(data_neg, data_pos,rev_index, used_items + items, ratio)
                 end_fold = timer()
                 overall_fold += end_fold - start_fold
 
@@ -223,10 +270,10 @@ def best_item_gpu(X_pos, X_neg, used_items=[]):
     
     return ret
 
-def fold_gpu(data_pos, data_neg, used_items=[], ratio=0.5):
+def fold_gpu(data_pos, data_neg, rev_index, used_items=[], ratio=0.5):
     ret = []
     while len(data_pos) > 0:
-        rule,_,_,_,_,_ = learn_rule_gpu(data_pos, data_neg, used_items, ratio)
+        rule,_,_,_,_,_ = learn_rule_gpu(data_pos, data_neg, rev_index, used_items, ratio)
         data_fn = [data_pos[i] for i in range(len(data_pos)) if not cover_gpu(rule, data_pos[i])]
         if len(data_pos) == len(data_fn):
             break
@@ -318,3 +365,50 @@ def gain(tp, fn, tn, fp):
     ret += tn / tot * math.log(tn / tot_n) if tn > 0 else 0
     ret += fn / tot * math.log(fn / tot_n) if fn > 0 else 0
     return ret
+
+def split_data_by_item_gpu(data, item):
+    data_pos, data_neg = [], []
+
+    for x in data:
+        if evaluate(item, x):
+            data_pos.append(x) #lui aggiungeva righe io aggiungo INDICI DELLE COLLONE IN sorted_T
+        else:
+            data_neg.append(x)
+    return data_pos, data_neg
+
+#literal/col and row of the dataset
+def evaluate_gpu(item, dataset_example):
+
+    #col_indedataset_example, relation, value
+    def __eval(i, r, v):
+        if isinstance(v, str):
+            if r == '==':
+                return dataset_example[i] == v
+            elif r == '!=':
+                return dataset_example[i] != v
+            else:
+                return False
+        elif isinstance(dataset_example[i], str):
+            return False
+        elif r == '<=':
+            return dataset_example[i] <= v
+        elif r == '>':
+            return dataset_example[i] > v
+        else:
+            return False
+
+    def _eval(i):
+        if len(i) == 3:
+            return __eval(i[0], i[1], i[2])
+        elif len(i) == 4:
+            return evaluate_gpu(i, dataset_example)
+
+    if len(item) == 0:
+        return 0
+    if len(item) == 3:
+        return __eval(item[0], item[1], item[2])
+    if item[3] == 0 and len(item[1]) > 0 and not all([_eval(i) for i in item[1]]):
+        return 0
+    if len(item[2]) > 0 and any([_eval(i) for i in item[2]]):
+        return 0
+    return 1
