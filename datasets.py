@@ -3408,4 +3408,12 @@ def MINITEST():
     print('\n% weight lifting dataset', np.shape(data))
     return model, data
 
+def MINITEST_check():
+    attrs = ['Aspect',	'Slope','Horizontal_Distance_To_Hydrology','Vertical_Distance_To_Hydrology','Hillshade_9am']
+    nums = ['Aspect',	'Slope','Horizontal_Distance_To_Hydrology','Vertical_Distance_To_Hydrology','Hillshade_9am']
+    model = Classifier(attrs=attrs, numeric=nums, label='Cover_Type')
+    data = model.load_data('data/MINITEST/covtype.csv')
+    print('\n% weight lifting dataset', np.shape(data))
+    return model, data
+
 #---------------------------

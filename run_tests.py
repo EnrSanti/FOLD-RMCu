@@ -303,9 +303,11 @@ def fast_check():
             print(f"{GREEN}test1 passed{RESET}")
             print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
+            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+
         if(accuracy_cpu != accuracy_gpu):
             print(f"{RED}ACCURACY DIFFERENCE(?){RESET}")
-            print(accuracy_cpu+"\n-----------------------------------\n"+accuracy_gpu)
+            print(str(accuracy_cpu)+"\n-----------------------------------\n"+str(accuracy_gpu))
             test_failed+=1
     
     if(test_failed==0):
@@ -313,10 +315,29 @@ def fast_check():
     else:        
         print(f"{RED}{test_failed}-------------------\nTEST FAILED\n-------------------{RESET}")
 
+
+def minitest_for_debugging():
+
+    model,data = MINITEST_check()
+
+    data_train, data_test = split_data_deterministically(data, ratio=1)
+
+
+    start_gpu = timer()
+    model.fitGPU(data_train, ratio=0.2)
+    end_gpu = timer()
+
+    h_gpu=model.get_asp(simple=True)
+    
+    #cover_type(X,'5') :- aspect(X,N0), N0=<56.0. 
+    #cover_type(X,'2') :- aspect(X,N0), N0>132.0. 
+    #cover_type(X,'2') :- aspect(X,N0), N0=<132.0. 
+
 def main():
     
     #compare_times()
-    fast_check()
+    #fast_check()
+    minitest_for_debugging()
 
 if __name__ == '__main__':
     main()
