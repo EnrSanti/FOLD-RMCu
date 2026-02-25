@@ -24,7 +24,6 @@ def run_test1():
 
 
     del(model)
-    del(data)
     del(data_train)
     del(data_test)
 
@@ -300,11 +299,11 @@ def run_test5():
 
 #si, molto alla buona, ma per ora va bene
 def compare_times():
-    run_test1() #speedy
     run_test2()
     run_test3()
     run_test4()
     run_test5()
+    run_test1() #speedy
 
 def fast_check():
     test_failed=0

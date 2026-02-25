@@ -46,7 +46,6 @@ def embed_data_global(data):
         for row in data:
             val = row[col]
             if isinstance(val, str) and val != '?':
-                print("ADDING col "+str(col)+"since instanceval str?: "+str(isinstance(val, str))+"for val: "+str(val))
                 categorical_cols.append(col)
                 break
     #print("Categorical columns:", categorical_cols)
