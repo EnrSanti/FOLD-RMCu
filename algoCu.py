@@ -4,107 +4,101 @@ import numpy as np
 from timeit import default_timer as timer
 from algo import *
 import cupy as cp
+import re
+import ast
 
 
-def evaluate_gpu(item, x):
-    def __eval_gpu(i, r, v):
-        if isinstance(v, str):
-            if r == '==':
-                return x[i] == v
-            elif r == '!=':
-                return x[i] != v
-            else:
-                return False
-        elif isinstance(x[i], str):
-            return False
-        elif r == '<=':
-            return x[i] <= v
-        elif r == '>':
-            return x[i] > v
-        else:
-            return False
-
-    def _eval_gpu(i):
-        if len(i) == 3:
-            return __eval_gpu(i[0], i[1], i[2])
-        elif len(i) == 4:
-            return evaluate(i, x)
-
-    if len(item) == 0:
-        return 0
-    if len(item) == 3:
-        return _eval_gpu(item[0], item[1], item[2])
-    if item[3] == 0 and len(item[1]) > 0 and not all([_eval_gpu(i) for i in item[1]]):
-        return 0
-    if len(item[2]) > 0 and any([_eval_gpu(i) for i in item[2]]):
-        return 0
-    return 1
-
-
-def cover_gpu(item, x):
-    return evaluate_gpu(item, x)
+def cover_gpu(item, x,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
+    return evaluate_gpu(item, x,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums)
 
 def preprocess_gpu(data):
     cpData = cp.array(data, dtype=cp.float32)
 
     dataT = cpData.T  # shape (cols, rows)
-    print(dataT)
-    print("\n")
+    #print(dataT)
+    #print("\n")
     # --------------------------------------------------
     # 3) Argsort each row
     # --------------------------------------------------
     perm_T = cp.argsort(dataT, axis=1)
     sorted_T = cp.take_along_axis(dataT, perm_T, axis=1)
-    print(sorted_T)
+    #print(sorted_T)
 
     reverse_index_T = cp.empty_like(perm_T)
     cols_T, rows_T = dataT.shape
     for j in range(cols_T):
         reverse_index_T[j, perm_T[j]] = cp.arange(rows_T)
 
-    print("\nSorted (by columns):")
-    print(sorted_T)
+    #print("\nSorted (by columns):")
+    #print(sorted_T)
 
-    print("\nReverse index:")
-    print(reverse_index_T)
+    #print("\nReverse index:")
+    #print(reverse_index_T)
 
     return sorted_T, reverse_index_T
 
-def embed_data(data):
+def embed_data_global(data):
     num_cols = len(data[0])
     categorical_cols = []
 
+    # Detect categorical columns
     for col in range(num_cols):
         for row in data:
             val = row[col]
-            if val != '?':
-                if isinstance(val, str):
-                    categorical_cols.append(col)
-                break  # Found a value to decide type, stop scanning this column
-    
-    uniques = {col: set() for col in categorical_cols}
+            if isinstance(val, str) and val != '?':
+                print("ADDING col "+str(col)+"since instanceval str?: "+str(isinstance(val, str))+"for val: "+str(val))
+                categorical_cols.append(col)
+                break
+    #print("Categorical columns:", categorical_cols)
 
+    # Collect all unique values across all categorical columns
+    global_uniques = set()
     for row in data:
         for col in categorical_cols:
-            uniques[col].add(row[col])
+            val = row[col]
+            global_uniques.add(val)
 
-    # Create mapping per column
-    mappings = {
-        col: {val: i for i, val in enumerate(sorted(uniques[col]))}
-        for col in categorical_cols
-    }
-    return encode_data(data,mappings,categorical_cols)
-    
-def encode_data(data, mappings,categorical_cols):
+    # Create a global mapping: str -> unique int
+    print(global_uniques)
+    print(categorical_cols)
+    mapping = {val: i for i, val in enumerate(sorted(global_uniques))}
+
+    # Detect numeric columns
+    numeric_cols = [col for col in range(num_cols) if col not in categorical_cols]
+
+    # Find a safe placeholder for each numeric column
+    placeholder_numeric = {}
+    for col in numeric_cols:
+        numeric_values = [v for row in data for v in [row[col]] if v != '?' and isinstance(v, (int, float))]
+        if numeric_values:
+            max_val = max(numeric_values)
+            placeholder_numeric[col] = max_val + 1.0  # safe placeholder
+        else:
+            placeholder_numeric[col] = 0.0  # fallback if all missing
+
+    # Encode the data
+    encoded_data = encode_data_global_with_placeholder(data, mapping, categorical_cols, placeholder_numeric)
+
+    return encoded_data, mapping, categorical_cols, placeholder_numeric
+
+
+def encode_data_global_with_placeholder(data, mapping, categorical_cols, placeholder_numeric):
     encoded = []
 
     for row in data:
         new_row = list(row)
-        for col, mapping in mappings.items():
-            new_row[col] = mapping[new_row[col]]
+        for col in range(len(row)):
+            val = new_row[col]
+            if col in categorical_cols:
+                new_row[col] = mapping[val]
+            else:
+                if val == '?':
+                    new_row[col] = placeholder_numeric[col]
         encoded.append(new_row)
 
-    return encoded,mappings,categorical_cols
+    #print("Encoded data:", encoded)
+    #print("Placeholders for '?':", placeholder_numeric)
+    return encoded
 
 def foldrmGPU(data, ratio=0.5):
     ret = []
@@ -120,35 +114,41 @@ def foldrmGPU(data, ratio=0.5):
     overall_fold = 0 
     total_time = 0 
     learn_rule_loops = 0
-    print(data)
     reverse_index_T=[]
 
-    embedded_data,mapping,categorical_cols=embed_data(data)
+    embedded_data,mapping,categorical_cols,placeholder_nums=embed_data_global(data)
 
-    print(categorical_cols)
-    print(mapping)
-    print(embedded_data)
-    print(data)
+    #print(mapping)
+
+    reverse_map = {v: k for k, v in mapping.items()}
+    minus_1_col=len(data[0])-1
+    if(minus_1_col in categorical_cols):
+        categorical_cols.append(-1)
+        
+    #print("categorical cols"+str(categorical_cols))
+    #print("last col"+str(minus_1_col))
     #original_sorted_T, reverse_index_T = preprocess_gpu(data)
     #orignal_training_data=data
     #original_data_indexes = list(range(len(data)))
-    while len(data) > 0:
+    while len(embedded_data) > 0:
         total_loops += 1
 
         start_most = timer()
-        l = most(data)
+        l = most(embedded_data)
+        
+        #print(l)
         end_most = timer()
         overall_most += end_most - start_most
         
         start_split = timer()
-        e_plus, e_minus = split_data_by_item_gpu(data, l)
+        e_plus, e_minus = split_data_by_item_gpu(embedded_data, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums)
+
+        #print("---")
         end_split = timer()
         overall_split += end_split - start_split
 
         start_learn = timer()
-        print("TOTAL DATA: "+str(len(data)))
-        print("e+ e-: "+str(len(e_plus))+" "+str(len(e_minus)))
-        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(e_plus, e_minus, reverse_index_T, [], ratio)
+        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(e_plus, e_minus, reverse_index_T,mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums, [], ratio)
         overall_best_item+=best_item
         overall_covers+=coversTime
         overall_fold+=foldTime
@@ -158,7 +158,8 @@ def foldrmGPU(data, ratio=0.5):
         overall_learn += end_learn - start_learn
         
         start_covers1 = timer()
-        e_tp = [e_plus[i] for i in range(len(e_plus)) if not cover(rule, e_plus[i])]
+        #
+        e_tp = [e_plus[i] for i in range(len(e_plus)) if not cover_gpu(rule, e_plus[i], mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
         end_covers1 = timer()
         overall_covers1 += end_covers1 - start_covers1
 
@@ -166,16 +167,23 @@ def foldrmGPU(data, ratio=0.5):
             break
 
         start_setop = timer()
-        data = e_tp + [e_minus[i] for i in range(len(e_minus)) if not cover(rule, e_minus[i])]
+        embedded_data = e_tp + [e_minus[i] for i in range(len(e_minus)) if not cover_gpu(rule, e_minus[i], mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
         end_setop = timer()
 
         overall_setop += end_setop - start_setop
         
         # Append rule with selected literal
+        rule_to_print= l, rule[1], rule[2], rule[3]
+        #print("to print -> " + str(rule_to_print))
         rule = l, rule[1], rule[2], rule[3]
+        rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, placeholder_nums)
         ret.append(rule)
-    
+        
+        #print("rule -> "+str(rule))
+
     # Total time spent
+    #print("all rules")
+    #print(ret)
     total_time = overall_most + overall_split + overall_learn + overall_covers1 + overall_setop
 
     print(f"Timing summary after {total_loops} loops:")
@@ -194,9 +202,48 @@ def foldrmGPU(data, ratio=0.5):
     print(f"Total:       {total_time:.4f}s")
 
     return ret
+VALID_OPS = {'==', '!=', '<=', '>', '<', '>='}
 
+def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
+    
+    #print("ramapping on obj" + str(obj))
+    # Case 1: literal (INT, OP, VALUE)
+    if (
+        isinstance(obj, tuple)
+        and len(obj) == 3
+        and isinstance(obj[0], int)
+        and isinstance(obj[1], str)
+        and obj[1] in VALID_OPS
+    ):
+        col, op, val = obj
+        #print("base canse \n")
+        if col in categorical_cols:
+            val = reverse_map.get(val, val)
+        elif (val == placeholder_nums[col]):
+            val = '?'
+        return (col, op, val)
 
-def learn_rule_gpu(data_pos, data_neg, rev_index, used_items=[], ratio=0.5):
+    # Case 2: tuple (general)
+    if isinstance(obj, tuple):
+        #print("TUPLE calling it on \n", [x for x in obj])
+        return tuple(
+            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums)
+            for x in obj
+        )
+
+    # Case 3: list
+    if isinstance(obj, list):
+        
+        #print("TUPLE calling it on \n", [x for x in obj])
+        return [
+            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums)
+            for x in obj
+        ]
+
+    # Case 4: anything else
+    return obj
+
+def learn_rule_gpu(data_pos, data_neg, rev_index,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums, used_items=[], ratio=0.5):
     items = []
     learn_rule_loops = 0
 
@@ -216,7 +263,7 @@ def learn_rule_gpu(data_pos, data_neg, rev_index, used_items=[], ratio=0.5):
         #print("\n NEG: "+str(data_neg))
         #print("*****************************\n")
         
-        t = best_item_gpu(data_pos, data_neg, used_items + items)
+        t = best_item_gpu(data_pos, data_neg,categorical_cols, placeholder_nums, used_items + items)
         end_best_item = timer()
         overall_best_item += end_best_item - start_best_item 
 
@@ -226,8 +273,8 @@ def learn_rule_gpu(data_pos, data_neg, rev_index, used_items=[], ratio=0.5):
         # ===== cover timing =====
         start_cover_pos_neg = timer()
         #gets rows
-        data_pos = [data_pos[i] for i in range(len(data_pos)) if cover_gpu(rule, data_pos[i])]
-        data_neg = [data_neg[i] for i in range(len(data_neg)) if cover_gpu(rule, data_neg[i])]
+        data_pos = [data_pos[i] for i in range(len(data_pos)) if cover_gpu(rule, data_pos[i],mapping,revese_map, minus_1_col,categorical_cols,placeholder_nums)]
+        data_neg = [data_neg[i] for i in range(len(data_neg)) if cover_gpu(rule, data_neg[i], mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums)]
         end_cover_pos_neg = timer()
         overall_covers += end_cover_pos_neg - start_cover_pos_neg
 
@@ -239,20 +286,19 @@ def learn_rule_gpu(data_pos, data_neg, rev_index, used_items=[], ratio=0.5):
             if len(data_neg) > 0 and t[0] != -1:
                 # ===== fold timing =====
                 start_fold = timer()
-                ab = fold_gpu(data_neg, data_pos,rev_index, used_items + items, ratio)
+                ab = fold_gpu(data_neg, data_pos,rev_index, mapping,revese_map, minus_1_col,categorical_cols,placeholder_nums, used_items + items, ratio)
                 end_fold = timer()
                 overall_fold += end_fold - start_fold
-
                 if len(ab) > 0:
                     rule = rule[0], rule[1], ab, 0
             break
 
     # Total time for profiling
     total_time = overall_best_item + overall_covers + overall_fold
-
+    #print("returned rule: " +str(rule))
     return rule, overall_best_item, overall_covers,overall_fold,total_time,learn_rule_loops
 
-def best_item_gpu(X_pos, X_neg, used_items=[]):
+def best_item_gpu(X_pos, X_neg,categorical_cols, placeholder_nums, used_items=[]):
 
     ret = -1, '', ''
     if len(X_pos) == 0 and len(X_neg) == 0:
@@ -263,25 +309,26 @@ def best_item_gpu(X_pos, X_neg, used_items=[]):
     
     #for each example check a literal providing the most IG
     for i in range(n - 1): # 0..n-1
-        ig, r, v = best_ig_gpu(X_pos, X_neg, i, used_items)
+        ig, r, v = best_ig_gpu(X_pos, X_neg, i,categorical_cols,placeholder_nums, used_items)
         if best < ig:
             best = ig
             ret = i, r, v
-    
+    #print("best item"+ str(ret))
     return ret
 
-def fold_gpu(data_pos, data_neg, rev_index, used_items=[], ratio=0.5):
+def fold_gpu(data_pos, data_neg, rev_index, mapping,revese_map, minus_1_col,categorical_cols,placeholder_nums, used_items=[], ratio=0.5):
     ret = []
     while len(data_pos) > 0:
-        rule,_,_,_,_,_ = learn_rule_gpu(data_pos, data_neg, rev_index, used_items, ratio)
-        data_fn = [data_pos[i] for i in range(len(data_pos)) if not cover_gpu(rule, data_pos[i])]
+        #print("fold gpu")
+        rule,_,_,_,_,_ = learn_rule_gpu(data_pos, data_neg, rev_index,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums,used_items, ratio)
+        data_fn = [data_pos[i] for i in range(len(data_pos)) if not cover_gpu(rule, data_pos[i], mapping,revese_map, minus_1_col, categorical_cols, placeholder_nums)]
         if len(data_pos) == len(data_fn):
             break
         data_pos = data_fn
         ret.append(rule)
     return ret
 
-def best_ig_gpu(data_pos, data_neg, i, used_items=[]):
+def best_ig_gpu(data_pos, data_neg, i, categorical_cols, placeholder_nums, used_items=[]):
     
     xp, xn, cp, cn = 0, 0, 0, 0
 
@@ -295,15 +342,13 @@ def best_ig_gpu(data_pos, data_neg, i, used_items=[]):
             pos[d[i]] = 0 
             neg[d[i]] = 0
 
-
         #d[i] is the value of a cell in column i
-
         pos[d[i]] += 1 
 
-        if isinstance(d[i], str): #se is cat
+        if i in categorical_cols or d[i]==placeholder_nums[i]: #se is 
             unique_cats_present.add(d[i]) #add to the unique cat values found
             cp += 1
-        else: #attr is numeric
+        else: 
             unique_vals_present.add(d[i]) #add to the unique num values found
             xp += 1
 
@@ -313,7 +358,7 @@ def best_ig_gpu(data_pos, data_neg, i, used_items=[]):
             neg[d[i]] = 0
         neg[d[i]] += 1
 
-        if isinstance(d[i], str):
+        if i in categorical_cols or d[i]==placeholder_nums[i]:
             unique_cats_present.add(d[i])
             cn += 1
         else:
@@ -321,7 +366,10 @@ def best_ig_gpu(data_pos, data_neg, i, used_items=[]):
             xn += 1
     
     unique_cats_present, unique_vals_present = list(unique_cats_present), list(unique_vals_present)
-    
+    #print("uniquecats:")
+    #print(unique_cats_present)
+    #print("unique_vals_present_gpu:")
+    #print(unique_vals_present)
     unique_vals_present.sort()
     unique_cats_present.sort()
 
@@ -366,49 +414,65 @@ def gain(tp, fn, tn, fp):
     ret += fn / tot * math.log(fn / tot_n) if fn > 0 else 0
     return ret
 
-def split_data_by_item_gpu(data, item):
+def split_data_by_item_gpu(data, item, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
     data_pos, data_neg = [], []
 
     for x in data:
-        if evaluate(item, x):
+        if evaluate_gpu(item, x, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
             data_pos.append(x) #lui aggiungeva righe io aggiungo INDICI DELLE COLLONE IN sorted_T
         else:
             data_neg.append(x)
+    #print("pos_cu:\n")
+    #print(data_pos)
+    #print("neg_cu:\n")
+    #print(data_neg)
     return data_pos, data_neg
 
 #literal/col and row of the dataset
-def evaluate_gpu(item, dataset_example):
+def evaluate_gpu(item, dataset_example,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
 
     #col_indedataset_example, relation, value
     def __eval(i, r, v):
-        if isinstance(v, str):
+        #MODIFICA QUI
+        if(i in categorical_cols): #v sarebbe un letterale
             if r == '==':
                 return dataset_example[i] == v
             elif r == '!=':
                 return dataset_example[i] != v
             else:
                 return False
-        elif isinstance(dataset_example[i], str):
-            return False
-        elif r == '<=':
-            return dataset_example[i] <= v
-        elif r == '>':
-            return dataset_example[i] > v
-        else:
-            return False
-
+        elif(i not in categorical_cols and dataset_example[i]!=placeholder_nums[i]):
+            if r == '<=':
+                return dataset_example[i] <= v
+            elif r == '>':
+                return dataset_example[i] > v
+            else:
+                return False
+        elif (dataset_example[i]==placeholder_nums[i]):
+            if r == '==':
+                return dataset_example[i] == v
+            elif r == '!=':
+                return dataset_example[i] != v
+            else:
+                return False
+        return False
     def _eval(i):
+        #print(i)
+        ret_val=0
         if len(i) == 3:
-            return __eval(i[0], i[1], i[2])
+            ret_val= __eval(i[0], i[1], i[2])
         elif len(i) == 4:
-            return evaluate_gpu(i, dataset_example)
-
+            ret_val= evaluate_gpu(i, dataset_example, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums)
+        #print(ret_val)
+        return ret_val
+    
     if len(item) == 0:
-        return 0
+        return 0 #automatically false
     if len(item) == 3:
         return __eval(item[0], item[1], item[2])
     if item[3] == 0 and len(item[1]) > 0 and not all([_eval(i) for i in item[1]]):
         return 0
     if len(item[2]) > 0 and any([_eval(i) for i in item[2]]):
         return 0
+    
     return 1

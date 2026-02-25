@@ -12,6 +12,7 @@ def split_data_by_item(data, item):
             data_pos.append(x)
         else:
             data_neg.append(x)
+
     return data_pos, data_neg
 
 
@@ -34,11 +35,16 @@ def evaluate(item, x):
             return False
 
     def _eval(i):
+        
+        #print(i)
+        ret_val=0
         if len(i) == 3:
-            return __eval(i[0], i[1], i[2])
+            ret_val= __eval(i[0], i[1], i[2])
         elif len(i) == 4:
-            return evaluate(i, x)
-
+            ret_val= evaluate(i, x)
+        #print(ret_val)
+        return ret_val
+    
     if len(item) == 0:
         return 0
     if len(item) == 3:
@@ -87,6 +93,7 @@ def best_ig(data_pos, data_neg, i, used_items=[]):
     xp, xn, cp, cn = 0, 0, 0, 0
     pos, neg = dict(), dict()
     xs, cs = set(), set()
+    #print("COL: "+str(i))
     for d in data_pos:
         if d[i] not in pos:
             pos[d[i]], neg[d[i]] = 0, 0
@@ -108,11 +115,22 @@ def best_ig(data_pos, data_neg, i, used_items=[]):
             xs.add(d[i])
             xn += 1.0
     xs, cs = list(xs), list(cs)
+
+    
     xs.sort()
     cs.sort()
+    #print("(SORTED) uniquecats: \n")
+    #print(cs)
+    #print("(SORTED) unique_vals_present_cpu: \n")
+    #print(xs)
     for j in range(1, len(xs)):
         pos[xs[j]] += pos[xs[j - 1]]
         neg[xs[j]] += neg[xs[j - 1]]
+
+    #print("pos prefix: \n")
+    #print(pos)
+    #print("neg prefix:: \n")
+    #print(neg)
     best, v, r = float('-inf'), float('-inf'), ''
     for x in xs:
         if (i, '<=', x) in used_items or (i, '>', x) in used_items:
@@ -143,13 +161,17 @@ def best_item(X_pos, X_neg, used_items=[]):
     
     n = len(X_pos[0]) if len(X_pos) > 0 else len(X_neg[0])
     best = float('-inf')
-    
+
+    #print("xpos: "+str(X_pos))
+    #print("xneg: "+str(X_neg))
+
     for i in range(n - 1):
+        
         ig, r, v = best_ig(X_pos, X_neg, i, used_items)
         if best < ig:
             best = ig
             ret = i, r, v
-    
+    #print("best item"+ str(ret))
     return ret
 
 
@@ -186,6 +208,7 @@ def foldrm(data, ratio=0.5):
 
         start_most = timer()
         l = most(data)
+        #print(l)
         end_most = timer()
         overall_most += end_most - start_most
         
@@ -240,6 +263,8 @@ def foldrm(data, ratio=0.5):
     print(f"set op:      {overall_setop:.4f}s ({100 * overall_setop/total_time:.1f}%)")
     print(f"Total:       {total_time:.4f}s")
 
+    #print("all rules")
+    #print(ret)
     return ret
 
 
@@ -297,16 +322,20 @@ def learn_rule(data_pos, data_neg, used_items=[], ratio=0.5):
     # Total time for profiling
     total_time = overall_best_item + overall_covers + overall_fold
 
+    #print("returned rule: " +str(rule))
     return rule, overall_best_item, overall_covers,overall_fold,total_time,learn_rule_loops
 
 def fold(data_pos, data_neg, used_items=[], ratio=0.5):
     ret = []
     while len(data_pos) > 0:
+        #print("fold SERIAL")
         rule,_,_,_,_,_ = learn_rule(data_pos, data_neg, used_items, ratio)
         data_fn = [data_pos[i] for i in range(len(data_pos)) if not cover(rule, data_pos[i])]
         if len(data_pos) == len(data_fn):
             break
         data_pos = data_fn
+        #print("QUIIIIII")
+        #print(rule)
         ret.append(rule)
     return ret
 

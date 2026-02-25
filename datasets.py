@@ -32,11 +32,10 @@ def autism():
 
 
 def breastw():
-    attrs = ['clump_thickness', 'cell_size_uniformity', 'cell_shape_uniformity', 'marginal_adhesion',
-    'single_epi_cell_size', 'bare_nuclei', 'bland_chromatin', 'normal_nucleoli', 'mitoses']
+    attrs = ['clump_thickness', 'cell_size_uniformity','cell_size_uniformity', 'bare_nuclei', 'mitoses']
     nums = attrs
     model = Classifier(attrs=attrs, numeric=nums, label='label')
-    data = model.load_data('data/breastw/breastw.csv')
+    data = model.load_data('data/breastw/breastw2.csv')
     print('\n% breastw dataset', np.shape(data))
     return model, data
 
@@ -72,7 +71,7 @@ def heart():
 def kidney():
     attrs = ['age', 'bp', 'sg', 'al', 'su', 'rbc', 'pc', 'pcc', 'ba', 'bgr', 'bu', 'sc', 'sod', 'pot', 'hemo', 'pcv',
     'wbcc', 'rbcc', 'htn', 'dm', 'cad', 'appet', 'pe', 'ane']
-    nums = ['age', 'bp', 'sg', 'bgr', 'bu', 'sc', 'sod', 'pot', 'hemo', 'pcv', 'wbcc', 'rbcc']
+    nums = ['age', 'bp',  'sg', 'al', 'bgr', 'bu', 'sc', 'sod', 'pot', 'hemo', 'pcv', 'wbcc', 'rbcc']
     model = Classifier(attrs=attrs, numeric=nums, label='label')
     data = model.load_data('data/kidney/kidney.csv')
     print('\n% kidney dataset', np.shape(data))

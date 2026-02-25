@@ -22,6 +22,14 @@ def run_test1():
     print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
 
 
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+
+    model,data_train, data_test = MNIST()  #c.a. 6 min e 30 a 0.2 di ratio
+
     start_gpu = timer()
     model.fitGPU(data_train, ratio=0.2)
     end_gpu = timer()
@@ -69,6 +77,18 @@ def run_test2():
     print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
     acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
     print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+
+
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+
+    model,data = MINITEST()  
+
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
 
     start_gpu = timer()
     model.fitGPU(data_train, ratio=0.2)
@@ -118,6 +138,17 @@ def run_test3():
     print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
 
 
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+
+
+    model, data = diabetes() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
+
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+
     start_gpu = timer()
     model.fitGPU(data_train, ratio=0.2)
     end_gpu = timer()
@@ -165,6 +196,16 @@ def run_test4():
     acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
     print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
 
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+
+    model, data = australia() # 6 min a 0.1 di ratio 
+    
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+    
     start_gpu = timer()
     model.fitGPU(data_train, ratio=0.1)
     end_gpu = timer()
@@ -213,6 +254,19 @@ def run_test5():
     print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
     acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
     print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+
+
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+    
+    model, data = coverType() #16 mine 20 a 0.2 ratio 
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+
+
 
     start_gpu = timer()
     model.fitGPU(data_train, ratio=0.2)
@@ -272,6 +326,13 @@ def fast_check():
         acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
         print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
 
+        del(model)
+        del(data)
+        del(data_train)
+        del(data_test)
+
+        model, data = loaders[i]()   # call function
+        data_train, data_test = split_data_deterministically(data, ratio=0.8)
 
         start_gpu = timer()
         model.fitGPU(data_train, ratio=0.4)
@@ -328,15 +389,29 @@ def minitest_for_debugging():
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
-    
-    #cover_type(X,'5') :- aspect(X,N0), N0=<56.0. 
-    #cover_type(X,'2') :- aspect(X,N0), N0>132.0. 
-    #cover_type(X,'2') :- aspect(X,N0), N0=<132.0. 
+    print(h_gpu)
+
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+
+    model,data = MINITEST_check()
+
+    data_train, data_test = split_data_deterministically(data, ratio=1)
+
+
+    model.fit(data_train, ratio=0.2)
+
+    h_gpu=model.get_asp(simple=True)
+    print(h_gpu)
+
 
 def main():
     
-    #compare_times()
-    fast_check()
+    compare_times()
+    #fast_check()
     #minitest_for_debugging()
 
 if __name__ == '__main__':
