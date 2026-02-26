@@ -11,6 +11,11 @@ import ast
 def cover_gpu(item, x,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
     return evaluate_gpu(item, x,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums)
 
+def cover_gpu_dev(rule, embedded_data_original, i , mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums):
+    
+    example_x=embedded_data_original[i]
+    return evaluate_gpu(rule, example_x, mapping, reverse_map, minus_1_col, categorical_cols, placeholder_nums)
+
 def preprocess_gpu(data):
     cpData = cp.array(data, dtype=cp.float32)
 
@@ -127,23 +132,40 @@ def foldrmGPU(data, ratio=0.5):
         
     #print("categorical cols"+str(categorical_cols))
     #print("last col"+str(minus_1_col))
-    original_sorted_T, reverse_index_T = preprocess_gpu(embedded_data)
+    original_sorted_T_dev, reverse_index_T_dev = preprocess_gpu(embedded_data)
     #orignal_training_data=data
-    #original_data_indexes = list(range(len(data)))
-    while len(embedded_data) > 0:
+    original_data_indexes = list(range(len(data)))
+    embedded_data_original=embedded_data
+    while len(original_data_indexes) > 0:
         total_loops += 1
 
         start_most = timer()
+        l1 = most_gpu(embedded_data_original, original_data_indexes) #CPU
         l = most(embedded_data)
-        
+        if(str(l)==str(l1)):
+            print("OK")
+        else:
+            print("at loop"+str(total_loops))
+            exit(0)
         #print(l)
         end_most = timer()
         overall_most += end_most - start_most
         
         start_split = timer()
-        e_plus, e_minus = split_data_by_item_gpu(embedded_data, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums)
 
-        #print("---")
+        #invece degli elementi prendo gli indici
+        e_plus, e_minus = split_data_by_item_gpu(embedded_data, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums) #CPU
+
+        index_e_plus, index_e_minus = split_data_by_item_gpu_dev(embedded_data_original, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums, original_data_indexes) #CPU but indexes
+
+        print("e plus: "+str(e_plus))
+        print("e min: "+str(e_minus))
+
+        print("index e plus: "+str(index_e_plus))
+        print("index e min: "+str(index_e_minus))
+        #check if = 
+
+        
         end_split = timer()
         overall_split += end_split - start_split
 
@@ -160,6 +182,12 @@ def foldrmGPU(data, ratio=0.5):
         start_covers1 = timer()
         #
         e_tp = [e_plus[i] for i in range(len(e_plus)) if not cover_gpu(rule, e_plus[i], mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
+        
+        e_tp_index = [i for i in index_e_plus if not cover_gpu_dev(rule, embedded_data_original, i , mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
+        
+        print("etp:"+str(e_tp))
+        print("etp_index:"+str(e_tp_index))
+
         end_covers1 = timer()
         overall_covers1 += end_covers1 - start_covers1
 
@@ -167,13 +195,22 @@ def foldrmGPU(data, ratio=0.5):
             break
 
         start_setop = timer()
+        
         embedded_data = e_tp + [e_minus[i] for i in range(len(e_minus)) if not cover_gpu(rule, e_minus[i], mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
+        
+        e_tn_index =  [i for i in index_e_minus if not cover_gpu_dev(rule, embedded_data_original, i , mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
+        
+        original_data_indexes = e_tp_index + e_tn_index
+
+        print("----------\n")
+        print("remaining original data indexes "+str(original_data_indexes))
+        print("remaining embedded_data "+str(embedded_data))
+
         end_setop = timer()
 
         overall_setop += end_setop - start_setop
         
         # Append rule with selected literal
-        rule_to_print= l, rule[1], rule[2], rule[3]
         #print("to print -> " + str(rule_to_print))
         rule = l, rule[1], rule[2], rule[3]
         rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, placeholder_nums)
@@ -437,6 +474,16 @@ def gain_device(tp, fn, tn, fp):
         ret += (fn / tot) * math.log(fn / tot_n)
 
     return ret
+def split_data_by_item_gpu_dev(embedded_data, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums, original_data_indexes):
+    data_pos, data_neg = [], []
+
+    for i in original_data_indexes:
+        x=embedded_data[i]
+        if evaluate_gpu(l, x, mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums):
+            data_pos.append(i) #lui aggiungeva righe io aggiungo INDICI DELLE COLLONE IN sorted_T
+        else:
+            data_neg.append(i)
+    return data_pos, data_neg
 
 def split_data_by_item_gpu(data, item, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
     data_pos, data_neg = [], []
@@ -446,10 +493,7 @@ def split_data_by_item_gpu(data, item, mapping,revese_map, minus_1_col,categoric
             data_pos.append(x) #lui aggiungeva righe io aggiungo INDICI DELLE COLLONE IN sorted_T
         else:
             data_neg.append(x)
-    #print("pos_cu:\n")
-    #print(data_pos)
-    #print("neg_cu:\n")
-    #print(data_neg)
+            
     return data_pos, data_neg
 
 #literal/col and row of the dataset
@@ -572,3 +616,17 @@ def evaluate_gpu(item, dataset_example, mapping, reverse_map, minus_1_col, categ
                     return 0
     return 1
 
+def most_gpu(data, original_data_indexes, i=-1):
+    tab = dict()
+    
+    for row_index in original_data_indexes:
+        d=data[row_index]
+        if d[i] not in tab:
+            tab[d[i]] = 0
+        tab[d[i]] += 1
+    
+    y, n = '', 0
+    for t in tab:
+        if n <= tab[t]:
+            y, n = t, tab[t]
+    return i, '==', y
