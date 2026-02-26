@@ -7,14 +7,9 @@ import cupy as cp
 import re
 import ast
 
-
-def cover_gpu(item, x,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
-    return evaluate_gpu(item, x,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums)
-
-def cover_gpu_dev(rule, embedded_data_original, i , mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums):
-    
+def cover_gpu_dev(rule, embedded_data_original, i,reverse_map,categorical_cols, placeholder_nums):
     example_x=embedded_data_original[i]
-    return evaluate_gpu(rule, example_x, mapping, reverse_map, minus_1_col, categorical_cols, placeholder_nums)
+    return evaluate_gpu(rule, example_x,  reverse_map, categorical_cols, placeholder_nums)
 
 def preprocess_gpu(data):
     cpData = cp.array(data, dtype=cp.float32)
@@ -149,21 +144,16 @@ def foldrmGPU(data, ratio=0.5):
         start_split = timer()
 
         #invece degli elementi prendo gli indici
-        index_e_plus, index_e_minus = split_data_by_item_gpu_dev(embedded_data_original, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums, original_data_indexes) #CPU but indexes
-
-        #print("e plus: "+str(e_plus))
-        #print("e min: "+str(e_minus))
-
-        #print("index e plus: "+str(index_e_plus))
-        #print("index e min: "+str(index_e_minus))
-        #check if = 
-
+        index_e_plus, index_e_minus = split_data_by_item_gpu_dev(embedded_data_original, l,reverse_map,categorical_cols,placeholder_nums, original_data_indexes) #CPU but indexes
+ 
+ 
+ 
         
         end_split = timer()
         overall_split += end_split - start_split
 
         start_learn = timer()
-        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus , reverse_index_T,mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums, [], ratio)
+        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus , reverse_index_T,reverse_map,categorical_cols, placeholder_nums, [], ratio)
         overall_best_item+=best_item
         overall_covers+=coversTime
         overall_fold+=foldTime
@@ -174,7 +164,7 @@ def foldrmGPU(data, ratio=0.5):
         
         start_covers1 = timer()
         
-        e_tp_index = [i for i in index_e_plus if not cover_gpu_dev(rule, embedded_data_original, i , mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
+        e_tp_index = [i for i in index_e_plus if not cover_gpu_dev(rule, embedded_data_original, i ,reverse_map,categorical_cols, placeholder_nums)]
         
         #print("etp:"+str(e_tp))
         #print("etp_index:"+str(e_tp_index))
@@ -187,7 +177,7 @@ def foldrmGPU(data, ratio=0.5):
 
         start_setop = timer()
         
-        e_tn_index =  [i for i in index_e_minus if not cover_gpu_dev(rule, embedded_data_original, i , mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
+        e_tn_index =  [i for i in index_e_minus if not cover_gpu_dev(rule, embedded_data_original, i,reverse_map,categorical_cols, placeholder_nums)]
         
         original_data_indexes = e_tp_index + e_tn_index
 
@@ -269,7 +259,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
     # Case 4: anything else
     return obj
 
-def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums, used_items=[], ratio=0.5):
+def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,revese_map,categorical_cols, placeholder_nums, used_items=[], ratio=0.5):
     items = []
     learn_rule_loops = 0
 
@@ -301,8 +291,8 @@ def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index
         #gets rows
 
         
-        index_e_plus = [i for i in index_e_plus if cover_gpu_dev(rule, embedded_data_original, i ,mapping,revese_map, minus_1_col,categorical_cols,placeholder_nums)]
-        index_e_minus = [i for i in index_e_minus  if cover_gpu_dev(rule, embedded_data_original, i, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums)]
+        index_e_plus = [i for i in index_e_plus if cover_gpu_dev(rule, embedded_data_original, i,revese_map,categorical_cols,placeholder_nums)]
+        index_e_minus = [i for i in index_e_minus  if cover_gpu_dev(rule, embedded_data_original, i,revese_map,categorical_cols, placeholder_nums)]
         
         end_cover_pos_neg = timer()
         overall_covers += end_cover_pos_neg - start_cover_pos_neg
@@ -316,7 +306,7 @@ def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index
                 # ===== fold timing =====
                 start_fold = timer()
                 #SISTEMA
-                ab = fold_gpu(embedded_data_original,index_e_minus,index_e_plus ,rev_index, mapping,revese_map, minus_1_col,categorical_cols,placeholder_nums, used_items + items, ratio)
+                ab = fold_gpu(embedded_data_original,index_e_minus,index_e_plus ,rev_index,revese_map,categorical_cols,placeholder_nums, used_items + items, ratio)
                 end_fold = timer()
                 overall_fold += end_fold - start_fold
                 if len(ab) > 0:
@@ -346,12 +336,12 @@ def best_item_gpu(embedded_data_original,index_e_plus, index_e_minus,categorical
     #print("best item"+ str(ret))
     return ret
 
-def fold_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index, mapping,revese_map, minus_1_col,categorical_cols,placeholder_nums, used_items=[], ratio=0.5):
+def fold_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index, revese_map,categorical_cols,placeholder_nums, used_items=[], ratio=0.5):
     ret = []
     while len(index_e_plus) > 0:
         #print("fold gpu")
-        rule,_,_,_,_,_ = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums,used_items, ratio)
-        data_fn = [i for i in index_e_plus if not cover_gpu_dev(rule, embedded_data_original,i , mapping,revese_map, minus_1_col, categorical_cols, placeholder_nums)]
+        rule,_,_,_,_,_ = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,revese_map,categorical_cols, placeholder_nums,used_items, ratio)
+        data_fn = [i for i in index_e_plus if not cover_gpu_dev(rule, embedded_data_original,i,revese_map, categorical_cols, placeholder_nums)]
         if len(index_e_plus) == len(data_fn):
             break
         index_e_plus = data_fn
@@ -469,30 +459,21 @@ def gain_device(tp, fn, tn, fp):
         ret += (fn / tot) * math.log(fn / tot_n)
 
     return ret
-def split_data_by_item_gpu_dev(embedded_data, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums, original_data_indexes):
+
+def split_data_by_item_gpu_dev(embedded_data, l,reverse_map,categorical_cols,placeholder_nums, original_data_indexes):
     data_pos, data_neg = [], []
 
     for i in original_data_indexes:
         x=embedded_data[i]
-        if evaluate_gpu(l, x, mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums):
+        if evaluate_gpu(l, x,reverse_map,categorical_cols, placeholder_nums):
             data_pos.append(i) #lui aggiungeva righe io aggiungo INDICI DELLE COLLONE IN sorted_T
         else:
             data_neg.append(i)
     return data_pos, data_neg
 
-def split_data_by_item_gpu(data, item, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
-    data_pos, data_neg = [], []
-
-    for x in data:
-        if evaluate_gpu(item, x, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
-            data_pos.append(x) #lui aggiungeva righe io aggiungo INDICI DELLE COLLONE IN sorted_T
-        else:
-            data_neg.append(x)
-            
-    return data_pos, data_neg
 
 #literal/col and row of the dataset
-def evaluate_gpu(item, dataset_example, mapping, reverse_map, minus_1_col, categorical_cols, placeholder_nums):
+def evaluate_gpu(item, dataset_example, reverse_map, categorical_cols, placeholder_nums):
 
     if len(item) == 0:
         return 0  # automatically false
@@ -569,7 +550,7 @@ def evaluate_gpu(item, dataset_example, mapping, reverse_map, minus_1_col, categ
                     return 0
 
             else:
-                if not evaluate_gpu(sub, dataset_example, mapping, reverse_map, minus_1_col, categorical_cols, placeholder_nums):
+                if not evaluate_gpu(sub, dataset_example, reverse_map, categorical_cols, placeholder_nums):
                     return 0
 
     # Negative literals (any must NOT hold)
@@ -607,7 +588,7 @@ def evaluate_gpu(item, dataset_example, mapping, reverse_map, minus_1_col, categ
                     return 0
 
             else:
-                if evaluate_gpu(sub, dataset_example, mapping, reverse_map, minus_1_col, categorical_cols, placeholder_nums):
+                if evaluate_gpu(sub, dataset_example, reverse_map, categorical_cols, placeholder_nums):
                     return 0
     return 1
 
