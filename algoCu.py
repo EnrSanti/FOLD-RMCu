@@ -26,8 +26,9 @@ def preprocess_gpu(data):
 
     reverse_index_T = cp.empty_like(perm_T)
     cols_T, rows_T = dataT.shape
-    for j in range(cols_T):
-        reverse_index_T[j, perm_T[j]] = cp.arange(rows_T)
+    reverse_index_T = cp.argsort(perm_T, axis=1)
+    #for j in range(cols_T):
+    #    reverse_index_T[j, perm_T[j]] = cp.arange(rows_T)
 
     #print("\nSorted (by columns):")
     #print(sorted_T)
@@ -126,7 +127,7 @@ def foldrmGPU(data, ratio=0.5):
         
     #print("categorical cols"+str(categorical_cols))
     #print("last col"+str(minus_1_col))
-    #original_sorted_T, reverse_index_T = preprocess_gpu(data)
+    original_sorted_T, reverse_index_T = preprocess_gpu(embedded_data)
     #orignal_training_data=data
     #original_data_indexes = list(range(len(data)))
     while len(embedded_data) > 0:
@@ -382,7 +383,7 @@ def best_ig_gpu(data_pos, data_neg, i, categorical_cols, placeholder_nums, used_
     for x in unique_vals_present:
         if (i, '<=', x) in used_items or (i, '>', x) in used_items:
             continue
-        ig = gain(pos[x], xp - pos[x] + cp, xn - neg[x] + cn, neg[x])
+        ig = gain(pos[x], xp - pos[x] + cp, xn - neg[x] + cn, neg[x]) #su gpu, tempi assurdi causa data transfer
         if best < ig:
             best, v, r = ig, x, '<='
         ig = gain(xp - pos[x], pos[x] + cp, neg[x] + cn, xn - neg[x])
@@ -413,6 +414,30 @@ def gain(tp, fn, tn, fp):
     ret += fn / tot * math.log(fn / tot_n) if fn > 0 else 0
     return ret
 
+
+@cuda.jit#(device=True)
+def gain_device(tp, fn, tn, fp):
+
+    if tp + tn < fp + fn:
+        return -1e20
+
+    tot_p = tp + fp
+    tot_n = tn + fn
+    tot   = tot_p + tot_n
+
+    ret = 0.0
+
+    if tp > 0:
+        ret += (tp / tot) * math.log(tp / tot_p)
+    if fp > 0:
+        ret += (fp / tot) * math.log(fp / tot_p)
+    if tn > 0:
+        ret += (tn / tot) * math.log(tn / tot_n)
+    if fn > 0:
+        ret += (fn / tot) * math.log(fn / tot_n)
+
+    return ret
+
 def split_data_by_item_gpu(data, item, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
     data_pos, data_neg = [], []
 
@@ -428,50 +453,122 @@ def split_data_by_item_gpu(data, item, mapping,revese_map, minus_1_col,categoric
     return data_pos, data_neg
 
 #literal/col and row of the dataset
-def evaluate_gpu(item, dataset_example,mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums):
+def evaluate_gpu(item, dataset_example, mapping, reverse_map, minus_1_col, categorical_cols, placeholder_nums):
 
-    #col_indedataset_example, relation, value
-    def __eval(i, r, v):
-        #MODIFICA QUI
-        if(i in categorical_cols): #v sarebbe un letterale
-            if r == '==':
-                return dataset_example[i] == v
-            elif r == '!=':
-                return dataset_example[i] != v
-            else:
-                return False
-        elif(i not in categorical_cols and dataset_example[i]!=placeholder_nums[i]):
-            if r == '<=':
-                return dataset_example[i] <= v
-            elif r == '>':
-                return dataset_example[i] > v
-            else:
-                return False
-        elif (dataset_example[i]==placeholder_nums[i]):
-            if r == '==':
-                return dataset_example[i] == v
-            elif r == '!=':
-                return dataset_example[i] != v
-            else:
-                return False
-        return False
-    def _eval(i):
-        #print(i)
-        ret_val=0
-        if len(i) == 3:
-            ret_val= __eval(i[0], i[1], i[2])
-        elif len(i) == 4:
-            ret_val= evaluate_gpu(i, dataset_example, mapping,revese_map, minus_1_col,categorical_cols, placeholder_nums)
-        #print(ret_val)
-        return ret_val
-    
     if len(item) == 0:
-        return 0 #automatically false
+        return 0  # automatically false
+
+    # -------------------------
+    # Simple literal case
+    # -------------------------
     if len(item) == 3:
-        return __eval(item[0], item[1], item[2])
-    if item[3] == 0 and len(item[1]) > 0 and not all([_eval(i) for i in item[1]]):
-        return 0
-    if len(item[2]) > 0 and any([_eval(i) for i in item[2]]):
-        return 0
-    
+        i, r, v = item
+        val = dataset_example[i]
+
+        if i in categorical_cols:
+            if r == '==':
+                return val == v
+            elif r == '!=':
+                return val != v
+            else:
+                return False
+
+        elif val != placeholder_nums[i]:
+            if r == '<=':
+                return val <= v
+            elif r == '>':
+                return val > v
+            else:
+                return False
+
+        else:  # val == placeholder
+            if r == '==':
+                return val == v
+            elif r == '!=':
+                return val != v
+            else:
+                return False
+
+    # -------------------------
+    # Complex rule case
+    # -------------------------
+    # item structure assumed:
+    # [?, positive_literals, negative_literals, flag]
+
+    # If flag == 0 → conjunction must hold
+    if item[3] == 0 and len(item[1]) > 0:
+        for sub in item[1]:
+            if len(sub) == 3:
+                i, r, v = sub
+                val = dataset_example[i]
+
+                if i in categorical_cols:
+                    if r == '==':
+                        cond = val == v
+                    elif r == '!=':
+                        cond = val != v
+                    else:
+                        cond = False
+
+                elif val != placeholder_nums[i]:
+                    if r == '<=':
+                        cond = val <= v
+                    elif r == '>':
+                        cond = val > v
+                    else:
+                        cond = False
+
+                else:
+                    if r == '==':
+                        cond = val == v
+                    elif r == '!=':
+                        cond = val != v
+                    else:
+                        cond = False
+
+                if not cond:
+                    return 0
+
+            else:
+                if not evaluate_gpu(sub, dataset_example, mapping, reverse_map, minus_1_col, categorical_cols, placeholder_nums):
+                    return 0
+
+    # Negative literals (any must NOT hold)
+    if len(item[2]) > 0:
+        for sub in item[2]:
+            if len(sub) == 3:
+                i, r, v = sub
+                val = dataset_example[i]
+
+                if i in categorical_cols:
+                    if r == '==':
+                        cond = val == v
+                    elif r == '!=':
+                        cond = val != v
+                    else:
+                        cond = False
+
+                elif val != placeholder_nums[i]:
+                    if r == '<=':
+                        cond = val <= v
+                    elif r == '>':
+                        cond = val > v
+                    else:
+                        cond = False
+
+                else:
+                    if r == '==':
+                        cond = val == v
+                    elif r == '!=':
+                        cond = val != v
+                    else:
+                        cond = False
+
+                if cond:
+                    return 0
+
+            else:
+                if evaluate_gpu(sub, dataset_example, mapping, reverse_map, minus_1_col, categorical_cols, placeholder_nums):
+                    return 0
     return 1
+
