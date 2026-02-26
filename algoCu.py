@@ -140,8 +140,7 @@ def foldrmGPU(data, ratio=0.5):
         total_loops += 1
 
         start_most = timer()
-        l1 = most_gpu(embedded_data_original, original_data_indexes) #CPU
-        l = most(embedded_data)
+        l = most_gpu(embedded_data_original, original_data_indexes) #CPU
 
         #print(l)
         end_most = timer()
@@ -150,8 +149,6 @@ def foldrmGPU(data, ratio=0.5):
         start_split = timer()
 
         #invece degli elementi prendo gli indici
-        e_plus, e_minus = split_data_by_item_gpu(embedded_data, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums) #CPU
-
         index_e_plus, index_e_minus = split_data_by_item_gpu_dev(embedded_data_original, l,mapping,reverse_map,minus_1_col,categorical_cols,placeholder_nums, original_data_indexes) #CPU but indexes
 
         #print("e plus: "+str(e_plus))
@@ -176,8 +173,6 @@ def foldrmGPU(data, ratio=0.5):
         overall_learn += end_learn - start_learn
         
         start_covers1 = timer()
-        #
-        e_tp = [e_plus[i] for i in range(len(e_plus)) if not cover_gpu(rule, e_plus[i], mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
         
         e_tp_index = [i for i in index_e_plus if not cover_gpu_dev(rule, embedded_data_original, i , mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
         
@@ -191,8 +186,6 @@ def foldrmGPU(data, ratio=0.5):
             break
 
         start_setop = timer()
-        
-        embedded_data = e_tp + [e_minus[i] for i in range(len(e_minus)) if not cover_gpu(rule, e_minus[i], mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
         
         e_tn_index =  [i for i in index_e_minus if not cover_gpu_dev(rule, embedded_data_original, i , mapping,reverse_map, minus_1_col,categorical_cols, placeholder_nums)]
         
