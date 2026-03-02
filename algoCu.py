@@ -40,6 +40,7 @@ def preprocess_gpu(data):
     return sorted_T, reverse_index_T
 
 def embed_data_global(data):
+    
     num_cols = len(data[0])
     categorical_cols = []
 
@@ -67,24 +68,75 @@ def embed_data_global(data):
     # Detect numeric columns
     numeric_cols = [col for col in range(num_cols) if col not in categorical_cols]
 
-    # Find a safe placeholder for each numeric column
-    placeholder_numeric = [0.0]*num_cols
-    for col in numeric_cols:
-        numeric_values = [v for row in data for v in [row[col]] if v != '?' and isinstance(v, (int, float))]
-        if numeric_values:
-            max_val = max(numeric_values)
-            placeholder_numeric[col] = max_val + 1.0  # safe placeholder
-        else:
-            placeholder_numeric[col] = 1.0  # fallback if all missing
+    
 
     # Encode the data
-    encoded_data = encode_data_global_with_placeholder(data, mapping, categorical_cols, placeholder_numeric)
+    encoded_data,placeholder_numeric, rev_map_float,cols_float = encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols,numeric_cols)
 
-    return encoded_data, mapping, categorical_cols, placeholder_numeric
+    return encoded_data, mapping, categorical_cols, placeholder_numeric, rev_map_float,cols_float
 
 
-def encode_data_global_with_placeholder(data, mapping, categorical_cols, placeholder_numeric):
+def encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols,numeric_cols):
     encoded = []
+
+    # Find a safe placeholder for each numeric column
+    placeholder_numeric = [0]*num_cols
+    map_float = [[]]*num_cols
+    rev_map_float = [[]]*num_cols
+    cols_float=[]
+    
+    for col in numeric_cols:
+        for row in data:
+            val = row[col]
+
+            # Skip missing
+            if val == '?':
+                continue
+
+            # Strict float check (exclude ints)
+            if not float(val).is_integer() and not col in cols_float:
+                cols_float.append(col)
+                
+    #print("cols float" + str(cols_float))
+    for col in numeric_cols:
+        if(col in cols_float):
+            """
+            data: list of rows
+            col: column index
+
+            Returns:
+            mapping: dict {float_value -> int_rank}
+            reverse_map: list where reverse_map[rank] = float_value
+            """
+
+            # 1) Copy column (without modifying dataset)
+            column_copy = [row[col] for row in data]
+
+            # 2) Keep only numeric values (ignore '?')
+            numeric_vals = [
+                v for v in column_copy
+                if v != '?'
+            ]
+
+            unique_vals = set(numeric_vals)
+
+
+            sorted_unique = sorted(unique_vals)
+            #print(f"sorted_col {col}: {str(sorted_unique)}")
+
+            mapping_float = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
+            reverse_map_float = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
+            map_float[col]=mapping_float
+            rev_map_float[col]=reverse_map_float
+            #print("mapping_float"+str(mapping_float))
+            placeholder_numeric[col] = max(reverse_map_float) + 1
+        else:
+            numeric_values = [v for row in data for v in [row[col]] if v != '?']
+            if numeric_values:
+                max_val = max(numeric_values)
+                placeholder_numeric[col] = max_val + 1  # safe placeholder
+            else:
+                placeholder_numeric[col] = 1  # fallback if all missing
 
     for row in data:
         new_row = list(row)
@@ -93,13 +145,18 @@ def encode_data_global_with_placeholder(data, mapping, categorical_cols, placeho
             if col in categorical_cols:
                 new_row[col] = mapping[val]
             else:
+                # aggiungi float mapping
                 if val == '?':
                     new_row[col] = placeholder_numeric[col]
+                elif(col in cols_float):
+                    new_row[col] = map_float[col][val]
+
         encoded.append(new_row)
 
     #print("Encoded data:", encoded)
     #print("Placeholders for '?':", placeholder_numeric)
-    return encoded
+    #print(encoded)
+    return encoded,placeholder_numeric, rev_map_float,cols_float
 
 def foldrmGPU(data, ratio=0.5):
     ret = []
@@ -117,7 +174,7 @@ def foldrmGPU(data, ratio=0.5):
     learn_rule_loops = 0
     reverse_index_T=[]
 
-    embedded_data,mapping,categorical_cols,placeholder_nums=embed_data_global(data)
+    embedded_data,mapping,categorical_cols,placeholder_nums, reverse_map_float,float_cols=embed_data_global(data)
 
     #print(mapping) str -> int (0,1.. n)
     #i just need to keep track of the size of mapping (n) and a list of strings
@@ -142,6 +199,7 @@ def foldrmGPU(data, ratio=0.5):
     #orignal_training_data=data
     original_data_indexes = list(range(len(data)))
     embedded_data_original=embedded_data
+
     while len(original_data_indexes) > 0:
         total_loops += 1
 
@@ -212,7 +270,7 @@ def foldrmGPU(data, ratio=0.5):
         # Append rule with selected literal
         #print("to print -> " + str(rule_to_print))
         rule = l, rule[1], rule[2], rule[3]
-        rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, placeholder_nums)
+        rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, placeholder_nums, reverse_map_float,float_cols)
         ret.append(rule)
         
         #print("rule -> "+str(rule))
@@ -240,7 +298,7 @@ def foldrmGPU(data, ratio=0.5):
     return ret
 
 
-def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
+def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, reverse_map_float, float_cols):
     
     #print("ramapping on obj" + str(obj))
     # Case 1: literal (INT, OP, VALUE)
@@ -257,8 +315,12 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
         #print("base canse \n")
         if col in categorical_cols:
             val = reverse_map[val]
-        elif (val == placeholder_nums[col]):
+        elif (col in float_cols):
+            val=reverse_map_float[col][val]
+        
+        if(val == placeholder_nums[col]):
             val = '?'
+
         m_op=MAPPED_OPS[op]
         return (col, m_op, val)
 
@@ -266,7 +328,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
     if isinstance(obj, tuple):
         #print("TUPLE calling it on \n", [x for x in obj])
         return tuple(
-            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums)
+            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums,reverse_map_float, float_cols)
             for x in obj
         )
 
@@ -275,7 +337,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
         
         #print("TUPLE calling it on \n", [x for x in obj])
         return [
-            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums)
+            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums, reverse_map_float, float_cols)
             for x in obj
         ]
 
@@ -375,6 +437,9 @@ def fold_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,categ
         ret.append(rule)
     return ret
 
+
+                #fixed size (can be >>) #non fixed size (int arrays) #int  #fixed size array #fixed size array #non fixed size array
+#@cuda.jit(device=True)
 def best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i, categorical_cols, placeholder_nums, used_items=[]):
     
     xp, xn, cp, cn = 0, 0, 0, 0
@@ -385,7 +450,9 @@ def best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i, categoric
     #outer loop is on the columns
 
     for index in index_e_plus: #loop per example (row)
-        d=embedded_data_original[index]
+        
+        d=embedded_data_original[index] #get 1 row
+        
         if d[i] not in pos:
             pos[d[i]] = 0 
             neg[d[i]] = 0
@@ -415,13 +482,14 @@ def best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i, categoric
             xn += 1
     
     unique_cats_present, unique_vals_present = list(unique_cats_present), list(unique_vals_present)
-    #print("uniquecats:")
-    #print(unique_cats_present)
-    #print("unique_vals_present_gpu:")
-    #print(unique_vals_present)
+
     unique_vals_present.sort()
     unique_cats_present.sort()
 
+
+
+
+    #--------------------------
 
     for j in range(1, len(unique_vals_present)):
         pos[unique_vals_present[j]] += pos[unique_vals_present[j - 1]]
@@ -464,7 +532,7 @@ def gain(tp, fn, tn, fp):
     return ret
 
 
-@cuda.jit#(device=True)
+@cuda.jit(device=True)
 def gain_device(tp, fn, tn, fp):
 
     if tp + tn < fp + fn:
@@ -486,6 +554,7 @@ def gain_device(tp, fn, tn, fp):
         ret += (fn / tot) * math.log(fn / tot_n)
 
     return ret
+
 
 def split_data_by_item_gpu_dev(embedded_data, l,categorical_cols,placeholder_nums, original_data_indexes):
     data_pos, data_neg = [], []
