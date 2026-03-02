@@ -59,22 +59,22 @@ def embed_data_global(data):
             global_uniques.add(val)
 
     # Create a global mapping: str -> unique int
-    print(global_uniques)
-    print(categorical_cols)
+    #print(global_uniques)
+    #print(categorical_cols)
     mapping = {val: i for i, val in enumerate(sorted(global_uniques))}
 
     # Detect numeric columns
     numeric_cols = [col for col in range(num_cols) if col not in categorical_cols]
 
     # Find a safe placeholder for each numeric column
-    placeholder_numeric = {}
+    placeholder_numeric = [0.0]*num_cols
     for col in numeric_cols:
         numeric_values = [v for row in data for v in [row[col]] if v != '?' and isinstance(v, (int, float))]
         if numeric_values:
             max_val = max(numeric_values)
             placeholder_numeric[col] = max_val + 1.0  # safe placeholder
         else:
-            placeholder_numeric[col] = 0.0  # fallback if all missing
+            placeholder_numeric[col] = 1.0  # fallback if all missing
 
     # Encode the data
     encoded_data = encode_data_global_with_placeholder(data, mapping, categorical_cols, placeholder_numeric)
@@ -163,14 +163,15 @@ def foldrmGPU(data, ratio=0.5):
         overall_split += end_split - start_split
 
         start_learn = timer()
-        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus , reverse_index_T,reverse_map,categorical_cols, placeholder_nums, [], ratio)
-                                                            
+        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus , reverse_index_T,categorical_cols, placeholder_nums, [], ratio)
+        '''                                                   
         print("type emmbedded data "+str(type(embedded_data_original)))
         print("index e plus "+str(type(index_e_plus)))
         print("reverse_index_T "+str(type(reverse_index_T)))
         print("reverse map"+ str(type(reverse_map)))
         print("categorical_cols "+str(type(categorical_cols)))
         print("placeholder_nums "+str(type(placeholder_nums))) 
+        '''
         overall_best_item+=best_item
         overall_covers+=coversTime
         overall_fold+=foldTime
@@ -276,7 +277,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
     # Case 4: anything else
     return obj
 
-def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,revese_map,categorical_cols, placeholder_nums, used_items=[], ratio=0.5):
+def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,categorical_cols, placeholder_nums, used_items=[], ratio=0.5):
     items = []
     learn_rule_loops = 0
 
@@ -325,7 +326,7 @@ def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index
                 # ===== fold timing =====
                 start_fold = timer()
                 #SISTEMA
-                ab = fold_gpu(embedded_data_original,index_e_minus,index_e_plus ,rev_index,revese_map,categorical_cols,placeholder_nums, used_items + items, ratio)
+                ab = fold_gpu(embedded_data_original,index_e_minus,index_e_plus ,rev_index,categorical_cols,placeholder_nums, used_items + items, ratio)
                 end_fold = timer()
                 overall_fold += end_fold - start_fold
                 if len(ab) > 0:
@@ -355,11 +356,11 @@ def best_item_gpu(embedded_data_original,index_e_plus, index_e_minus,categorical
     #print("best item"+ str(ret))
     return ret
 
-def fold_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index, revese_map,categorical_cols,placeholder_nums, used_items=[], ratio=0.5):
+def fold_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,categorical_cols,placeholder_nums, used_items=[], ratio=0.5):
     ret = []
     while len(index_e_plus) > 0:
         #print("fold gpu")
-        rule,_,_,_,_,_ = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,revese_map,categorical_cols, placeholder_nums,used_items, ratio)
+        rule,_,_,_,_,_ = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,categorical_cols, placeholder_nums,used_items, ratio)
         data_fn = [i for i in index_e_plus if not cover_gpu_dev(rule, embedded_data_original,i, categorical_cols, placeholder_nums)]
         if len(index_e_plus) == len(data_fn):
             break
