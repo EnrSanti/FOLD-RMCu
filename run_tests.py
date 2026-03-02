@@ -3,6 +3,7 @@ from datasets import *
 from timeit import default_timer as timer
 from datetime import timedelta
 import re
+import threading
 
 
 def run_test1():
@@ -107,10 +108,10 @@ def run_test2():
     RESET = "\033[0m"
 
     if h_cpu != h_gpu:
-        print(f"{RED}test1 failed{RESET}")
+        print(f"{RED}test2 failed{RESET}")
         print(h_cpu+"\n-----------------------------------\n"+h_gpu)
     else:
-        print(f"{GREEN}test1 passed{RESET}")
+        print(f"{GREEN}test2 passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
     if(accuracy_cpu != accuracy_gpu):
@@ -166,10 +167,10 @@ def run_test3():
     RESET = "\033[0m"
 
     if h_cpu != h_gpu:
-        print(f"{RED}test1 failed{RESET}")
+        print(f"{RED}test3 failed{RESET}")
         print(h_cpu+"\n-----------------------------------\n"+h_gpu)
     else:
-        print(f"{GREEN}test1 passed{RESET}")
+        print(f"{GREEN}test3 passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
 
@@ -223,10 +224,10 @@ def run_test4():
     RESET = "\033[0m"
 
     if h_cpu != h_gpu:
-        print(f"{RED}test1 failed{RESET}")
+        print(f"{RED}test4 failed{RESET}")
         print(h_cpu+"\n-----------------------------------\n"+h_gpu)
     else:
-        print(f"{GREEN}test1 passed{RESET}")
+        print(f"{GREEN}test4 passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
 
@@ -285,10 +286,10 @@ def run_test5():
     RESET = "\033[0m"
 
     if h_cpu != h_gpu:
-        print(f"{RED}test1 failed{RESET}")
+        print(f"{RED}test5 failed{RESET}")
         print(h_cpu+"\n-----------------------------------\n"+h_gpu)
     else:
-        print(f"{GREEN}test1 passed{RESET}")
+        print(f"{GREEN}test5 passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
 
@@ -298,13 +299,67 @@ def run_test5():
 
 
 #si, molto alla buona, ma per ora va bene
-def compare_times():
-    run_test1() #speedy
-    run_test2()
-    run_test3()
-    run_test4()
-    run_test5()
 
+def compare_times(parallel=False):
+    tests = [
+        run_test1,
+        run_test2,
+        run_test3,
+        run_test4,
+        run_test5
+    ]
+
+    errors = 0
+    lock = threading.Lock()
+
+    if parallel:
+        barrier = threading.Barrier(len(tests) + 1)  # +1 for main thread
+
+        def worker(test_func, idx):
+            nonlocal errors
+            try:
+                print(f"[Test {idx}] starting")
+                result = test_func()  # assume returns 0 if ok, 1 if failed
+
+                if result:   # test reported failure
+                    with lock:
+                        errors += 1
+
+            except Exception as e:
+                print(f"[Test {idx}] crashed:", e)
+                with lock:
+                    errors += 1
+
+            finally:
+                barrier.wait()  # only in parallel
+
+        threads = []
+        for idx, test in enumerate(tests):
+            t = threading.Thread(target=worker, args=(test, idx))
+            t.start()
+            threads.append(t)
+
+        barrier.wait()  # main thread waits for all workers
+        for t in threads:
+            t.join()
+
+    else:
+        # Sequential execution
+        for idx, test in enumerate(tests):
+            try:
+                print(f"[Test {idx}] starting")
+                result = test()
+                if result:  # test reported failure
+                    errors += 1
+            except Exception as e:
+                print(f"[Test {idx}] crashed:", e)
+                errors += 1
+
+    # Final summary
+    if errors == 0:
+        print("\033[92mALL TESTS PASSED\033[0m")
+    else:
+        print(f"\033[91m{errors} TESTS FAILED\033[0m")
 def fast_check():
     test_failed=0
     loaders = [acute,adult,breastw,autism,cars, credit,heart,kidney, krkp, mushroom]
@@ -409,7 +464,7 @@ def minitest_for_debugging():
 
 def main():
     
-    compare_times()
+    compare_times(True)
     #fast_check()
     #minitest_for_debugging()
 

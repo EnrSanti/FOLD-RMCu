@@ -4,6 +4,7 @@ import numpy as np
 from timeit import default_timer as timer
 from algo import *
 import cupy as cp
+import cupy as cupy #yes to unify
 import re
 import ast
 
@@ -156,8 +157,9 @@ def foldrmGPU(data, ratio=0.5):
         #invece degli elementi prendo gli indici
         index_e_plus, index_e_minus = split_data_by_item_gpu_dev(embedded_data_original, l,categorical_cols,placeholder_nums, original_data_indexes) #CPU but indexes
  
- 
- 
+        #move
+        #index_e_plus_gpu  = cp.asarray(index_e_plus)
+        #index_e_minus_gpu = cp.asarray(index_e_minus)
         
         end_split = timer()
         overall_split += end_split - start_split
@@ -236,17 +238,19 @@ def foldrmGPU(data, ratio=0.5):
     print(f"Total:       {total_time:.4f}s")
 
     return ret
-VALID_OPS = {'==', '!=', '<=', '>', '<', '>='}
+
 
 def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
     
     #print("ramapping on obj" + str(obj))
     # Case 1: literal (INT, OP, VALUE)
+    VALID_OPS=[0,1,2,3] # <= > == !=
+    MAPPED_OPS=['<=','>','==','!=']
     if (
         isinstance(obj, tuple)
         and len(obj) == 3
         and isinstance(obj[0], int)
-        and isinstance(obj[1], str)
+        and isinstance(obj[1], int)
         and obj[1] in VALID_OPS
     ):
         col, op, val = obj
@@ -255,7 +259,8 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
             val = reverse_map[val]
         elif (val == placeholder_nums[col]):
             val = '?'
-        return (col, op, val)
+        m_op=MAPPED_OPS[op]
+        return (col, m_op, val)
 
     # Case 2: tuple (general)
     if isinstance(obj, tuple):
@@ -276,8 +281,8 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums):
 
     # Case 4: anything else
     return obj
-
-def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,categorical_cols, placeholder_nums, used_items=[], ratio=0.5):
+                    #fixed size            #can be fixed size   #can be fixed size  #can be fixed size   #fixed size       #fixed size      #can be fixed size                                       
+def learn_rule_gpu(embedded_data_original,   index_e_plus,       index_e_minus,       rev_index,          categorical_cols, placeholder_nums, used_items=[], ratio=0.5):
     items = []
     learn_rule_loops = 0
 
@@ -298,8 +303,6 @@ def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index
         #print("*****************************\n")
         
         t = best_item_gpu(embedded_data_original,index_e_plus, index_e_minus,categorical_cols, placeholder_nums, used_items + items)
-        print("used items")
-        print(used_items)
         end_best_item = timer()
         overall_best_item += end_best_item - start_best_item 
 
@@ -333,6 +336,10 @@ def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index
                     rule = rule[0], rule[1], ab, 0
             break
 
+
+
+
+
     # Total time for profiling
     total_time = overall_best_item + overall_covers + overall_fold
     #print("returned rule: " +str(rule))
@@ -340,12 +347,12 @@ def learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index
 
 def best_item_gpu(embedded_data_original,index_e_plus, index_e_minus,categorical_cols, placeholder_nums, used_items=[]):
 
-    ret = -1, '', ''
+    ret = -1, 0, 0
     if len(index_e_plus) == 0 and len(index_e_minus) == 0:
         return ret
     
-    n = len(embedded_data_original[index_e_plus[0]]) if len(index_e_plus) > 0 else len(embedded_data_original[index_e_minus[0]]) #prene la lunghezza di una riga
-    best = float('-inf')
+    n = len(embedded_data_original[index_e_plus[0]]) if len(index_e_plus) > 0 else len(embedded_data_original[index_e_minus[0]]) #prende la lunghezza di una riga
+    best = cp.float32(-1e20)
     
     #for each example check a literal providing the most IG
     for i in range(n - 1): # 0..n-1
@@ -420,33 +427,33 @@ def best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i, categoric
         pos[unique_vals_present[j]] += pos[unique_vals_present[j - 1]]
         neg[unique_vals_present[j]] += neg[unique_vals_present[j - 1]]
     
-    best, v, r = float('-inf'), float('-inf'), ''
+    best, v, r = cupy.float32(-1e20), cupy.float32(-1e20), 0
     
     for x in unique_vals_present:
-        if (i, '<=', x) in used_items or (i, '>', x) in used_items:
+        if (i, 0, x) in used_items or (i, 1, x) in used_items:
             continue
         ig = gain(pos[x], xp - pos[x] + cp, xn - neg[x] + cn, neg[x]) #su gpu, tempi assurdi causa data transfer
         if best < ig:
-            best, v, r = ig, x, '<='
+            best, v, r = ig, x, 0
         ig = gain(xp - pos[x], pos[x] + cp, neg[x] + cn, xn - neg[x])
         if best < ig:
-            best, v, r = ig, x, '>'
+            best, v, r = ig, x, 1
 
     for c in unique_cats_present:
-        if (i, '==', c) in used_items or (i, '!=', c) in used_items:
+        if (i, 2, c) in used_items or (i, 3, c) in used_items:
             continue
         ig = gain(pos[c], cp - pos[c] + xp, cn - neg[c] + xn, neg[c])
         if best < ig:
-            best, v, r = ig, c, '=='
+            best, v, r = ig, c, 2
         ig = gain(cp - pos[c] + xp, pos[c], neg[c], cn - neg[c] + xn)
         if best < ig:
-            best, v, r = ig, c, '!='
+            best, v, r = ig, c, 3
     
     return best, r, v
 
 def gain(tp, fn, tn, fp):
     if tp + tn < fp + fn:
-        return float('-inf')
+        return cp.float32(-1e20)
     ret = 0
     tot_p, tot_n = float(tp + fp), float(tn + fn)
     tot = float(tot_p + tot_n)
@@ -506,25 +513,25 @@ def evaluate_gpu(item, dataset_example, categorical_cols, placeholder_nums):
         val = dataset_example[i]
 
         if i in categorical_cols:
-            if r == '==':
+            if r == 2:
                 return val == v
-            elif r == '!=':
+            elif r == 3:
                 return val != v
             else:
                 return False
 
         elif val != placeholder_nums[i]:
-            if r == '<=':
+            if r == 0:
                 return val <= v
-            elif r == '>':
+            elif r == 1:
                 return val > v
             else:
                 return False
 
         else:  # val == placeholder
-            if r == '==':
+            if r == 2:
                 return val == v
-            elif r == '!=':
+            elif r == 3:
                 return val != v
             else:
                 return False
@@ -543,25 +550,25 @@ def evaluate_gpu(item, dataset_example, categorical_cols, placeholder_nums):
                 val = dataset_example[i]
 
                 if i in categorical_cols:
-                    if r == '==':
+                    if r == 2:
                         cond = val == v
-                    elif r == '!=':
+                    elif r == 3:
                         cond = val != v
                     else:
                         cond = False
 
                 elif val != placeholder_nums[i]:
-                    if r == '<=':
+                    if r == 0:
                         cond = val <= v
-                    elif r == '>':
+                    elif r == 1:
                         cond = val > v
                     else:
                         cond = False
 
                 else:
-                    if r == '==':
+                    if r == 2:
                         cond = val == v
-                    elif r == '!=':
+                    elif r == 3:
                         cond = val != v
                     else:
                         cond = False
@@ -581,25 +588,25 @@ def evaluate_gpu(item, dataset_example, categorical_cols, placeholder_nums):
                 val = dataset_example[i]
 
                 if i in categorical_cols:
-                    if r == '==':
+                    if r == 2:
                         cond = val == v
-                    elif r == '!=':
+                    elif r == 3:
                         cond = val != v
                     else:
                         cond = False
 
                 elif val != placeholder_nums[i]:
-                    if r == '<=':
+                    if r == 0:
                         cond = val <= v
-                    elif r == '>':
+                    elif r == 1:
                         cond = val > v
                     else:
                         cond = False
 
                 else:
-                    if r == '==':
+                    if r == 2:
                         cond = val == v
-                    elif r == '!=':
+                    elif r == 3:
                         cond = val != v
                     else:
                         cond = False
@@ -621,8 +628,8 @@ def most_gpu(data, original_data_indexes, i=-1):
             tab[d[i]] = 0
         tab[d[i]] += 1
     
-    y, n = '', 0
+    y, n = 0, 0
     for t in tab:
         if n <= tab[t]:
             y, n = t, tab[t]
-    return i, '==', y
+    return i, 2, y
