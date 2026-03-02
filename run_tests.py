@@ -464,7 +464,7 @@ def minitest_for_debugging():
 
 def main():
     
-    compare_times(True)
+    compare_times()
     #fast_check()
     #minitest_for_debugging()
 

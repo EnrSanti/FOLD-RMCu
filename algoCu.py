@@ -71,9 +71,9 @@ def embed_data_global(data):
     
 
     # Encode the data
-    encoded_data,placeholder_numeric, rev_map_float,cols_float = encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols,numeric_cols)
+    encoded_data,placeholder_numeric, rev_map_numeric,cols_float = encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols,numeric_cols)
 
-    return encoded_data, mapping, categorical_cols, placeholder_numeric, rev_map_float,cols_float
+    return encoded_data, mapping, categorical_cols, placeholder_numeric, rev_map_numeric,cols_float
 
 
 def encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols,numeric_cols):
@@ -81,8 +81,8 @@ def encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols
 
     # Find a safe placeholder for each numeric column
     placeholder_numeric = [0]*num_cols
-    map_float = [[]]*num_cols
-    rev_map_float = [[]]*num_cols
+    map_numeric = [[]]*num_cols
+    rev_map_numeric = [[]]*num_cols
     cols_float=[]
     
     for col in numeric_cols:
@@ -96,7 +96,8 @@ def encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols
             # Strict float check (exclude ints)
             if not float(val).is_integer() and not col in cols_float:
                 cols_float.append(col)
-                
+
+    int_cols = [col for col in numeric_cols if col not in cols_float]
     #print("cols float" + str(cols_float))
     for col in numeric_cols:
         if(col in cols_float):
@@ -126,17 +127,20 @@ def encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols
 
             mapping_float = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
             reverse_map_float = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
-            map_float[col]=mapping_float
-            rev_map_float[col]=reverse_map_float
+            map_numeric[col]=mapping_float
+            rev_map_numeric[col]=reverse_map_float
             #print("mapping_float"+str(mapping_float))
             placeholder_numeric[col] = max(reverse_map_float) + 1
         else:
-            numeric_values = [v for row in data for v in [row[col]] if v != '?']
-            if numeric_values:
-                max_val = max(numeric_values)
-                placeholder_numeric[col] = max_val + 1  # safe placeholder
-            else:
-                placeholder_numeric[col] = 1  # fallback if all missing
+            numeric_vals = [v for row in data for v in [row[col]] if v != '?']
+            unique_vals = set(numeric_vals)
+            sorted_unique = sorted(unique_vals)
+            mapping_int = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
+            reverse_map_int = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
+            map_numeric[col]=mapping_int
+            rev_map_numeric[col]=reverse_map_int
+            placeholder_numeric[col] = max(reverse_map_int) + 1
+
 
     for row in data:
         new_row = list(row)
@@ -148,15 +152,15 @@ def encode_data_global_with_placeholder(data, mapping, categorical_cols,num_cols
                 # aggiungi float mapping
                 if val == '?':
                     new_row[col] = placeholder_numeric[col]
-                elif(col in cols_float):
-                    new_row[col] = map_float[col][val]
+                else:
+                    new_row[col] = map_numeric[col][val]
 
         encoded.append(new_row)
 
     #print("Encoded data:", encoded)
     #print("Placeholders for '?':", placeholder_numeric)
     #print(encoded)
-    return encoded,placeholder_numeric, rev_map_float,cols_float
+    return encoded,placeholder_numeric, rev_map_numeric,cols_float
 
 def foldrmGPU(data, ratio=0.5):
     ret = []
@@ -174,7 +178,7 @@ def foldrmGPU(data, ratio=0.5):
     learn_rule_loops = 0
     reverse_index_T=[]
 
-    embedded_data,mapping,categorical_cols,placeholder_nums, reverse_map_float,float_cols=embed_data_global(data)
+    embedded_data,mapping,categorical_cols,placeholder_nums, rev_map_numeric,float_cols=embed_data_global(data)
 
     #print(mapping) str -> int (0,1.. n)
     #i just need to keep track of the size of mapping (n) and a list of strings
@@ -270,7 +274,7 @@ def foldrmGPU(data, ratio=0.5):
         # Append rule with selected literal
         #print("to print -> " + str(rule_to_print))
         rule = l, rule[1], rule[2], rule[3]
-        rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, placeholder_nums, reverse_map_float,float_cols)
+        rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, placeholder_nums, rev_map_numeric,float_cols)
         ret.append(rule)
         
         #print("rule -> "+str(rule))
@@ -298,7 +302,7 @@ def foldrmGPU(data, ratio=0.5):
     return ret
 
 
-def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, reverse_map_float, float_cols):
+def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, reverse_map_numeric, float_cols):
     
     #print("ramapping on obj" + str(obj))
     # Case 1: literal (INT, OP, VALUE)
@@ -315,12 +319,11 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, rever
         #print("base canse \n")
         if col in categorical_cols:
             val = reverse_map[val]
-        elif (col in float_cols):
-            val=reverse_map_float[col][val]
-        
-        if(val == placeholder_nums[col]):
+        elif (val == placeholder_nums[col]):
             val = '?'
-
+        else:
+            val=reverse_map_numeric[col][val]
+        
         m_op=MAPPED_OPS[op]
         return (col, m_op, val)
 
@@ -328,7 +331,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, rever
     if isinstance(obj, tuple):
         #print("TUPLE calling it on \n", [x for x in obj])
         return tuple(
-            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums,reverse_map_float, float_cols)
+            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums,reverse_map_numeric, float_cols)
             for x in obj
         )
 
@@ -337,7 +340,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, rever
         
         #print("TUPLE calling it on \n", [x for x in obj])
         return [
-            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums, reverse_map_float, float_cols)
+            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums, reverse_map_numeric, float_cols)
             for x in obj
         ]
 
