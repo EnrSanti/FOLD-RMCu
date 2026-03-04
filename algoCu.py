@@ -1,5 +1,6 @@
 import math
-from numba import cuda
+from numba import cuda, float64
+import numba
 import numpy as np
 from timeit import default_timer as timer
 from algo import *
@@ -7,7 +8,7 @@ import cupy as cp
 import cupy as cupy #yes to unify
 import re
 import ast
-
+global_kernel_call=0
 def cover_gpu_dev(rule, embedded_data_original, i,categorical_cols, placeholder_nums):
     example_x=embedded_data_original[i]
     return evaluate_gpu(rule, example_x, categorical_cols, placeholder_nums)
@@ -434,7 +435,67 @@ def best_item_gpu(embedded_data_original,index_e_plus, index_e_minus,categorical
     
     #for each example check a literal providing the most IG
     for i in range(n - 1): # 0..n-1 # form 20 to 500 blocks
-        ig, r, v = best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i,categorical_cols,placeholder_nums, max_range_cols,used_items)
+        # launch 1 block
+        thread_per_block=1
+        blocks_grid=1
+        # 1) 2D list of data -> 2D float32 array
+        embedded_data_original_dev = cuda.to_device(
+            np.array(embedded_data_original, dtype=np.int32)  # or np.int32 if ints
+        )
+
+        # 2) 1D lists of indices -> int32 arrays
+        index_e_plus_dev  = cuda.to_device(np.array(index_e_plus, dtype=np.int32))
+        index_e_minus_dev = cuda.to_device(np.array(index_e_minus, dtype=np.int32))
+
+        # 3) 1D lists of column indices -> int32 arrays
+        categorical_cols_dev = cuda.to_device(np.array(categorical_cols, dtype=np.int32))
+        max_range_cols_dev   = cuda.to_device(np.array(max_range_cols, dtype=np.int32))
+
+        # 4) Numeric placeholders -> float32 array
+        placeholder_nums_dev = cuda.to_device(np.array(placeholder_nums, dtype=np.int32))
+
+
+        used_items_arr = np.zeros((len(used_items), 3), dtype=np.float64)
+
+        for j, (col, cmp, val) in enumerate(used_items):
+            used_items_arr[j, 0] = col       # column index as float32 (or int32 if you like)
+            used_items_arr[j, 1] = cmp       # comparator as float32 (or int32)
+            used_items_arr[j, 2] = val       # value (float)
+
+        used_items_dev = cuda.to_device(used_items_arr)
+
+
+        return_vals_dev = cuda.device_array(3, dtype=np.float64)
+
+
+        print("used_items")
+        print(used_items)
+        
+        neg_dev = cuda.device_array(33000, dtype=np.int32)
+        pos_dev = cuda.device_array(33000, dtype=np.int32)
+        vals_dev = cuda.device_array(33000, dtype=np.int32)
+        cats_dev = cuda.device_array(33000, dtype=np.int32)
+        host_arr = np.zeros([2], dtype=np.float32)
+        global global_kernel_call
+        global_kernel_call+=1
+        print("KER CALL HOST ---------------------- ",global_kernel_call)
+        host_arr[0]=global_kernel_call
+        print("used items", used_items_arr)
+        device_arr = cuda.to_device(host_arr)
+        best_ig_gpu[blocks_grid,thread_per_block](embedded_data_original_dev,index_e_plus_dev, index_e_minus_dev, i,categorical_cols_dev,placeholder_nums_dev, max_range_cols_dev,return_vals_dev, pos_dev, neg_dev, vals_dev,cats_dev, device_arr,used_items_dev )
+        cuda.synchronize()
+        
+        import time
+
+        time.sleep(0.2)  
+        print("kernel called")
+        return_vals_host = return_vals_dev.copy_to_host()  # returns a NumPy array
+        ig, r, v = return_vals_host
+        v=int(v) if v != -1e20 else v
+        r=int(r)
+        print([ig,r,v])
+        print("KER OVER ---------------------- ",global_kernel_call)
+        #sync and get res
         if best < ig:
             best = ig
             ret = i, r, v
@@ -455,25 +516,40 @@ def fold_gpu(embedded_data_original,index_e_plus, index_e_minus, rev_index,categ
 
 
                 #fixed size (can be >>) #non fixed size (int arrays) #int  #fixed size array #fixed size array #non fixed size array
-#@cuda.jit(device=True)
-def best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i, categorical_cols, placeholder_nums, max_range_cols,used_items=[]):
+#@cuda.jit           # copy once                 #   merge                          # copy once          copy once         copy once
+@cuda.jit
+def best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i, categorical_cols, placeholder_nums, max_range_cols,return_vals_dev,pos, neg, unique_vals_present,unique_cats_present, device_arr,used_items=[]):
     
     xp, xn, cp, cn = 0, 0, 0, 0
 
-    pos, neg = [0]*(max_range_cols[i]+1),[0]*(max_range_cols[i]+1)
-    unique_vals_present, unique_cats_present = [0]*(max_range_cols[i]+1),[0]*(max_range_cols[i]+1)
+    #pos, neg = [0]*(max_range_cols[i]+1),[0]*(max_range_cols[i]+1)
+    #unique_vals_present, unique_cats_present = [0]*(max_range_cols[i]+1),[0]*(max_range_cols[i]+1)
 
     #outer loop is on the columns
+    print("on GPUK ------------------------------", device_arr[0])
+    for j in range(33000):
+        pos[j] = 0
+        neg[j] = 0
+        unique_vals_present[j] = 0
+        unique_cats_present[j] = 0
+    if(len(index_e_plus)==0):
+        print("index_e plus is empty")
+    else:
+        print("index_e plus not empty ")
 
     for index in index_e_plus: #loop per example (row)
-        
         d=embedded_data_original[index] #get 1 row
-        
 
         #d[i] is the value of a cell in column i
         pos[d[i]] += 1 
 
-        if i in categorical_cols or d[i]==placeholder_nums[i]: #se is 
+        is_categorical = False
+        for j in range(categorical_cols.size):
+            if i == categorical_cols[j]:
+                is_categorical = True
+                break
+
+        if is_categorical or d[i]==placeholder_nums[i]: #se is 
             unique_cats_present[(d[i])]=1 #add to the unique cat values found
             cp += 1
         else: 
@@ -481,11 +557,21 @@ def best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i, categoric
             xp += 1
 
 
-
+    if(len(index_e_minus)==0):
+        print("index_e_minus is empty")
+    else:
+        print("index_e_minus not empty ")
     for index in index_e_minus:
         d=embedded_data_original[index]
         neg[d[i]] += 1
-        if i in categorical_cols or d[i]==placeholder_nums[i]:
+
+        is_categorical = False
+        for j in range(categorical_cols.size):
+            if i == categorical_cols[j]:
+                is_categorical = True
+                break
+
+        if is_categorical or d[i]==placeholder_nums[i]:
             unique_cats_present[(d[i])]=1
             cn += 1
         else:
@@ -493,42 +579,97 @@ def best_ig_gpu(embedded_data_original,index_e_plus, index_e_minus, i, categoric
             xn += 1
 
     
-    unique_vals_present = [i for i, v in enumerate(unique_vals_present) if v == 1]
-    
-    unique_cats_present = [i for i, v in enumerate(unique_cats_present) if v == 1]
+    num_vals = 0
+    for j in range(unique_vals_present.size):
+        if unique_vals_present[j] == 1:
+            unique_vals_present[num_vals] = j  # overwrite array with only present indices
+            num_vals += 1
+    # Now unique_vals_present[:num_vals] contains the indices of present values
 
+    num_cats = 0
 
+    for j in range(0,4):
+        print("setting unique_cats_present BEFORE: ",unique_cats_present[j])
+    print("range",unique_cats_present.size)
+    for j in range(unique_cats_present.size):
+        if unique_cats_present[j] == 1:
+            unique_cats_present[num_cats] = j
+            print("setting unique_cats_present []: ",num_cats,j)
+            num_cats += 1
+
+    for j in range(0,4):
+        print("setting unique_cats_present BEFORE: ",unique_cats_present[j])
+
+    print("unique_vals_present len (loop size first)", num_vals)
+    print("unique_cats_present len (loop size snd)", num_cats)
     #--------------------------
-
-    for j in range(1, len(unique_vals_present)):
+    for j in range(1, num_vals):
         pos[unique_vals_present[j]] += pos[unique_vals_present[j - 1]]
         neg[unique_vals_present[j]] += neg[unique_vals_present[j - 1]]
-    
 
-    best, v, r = cupy.float32(-1e20), cupy.float32(-1e20), 0
-    
-    for x in unique_vals_present:
-        if (i, 0, x) in used_items or (i, 1, x) in used_items:
+    best, v, r = float64(-1e20), float64(-1e20), 0
+
+    ig=float64(-1e20)
+    num_used = len(used_items)  
+    for x_i in range(0, num_vals):
+        x=unique_vals_present[x_i]
+        print("considering val: ",x)
+        skip = 0  # boolean flag
+        for j in range(num_used):
+
+            if int(used_items[j, 0]) == i and int(used_items[j, 1]) == 0 and int(used_items[j, 2]) == x:
+                skip = 1
+            if int(used_items[j, 0]) == i and int(used_items[j, 1]) == 1 and int(used_items[j, 2]) == x:
+                skip = 1
+
+        if skip:
+            print("skipping")
             continue
-        ig = gain(pos[x], xp - pos[x] + cp, xn - neg[x] + cn, neg[x]) #su gpu, tempi assurdi causa data transfer
+        ig = gain_device(pos[x], xp - pos[x] + cp, xn - neg[x] + cn, neg[x]) #su gpu, tempi assurdi causa data transfer
+        print("ig1 ",ig)
         if best < ig:
+            print("in 1 (adding x and 0) ",x)
             best, v, r = ig, x, 0
-        ig = gain(xp - pos[x], pos[x] + cp, neg[x] + cn, xn - neg[x])
+        
+        ig = gain_device(xp - pos[x], pos[x] + cp, neg[x] + cn, xn - neg[x])
+        print("ig2 ",ig)
         if best < ig:
+            print("in 2 (adding x and 1) ",x)
             best, v, r = ig, x, 1
+    print("num used of items: " ,num_used)
+    for c_i in range(0, num_cats):
+        c=unique_cats_present[c_i]
+        print("considering cat: ",c)
+        skip = 0  # boolean flag
 
-    for c in unique_cats_present:
-        if (i, 2, c) in used_items or (i, 3, c) in used_items:
+        print("i: ", i)
+        print("c: ", c)
+        for j in range(num_used):
+            if int(used_items[j, 0]) == i and int(used_items[j, 1]) == 2 and int(used_items[j, 2]) == c:
+                skip = 1
+                break
+            if int(used_items[j, 0]) == i and int(used_items[j, 1]) == 3 and int(used_items[j, 2]) == c:
+                skip = 1
+                break
+
+        if skip:
+            print("skipping")
             continue
-        ig = gain(pos[c], cp - pos[c] + xp, cn - neg[c] + xn, neg[c])
+        ig = gain_device(pos[c], cp - pos[c] + xp, cn - neg[c] + xn, neg[c])
+        print("ig1 ",ig)
         if best < ig:
+            print("in 1 (adding c and 2) ",c)
             best, v, r = ig, c, 2
-        ig = gain(cp - pos[c] + xp, pos[c], neg[c], cn - neg[c] + xn)
+        ig = gain_device(cp - pos[c] + xp, pos[c], neg[c], cn - neg[c] + xn)
+        print("ig2 ",ig)
         if best < ig:
+            print("in 2 (adding c and 3) ",c)
             best, v, r = ig, c, 3
     
-    return best, r, v
-
+    return_vals_dev[0] = best
+    return_vals_dev[1] = r
+    return_vals_dev[2] = v
+    print("end of GPUK ------------------------------", device_arr[0])
 def gain(tp, fn, tn, fp):
     if tp + tn < fp + fn:
         return cp.float32(-1e20)
@@ -545,23 +686,29 @@ def gain(tp, fn, tn, fp):
 @cuda.jit(device=True)
 def gain_device(tp, fn, tn, fp):
 
+    # Force double precision immediately
+    tp = float64(tp)
+    fn = float64(fn)
+    tn = float64(tn)
+    fp = float64(fp)
+
     if tp + tn < fp + fn:
-        return -1e20
+        return float64(-1e20)
 
     tot_p = tp + fp
     tot_n = tn + fn
-    tot   = tot_p + tot_n
+    tot = tot_p + tot_n
 
-    ret = 0.0
+    ret = float64(0.0)
 
-    if tp > 0:
-        ret += (tp / tot) * math.log(tp / tot_p)
-    if fp > 0:
-        ret += (fp / tot) * math.log(fp / tot_p)
-    if tn > 0:
-        ret += (tn / tot) * math.log(tn / tot_n)
-    if fn > 0:
-        ret += (fn / tot) * math.log(fn / tot_n)
+    if tp > 0.0:
+        ret += tp / tot * math.log(tp / tot_p)
+    if fp > 0.0:
+        ret += fp / tot * math.log(fp / tot_p)
+    if tn > 0.0:
+        ret += tn / tot * math.log(tn / tot_n)
+    if fn > 0.0:
+        ret += fn / tot * math.log(fn / tot_n)
 
     return ret
 
