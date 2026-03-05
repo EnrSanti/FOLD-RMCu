@@ -362,7 +362,7 @@ def compare_times(parallel=False):
         print(f"\033[91m{errors} TESTS FAILED\033[0m")
 def fast_check():
     test_failed=0
-    loaders = [ krkp]
+    loaders = [ adult]
 
     for i in range(len(loaders)):
         model, data = loaders[i]()   # call function
