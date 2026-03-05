@@ -86,7 +86,7 @@ def gain(tp, fn, tn, fp):
     ret += fp / tot * math.log(fp / tot_p) if fp > 0 else 0
     ret += tn / tot * math.log(tn / tot_n) if tn > 0 else 0
     ret += fn / tot * math.log(fn / tot_n) if fn > 0 else 0
-    return ret
+    return math.floor(ret / 1e-12) * 1e-12
 
 
 def best_ig(data_pos, data_neg, i, used_items=[]):
