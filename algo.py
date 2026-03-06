@@ -77,16 +77,46 @@ def predict(rules, data):
 
 
 def gain(tp, fn, tn, fp):
+
+    tp = float(tp)
+    fn = float(fn)
+    tn = float(tn)
+    fp = float(fp)
+
     if tp + tn < fp + fn:
-        return float('-inf')
-    ret = 0
-    tot_p, tot_n = float(tp + fp), float(tn + fn)
-    tot = float(tot_p + tot_n)
-    ret += tp / tot * math.log(tp / tot_p) if tp > 0 else 0
-    ret += fp / tot * math.log(fp / tot_p) if fp > 0 else 0
-    ret += tn / tot * math.log(tn / tot_n) if tn > 0 else 0
-    ret += fn / tot * math.log(fn / tot_n) if fn > 0 else 0
-    return math.floor(ret / 1e-12) * 1e-12
+        return -1e20
+
+    tot_p = tp + fp
+    tot_n = tn + fn
+    tot = tot_p + tot_n
+
+    ret = 0.0
+
+    if tp > 0.0:
+        a = tp / tot
+        b = tp / tot_p
+        c = math.log(b)
+        ret = ret + a * c
+
+    if fp > 0.0:
+        a = fp / tot
+        b = fp / tot_p
+        c = math.log(b)
+        ret = ret + a * c
+
+    if tn > 0.0:
+        a = tn / tot
+        b = tn / tot_n
+        c = math.log(b)
+        ret = ret + a * c
+
+    if fn > 0.0:
+        a = fn / tot
+        b = fn / tot_n
+        c = math.log(b)
+        ret = ret + a * c
+
+    return math.floor(ret / 1e-8) * 1e-8
 
 
 def best_ig(data_pos, data_neg, i, used_items=[]):
