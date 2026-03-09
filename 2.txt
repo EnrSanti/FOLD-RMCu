@@ -1,2 +1,35 @@
-
-% adult dataset (32561, 15)
+call:  -0.63651417   <=   37.9
+call:  -0.68226137   !=   no
+call:  -0.47256006   ==   no
+call:  -0.32171838   !=   no
+call:  -0.44425512   !=   no
+call:  -0.66240126   !=   no
+over -----------
+call:  -0.2599302   >   37.9
+call:  -0.43891587   !=   no
+call:  -0.2599302   !=   no
+call:  -0.48257757   !=   yes
+call:  -0.23684693   ==   no
+call:  -0.37029507   !=   no
+over -----------
+call:  0.0   >   37.9
+call:  -0.68900924   ==   no
+call:  0.0   !=   no
+call:  -0.68900924   ==   yes
+call:  -inf      -inf
+call:  0.0   !=   no
+over -----------
+call:  0.0   >   35.5
+call:  0.0   ==   no
+call:  0.0   !=   no
+call:  0.0   ==   no
+call:  0.0   ==   no
+call:  0.0   ==   no
+over -----------
+call:  0.0   <=   35.5
+call:  0.0   ==   no
+call:  0.0   ==   yes
+call:  0.0   ==   no
+call:  0.0   ==   no
+call:  0.0   ==   no
+over -----------

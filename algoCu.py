@@ -213,6 +213,13 @@ def foldrmGPU(data, ratio=0.5):
     if(minus_1_col in categorical_cols):
         categorical_cols.append(-1)
         categorical_cols.remove(minus_1_col)
+
+    # Initialize an array of zeros
+    categorical_mask = np.zeros(len(data[0]), dtype=int)
+
+    # Set the specified indices to 1
+    categorical_mask[categorical_cols] = 1
+    categorical_mask_dev = cuda.to_device(np.array(categorical_mask, dtype=np.int32))
     
     
     for key, value in mapping.items():
@@ -236,7 +243,6 @@ def foldrmGPU(data, ratio=0.5):
     embedded_data_original_dev = cuda.to_device(
         np.array(embedded_data_original, dtype=np.int32)  # or np.int32 if ints
     )
-    
     while len(original_data_indexes) > 0:
         total_loops += 1
 
@@ -260,7 +266,7 @@ def foldrmGPU(data, ratio=0.5):
         overall_split += end_split - start_split
 
         start_learn = timer()
-        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus , reverse_index_T,categorical_cols, placeholder_nums, max_range_cols,embedded_data_original_dev,[], ratio)
+        rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus , reverse_index_T,categorical_cols,categorical_mask_dev, placeholder_nums, max_range_cols,embedded_data_original_dev,[], ratio)
         '''                                                   
         print("type emmbedded data "+str(type(embedded_data_original)))
         print("index e plus "+str(type(index_e_plus)))
@@ -381,7 +387,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, rever
     # Case 4: anything else
     return obj
                     #fixed size            #can be fixed size   #can be fixed size  #can be fixed size   #fixed size       #fixed size      #can be fixed size                                       
-def learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,   index_e_plus,       index_e_minus,       rev_index,          categorical_cols, placeholder_nums, max_range_cols,embedded_data_original_dev,used_items=[], ratio=0.5):
+def learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,   index_e_plus,       index_e_minus,       rev_index,          categorical_cols,categorical_mask, placeholder_nums, max_range_cols,embedded_data_original_dev,used_items=[], ratio=0.5):
     items = []
     learn_rule_loops = 0
 
@@ -401,7 +407,7 @@ def learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_d
         #print("\n NEG: "+str(data_neg))
         #print("*****************************\n")
         
-        t = best_item_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus,categorical_cols, placeholder_nums,max_range_cols, embedded_data_original_dev,used_items + items)
+        t = best_item_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus,categorical_cols, categorical_mask, placeholder_nums,max_range_cols, embedded_data_original_dev,used_items + items)
         end_best_item = timer()
         overall_best_item += end_best_item - start_best_item 
 
@@ -428,7 +434,7 @@ def learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_d
                 # ===== fold timing =====
                 start_fold = timer()
                 #SISTEMA
-                ab = fold_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_minus,index_e_plus ,rev_index,categorical_cols,placeholder_nums,max_range_cols, embedded_data_original_dev, used_items + items,  ratio)
+                ab = fold_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_minus,index_e_plus ,rev_index,categorical_cols,categorical_mask,placeholder_nums,max_range_cols, embedded_data_original_dev, used_items + items,  ratio)
                 end_fold = timer()
                 overall_fold += end_fold - start_fold
                 if len(ab) > 0:
@@ -440,7 +446,7 @@ def learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_d
     #print("returned rule: " +str(rule))
     return rule, overall_best_item, overall_covers,overall_fold,total_time,learn_rule_loops
 
-def best_item_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus,categorical_cols, placeholder_nums,max_range_cols, embedded_data_original_dev, used_items=[]):
+def best_item_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus,categorical_cols,categorical_mask_dev, placeholder_nums,max_range_cols, embedded_data_original_dev, used_items=[]):
 
     ret = -1, 0, 0
     if len(index_e_plus) == 0 and len(index_e_minus) == 0:
@@ -473,55 +479,57 @@ def best_item_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_de
     used_items_dev = cuda.to_device(used_items_arr)
 
     thread_per_block=32
-    blocks_grid=1
+
+    blocks_grid=n-1
     
-    return_vals_dev = cuda.device_array(3, dtype=cupy.float64)
+    return_vals_dev = cuda.device_array(3*(n-1), dtype=cupy.float64)
 
     global global_kernel_call
     #3333000 il num totale di esempi 4+ |pos+neg|=330000 + |cats+vals|=330000 
-    neg_dev = cuda.device_array(n_max, dtype=np.int32)
-    pos_dev = cuda.device_array(n_max, dtype=np.int32)
-    vals_dev = cuda.device_array(n_max, dtype=np.int32)
-    cats_dev = cuda.device_array(n_max, dtype=np.int32)
+    neg_dev = cuda.device_array(n_max*(n-1), dtype=np.int32)
+    pos_dev = cuda.device_array(n_max*(n-1), dtype=np.int32)
+    vals_dev = cuda.device_array(n_max*(n-1), dtype=np.int32)
+    cats_dev = cuda.device_array(n_max*(n-1), dtype=np.int32)
+    aux_sorted_dev = cuda.device_array(n_max, dtype=np.int32)
     #crea [len,len,len,len, pos, neg, vals,cats]
 
     
-    #for each example check a literal providing the most IG
-    for i in range(n - 1): # 0..n-1 # form 20 to 500 blocks
-             
-            
+    #for each example check a literal providing the most IG 
+
         
-        
-        global_kernel_call+=1
-            
-        
-        best_ig_gpu[blocks_grid,thread_per_block]( embedded_data_original_dev,original_sorted_dev, reverse_index_T_dev,index_e_plus_dev, index_e_minus_dev, i,categorical_cols_dev,placeholder_nums_dev, global_kernel_call,return_vals_dev, pos_dev, neg_dev, vals_dev,cats_dev,n_max,used_items_dev)
+    best_ig_gpu[blocks_grid,thread_per_block](categorical_mask_dev, aux_sorted_dev,  embedded_data_original_dev,original_sorted_dev, reverse_index_T_dev,index_e_plus_dev, index_e_minus_dev, categorical_cols_dev,placeholder_nums_dev, global_kernel_call,return_vals_dev, pos_dev, neg_dev, vals_dev,cats_dev,n_max,used_items_dev)
         
         
         
         
         
         
-        #print(best_ig_gpu.inspect_types())
-        cuda.synchronize()
+    cuda.synchronize()
+
         #print("ig1 on host: ",host_arr[0], "ig2 on host: ", host_arr[1])
-        return_vals_host = return_vals_dev.copy_to_host()  # returns a NumPy array
-        ig, r, v = return_vals_host
+    return_vals_host = return_vals_dev.copy_to_host()  # returns a NumPy array
+    n_triplets = len(return_vals_host) // 3
+
+    for i in range(n_triplets):
+        idx = i * 3
+        ig = return_vals_host[idx]
+        r  = return_vals_host[idx + 1]
+        v  = return_vals_host[idx + 2]
         
         v=int(v) if v != -1e20 else v
         r=int(r)
-        
-        #sync and get res
+        # Do something with your values
         if best < ig:
             best = ig
             ret = i, r, v
+
     return ret
 
-def fold_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus, rev_index,categorical_cols,placeholder_nums, max_range_cols,embedded_data_original_dev,used_items=[], ratio=0.5):
+def fold_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus, rev_index,categorical_cols,categorical_mask,placeholder_nums, max_range_cols,embedded_data_original_dev,used_items=[], ratio=0.5):
     ret = []
     while len(index_e_plus) > 0:
         #print("fold gpu")
-        rule,_,_,_,_,_ = learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus, rev_index,categorical_cols, placeholder_nums,max_range_cols,embedded_data_original_dev,used_items, ratio)
+        rule,_,_,_,_,_ = learn_rule_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus, rev_index,categorical_cols, categorical_mask,placeholder_nums,max_range_cols,embedded_data_original_dev,used_items, ratio)
         data_fn = [i for i in index_e_plus if not cover_gpu_dev(rule, embedded_data_original,i, categorical_cols, placeholder_nums)]
         if len(index_e_plus) == len(data_fn):
             break
@@ -534,7 +542,7 @@ def fold_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_dev,ind
 #@cuda.jit           # copy once                 #   merge                          # copy once          copy once         copy once
 
 @cuda.jit
-def best_ig_gpu( embedded_data_original_dev,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus, i, categorical_cols, placeholder_nums, kenerl_num,return_vals_dev,pos, neg, unique_vals_present,unique_cats_present,n_rows,used_items=[]):
+def best_ig_gpu(categorical_mask_dev, aux_sorted, embedded_data_original_dev,original_sorted_dev, reverse_index_T_dev,index_e_plus, index_e_minus, categorical_cols, placeholder_nums, kenerl_num,return_vals_dev,pos, neg, unique_vals_present,unique_cats_present,n_cols,used_items=[]):
     
     xp, xn, cp, cn = 0, 0, 0, 0
 
@@ -543,68 +551,70 @@ def best_ig_gpu( embedded_data_original_dev,original_sorted_dev, reverse_index_T
     r_sm = cuda.shared.array(shape=32, dtype=int32)
     #outer loop is on the columns
     tid = cuda.threadIdx.x
+    offset=cuda.blockIdx.x
+    i=offset
+    is_categorical = categorical_mask_dev[offset] #leva l'offse
+    for j in range(tid,n_cols,32):
+        pos[offset*n_cols+j] = 0
+        neg[offset*n_cols+j] = 0
+        unique_vals_present[offset*n_cols+j] = 0
+        unique_cats_present[offset*n_cols+j] = 0
+        #print("thread ",tid, "block index: ",cuda.blockIdx.x,"setting index: ",offset*n_cols+j)
 
-    for j in range(tid,n_rows,32):
-        pos[j] = 0
-        neg[j] = 0
-        unique_vals_present[j] = 0
-        unique_cats_present[j] = 0
+    #for j in range(tid,index_e_plus,32):
+    #    index=reverse_index_T_dev[index, ]
+    #    aux_sorted[j]= 
 
-    is_categorical = False
-    for j in range(categorical_cols.size):
-        if i == categorical_cols[j]:
-            is_categorical = True
-            break
 
     #formalmente non ok ---------------------------------------------------
     #elements_per_th = (max_range_cols + 32 - 1) // 32
     for index in index_e_plus: #loop per example (row)
-        index=reverse_index_T_dev[index, i]
+        #index=reverse_index_T_dev[index, i]
     
-        d=original_sorted_dev[index,i] #get 1 el
+        d=embedded_data_original_dev[index,i] #get 1 el
 
         #d[i] is the value of a cell in column i
-        pos[d] += 1 
+        pos[offset*n_cols+d] += 1 
         if is_categorical or d==placeholder_nums[i]: #se is 
-            unique_cats_present[(d)]=1 #add to the unique cat values found
+            unique_cats_present[offset*n_cols+(d)]=1 #add to the unique cat values found
             cp += 1
         else: 
-            unique_vals_present[(d)]=1 #add to the unique num values found
+            unique_vals_present[offset*n_cols+(d)]=1 #add to the unique num values found
             xp += 1
 
     for index in index_e_minus:
-        index=reverse_index_T_dev[index, i]
-        d=original_sorted_dev[index,i] #get 1 el
-        neg[d] += 1
+        #index=reverse_index_T_dev[index, i]
+        d=embedded_data_original_dev[index,i] #get 1 el
+        neg[offset*n_cols+d] += 1
 
 
         if is_categorical or d==placeholder_nums[i]:
-            unique_cats_present[(d)]=1
+            unique_cats_present[offset*n_cols+(d)]=1
             cn += 1
         else:
-            unique_vals_present[(d)]=1
+            unique_vals_present[offset*n_cols+(d)]=1
             xn += 1
 
 
     num_vals = 0
-    for j in range(unique_vals_present.size):
-        if unique_vals_present[j] == 1:
-            unique_vals_present[num_vals] = j  # overwrite array with only present indices
+    for j in range(n_cols):
+        if unique_vals_present[offset*n_cols+j] == 1:
+            unique_vals_present[offset*n_cols+num_vals] = j  # overwrite array with only present indices
             num_vals += 1
     # Now unique_vals_present[:num_vals] contains the indices of present values
 
     num_cats = 0
 
     #print("range",unique_cats_present.size)
-    for j in range(unique_cats_present.size):
-        if unique_cats_present[j] == 1:
-            unique_cats_present[num_cats] = j
+    for j in range(n_cols):
+        if unique_cats_present[offset*n_cols+j] == 1:
+            unique_cats_present[offset*n_cols+num_cats] = j
             num_cats += 1
     
     #--------------------------
     for j in range(1, num_vals):
-        pos[unique_vals_present[j]] += pos[unique_vals_present[j - 1]]
-        neg[unique_vals_present[j]] += neg[unique_vals_present[j - 1]]
+        pos[offset*n_cols+unique_vals_present[offset*n_cols+j]] += pos[offset*n_cols+unique_vals_present[offset*n_cols+j - 1]]
+        neg[offset*n_cols+unique_vals_present[offset*n_cols+j]] += neg[offset*n_cols+unique_vals_present[offset*n_cols+j - 1]]
 
     #--------------------------------------------------------------------------------------------
 
@@ -613,7 +623,7 @@ def best_ig_gpu( embedded_data_original_dev,original_sorted_dev, reverse_index_T
     r_sm[tid] = 0
     num_used = len(used_items)  
     for x_i in range(tid, num_vals, 32):
-        x=unique_vals_present[x_i]
+        x=unique_vals_present[offset*n_cols+x_i]
         skip = 0  # boolean flag
         for j in range(num_used):
 
@@ -623,21 +633,22 @@ def best_ig_gpu( embedded_data_original_dev,original_sorted_dev, reverse_index_T
 
         if skip:
             continue
-        
-        ig = gain_device(pos[x], xp - pos[x] + cp, xn - neg[x] + cn, neg[x]) #su gpu, tempi assurdi causa data transfer
+        x_index=offset*n_cols+x
+        ig = gain_device(pos[x_index], xp - pos[x_index] + cp, xn - neg[x_index] + cn, neg[x_index]) #su gpu, tempi assurdi causa data transfer
 
         if bests_sm[tid] < ig:
             bests_sm[tid],  v_sm[tid],  r_sm[tid] = ig, x, 0
         
-        ig = gain_device(xp - pos[x], pos[x] + cp, neg[x] + cn, xn - neg[x])
+        ig = gain_device(xp - pos[x_index], pos[x_index] + cp, neg[x_index] + cn, xn - neg[x_index])
 
         
         if bests_sm[tid] < ig:
             bests_sm[tid],  v_sm[tid],  r_sm[tid] = ig, x, 1
 
     for c_i in range(tid, num_cats, 32):
-        c=unique_cats_present[c_i]
+        c=unique_cats_present[offset*n_cols+c_i]
         skip = 0  # boolean flag
+        
         for j in range(num_used):
             if int(used_items[j, 0]) == i and int(used_items[j, 1]) in (2,3) and int(used_items[j, 2]) == c:
                 skip = 1
@@ -645,12 +656,15 @@ def best_ig_gpu( embedded_data_original_dev,original_sorted_dev, reverse_index_T
 
         if skip:
             continue
-        ig = gain_device(pos[c], cp - pos[c] + xp, cn - neg[c] + xn, neg[c])
+        
+        c_index=c+offset*n_cols
+
+        ig = gain_device(pos[c_index], cp - pos[c_index] + xp, cn - neg[c_index] + xn, neg[c_index])
         
         if bests_sm[tid] < ig:
             bests_sm[tid],  v_sm[tid],  r_sm[tid] = ig, c, 2
         
-        ig = gain_device(cp - pos[c] + xp, pos[c], neg[c], cn - neg[c] + xn)
+        ig = gain_device(cp - pos[c_index] + xp, pos[c_index], neg[c_index], cn - neg[c_index] + xn)
 
         if bests_sm[tid] < ig:
             bests_sm[tid],  v_sm[tid],  r_sm[tid] = ig, c, 3
@@ -678,18 +692,9 @@ def best_ig_gpu( embedded_data_original_dev,original_sorted_dev, reverse_index_T
 
 
     if(tid==0):
-        max_best = bests_sm[0]
-        max_v = v_sm[0]
-        max_r = r_sm[0]
-
-        for i in range(1, 32):
-            if bests_sm[i] > max_best:
-                max_best = bests_sm[i]
-                max_v = v_sm[i]
-                max_r = r_sm[i]
-        return_vals_dev[0] = max_best
-        return_vals_dev[1] = max_r
-        return_vals_dev[2] = max_v
+        return_vals_dev[cuda.blockIdx.x * 3 + 0] = best
+        return_vals_dev[cuda.blockIdx.x * 3 + 1] = r
+        return_vals_dev[cuda.blockIdx.x * 3 + 2] = v
 
 
 # GPU gain function
