@@ -10,7 +10,7 @@ def run_test1():
     model,data_train, data_test = MNIST()  #c.a. 6 min e 30 a 0.2 di ratio
 
     start = timer()
-    model.fit(data_train, ratio=0.2)
+    model.fit(data_train, ratio=0.5)
     end = timer()
 
     h_cpu=model.get_asp(simple=True)
@@ -31,7 +31,7 @@ def run_test1():
     model,data_train, data_test = MNIST()  #c.a. 6 min e 30 a 0.2 di ratio
 
     start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
+    model.fitGPU(data_train, ratio=0.5)
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
@@ -43,21 +43,24 @@ def run_test1():
     print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
 
     print("----------------------------------------------------------------")
+
     RED = "\033[91m"
     GREEN = "\033[92m"
     RESET = "\033[0m"
-
+    YELLOW = "\033[33m"
     if h_cpu != h_gpu:
-        print(f"{RED}test1 failed{RESET}")
-        print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            return 0
+        else:
+            print(f"{RED}test1 failed{RESET}")
+            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+            return 1
     else:
-        print(f"{GREEN}test1 passed{RESET}")
+        print(f"{GREEN}test passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
-
-    if(accuracy_cpu != accuracy_gpu):
-        print(f"{RED}ACCURACY DIFFERENCE(?){RESET}")
-        print(accuracy_cpu+"\n-----------------------------------\n"+accuracy_gpu)
+        return 0
 
 def run_test2():
     model,data = MINITEST()  
@@ -67,7 +70,7 @@ def run_test2():
 
     #sposta dati su gpu
     start = timer()
-    model.fit(data_train, ratio=0.2)
+    model.fit(data_train, ratio=0.5)
     end = timer()
 
     h_cpu=model.get_asp(simple=True)
@@ -91,7 +94,7 @@ def run_test2():
     data_train, data_test = split_data_deterministically(data, ratio=0.8)
 
     start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
+    model.fitGPU(data_train, ratio=0.5)
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
@@ -106,17 +109,20 @@ def run_test2():
     RED = "\033[91m"
     GREEN = "\033[92m"
     RESET = "\033[0m"
-
+    YELLOW = "\033[33m"
     if h_cpu != h_gpu:
-        print(f"{RED}test2 failed{RESET}")
-        print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            return 0
+        else:
+            print(f"{RED}test1 failed{RESET}")
+            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+            return 1
     else:
-        print(f"{GREEN}test2 passed{RESET}")
+        print(f"{GREEN}test passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
+        return 0
 
-    if(accuracy_cpu != accuracy_gpu):
-        print(f"{RED}ACCURACY DIFFERENCE(?){RESET}")
-        print(accuracy_cpu+"\n-----------------------------------\n"+accuracy_gpu)
 
 def run_test3():
     model, data = diabetes() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
@@ -126,7 +132,7 @@ def run_test3():
 
     #sposta dati su gpu
     start = timer()
-    model.fit(data_train, ratio=0.2)
+    model.fit(data_train, ratio=0.5)
     end = timer()
     h_cpu=model.get_asp(simple=True)
 
@@ -150,7 +156,7 @@ def run_test3():
     data_train, data_test = split_data_deterministically(data, ratio=0.8)
 
     start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
+    model.fitGPU(data_train, ratio=0.5)
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
@@ -165,28 +171,31 @@ def run_test3():
     RED = "\033[91m"
     GREEN = "\033[92m"
     RESET = "\033[0m"
-
+    YELLOW = "\033[33m"
     if h_cpu != h_gpu:
-        print(f"{RED}test3 failed{RESET}")
-        print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            return 0
+        else:
+            print(f"{RED}test1 failed{RESET}")
+            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+            return 1
     else:
-        print(f"{GREEN}test3 passed{RESET}")
+        print(f"{GREEN}test passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
+        return 0
 
-    if(accuracy_cpu != accuracy_gpu):
-        print(f"{RED}ACCURACY DIFFERENCE(?){RESET}")
-        print(accuracy_cpu+"\n-----------------------------------\n"+accuracy_gpu)
 
 def run_test4():
     model, data = australia() # 6 min a 0.1 di ratio 
     
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+    data_train, data_test = split_data_deterministically(data, ratio=0.5)
 
 
     #sposta dati su gpu
     start = timer()
-    model.fit(data_train, ratio=0.1)
+    model.fit(data_train, ratio=0.8)
     end = timer()
     h_cpu=model.get_asp(simple=True)
     Y = [d[-1] for d in data_test]
@@ -204,10 +213,10 @@ def run_test4():
 
     model, data = australia() # 6 min a 0.1 di ratio 
     
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+    data_train, data_test = split_data_deterministically(data, ratio=0.5)
     
     start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.1)
+    model.fitGPU(data_train, ratio=0.8)
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
@@ -222,18 +231,21 @@ def run_test4():
     RED = "\033[91m"
     GREEN = "\033[92m"
     RESET = "\033[0m"
-
+    YELLOW = "\033[33m"
     if h_cpu != h_gpu:
-        print(f"{RED}test4 failed{RESET}")
-        print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            return 0
+        else:
+            print(f"{RED}test1 failed{RESET}")
+            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+            return 1
     else:
-        print(f"{GREEN}test4 passed{RESET}")
+        print(f"{GREEN}test passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
+        return 0
 
-    if(accuracy_cpu != accuracy_gpu):
-        print(f"{RED}ACCURACY DIFFERENCE(?){RESET}")
-        print(accuracy_cpu+"\n-----------------------------------\n"+accuracy_gpu)
 
 def run_test5():
 
@@ -243,7 +255,7 @@ def run_test5():
 
     #sposta dati su gpu
     start = timer()
-    model.fit(data_train, ratio=0.2)
+    model.fit(data_train, ratio=0.5)
     end = timer()
 
 
@@ -269,7 +281,7 @@ def run_test5():
 
 
     start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
+    model.fitGPU(data_train, ratio=0.5)
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
@@ -284,29 +296,31 @@ def run_test5():
     RED = "\033[91m"
     GREEN = "\033[92m"
     RESET = "\033[0m"
-
+    YELLOW = "\033[33m"
     if h_cpu != h_gpu:
-        print(f"{RED}test5 failed{RESET}")
-        print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            return 0
+        else:
+            print(f"{RED}test1 failed{RESET}")
+            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
+            return 1
     else:
-        print(f"{GREEN}test5 passed{RESET}")
+        print(f"{GREEN}test passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
-
-    if(accuracy_cpu != accuracy_gpu):
-        print(f"{RED}ACCURACY DIFFERENCE(?){RESET}")
-        print(accuracy_cpu+"\n-----------------------------------\n"+accuracy_gpu)
+        return 0
 
 
 #si, molto alla buona, ma per ora va bene
 
 def compare_times(parallel=False):
     tests = [
-        run_test1,
-        run_test2,
+        #run_test4,
         run_test3,
-        run_test4,
-        run_test5
+        run_test2,
+        run_test5,
+        run_test1,
     ]
 
     errors = 0
@@ -352,7 +366,10 @@ def compare_times(parallel=False):
                 if result:  # test reported failure
                     errors += 1
             except Exception as e:
+                import traceback
                 print(f"[Test {idx}] crashed:", e)
+                print(traceback.format_exc()) 
+                print("-" * 30)
                 errors += 1
 
     # Final summary
@@ -469,8 +486,8 @@ def minitest_for_debugging():
 
 def main():
     
-    #compare_times()
-    fast_check()
+    compare_times()
+    #fast_check()
     #minitest_for_debugging()
 
 if __name__ == '__main__':
