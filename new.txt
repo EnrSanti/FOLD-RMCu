@@ -1,0 +1,1772 @@
+(block kernel call  0 ) block  0  num_vals:  9
+(block kernel call  0 ) block  3  num_vals:  5
+(block kernel call  0 ) block  1  num_vals:  9
+(block kernel call  0 ) block  2  num_vals:  9
+(block kernel call  0 ) block  0 index  1 pos [ 1 ] =  7
+(block kernel call  0 ) block  3 index  1 pos [ 28 ] =  1
+(block kernel call  0 ) block  1 index  1 pos [ 10 ] =  3
+(block kernel call  0 ) block  2 index  1 pos [ 19 ] =  1
+(block kernel call  0 ) block  0 index  2 pos [ 2 ] =  5
+(block kernel call  0 ) block  3 index  2 pos [ 29 ] =  0
+(block kernel call  0 ) block  1 index  2 pos [ 11 ] =  0
+(block kernel call  0 ) block  2 index  2 pos [ 20 ] =  1
+(block kernel call  0 ) block  0 index  3 pos [ 3 ] =  5
+(block kernel call  0 ) block  3 index  3 pos [ 30 ] =  0
+(block kernel call  0 ) block  1 index  3 pos [ 12 ] =  1
+(block kernel call  0 ) block  2 index  3 pos [ 21 ] =  1
+(block kernel call  0 ) block  0 index  4 pos [ 4 ] =  3
+(block kernel call  0 ) block  3 index  4 pos [ 31 ] =  1
+(block kernel call  0 ) block  1 index  4 pos [ 13 ] =  0
+(block kernel call  0 ) block  2 index  4 pos [ 22 ] =  0
+(block kernel call  0 ) block  0 index  5 pos [ 5 ] =  4
+(block kernel call  0 ) Block: 3 Thread 0 val:  29.000000
+(block kernel call  0 ) Block: 3 Thread 1 val:  1.000000
+(block kernel call  0 ) Block: 3 Thread 2 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 3 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 4 val:  1.000000
+(block kernel call  0 ) Block: 3 Thread 5 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 6 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 7 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 8 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 9 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 10 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 11 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 12 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 13 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 14 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 15 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 16 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 17 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 18 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 19 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 20 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 21 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 22 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 23 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 24 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 25 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 26 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 27 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 28 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 29 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 30 val:  0.000000
+(block kernel call  0 ) Block: 3 Thread 31 val:  0.000000
+(block kernel call  0 ) block  1 index  5 pos [ 14 ] =  1
+(block kernel call  0 ) block  2 index  5 pos [ 23 ] =  0
+(block kernel call  0 ) block  0 index  6 pos [ 6 ] =  0
+(block kernel call  0 ) block  1 index  6 pos [ 15 ] =  0
+(block kernel call  0 ) block  2 index  6 pos [ 24 ] =  0
+(block kernel call  0 ) Block: 3  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  29.000000
+(block kernel call  0 ) Block: 3  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  0 ) Block: 3  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  1.000000
+(block kernel call  0 ) Block: 3  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  0 ) Block: 3  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  0 ) block  0 index  7 pos [ 7 ] =  0
+(block kernel call  0 ) block  1 index  7 pos [ 16 ] =  1
+(block kernel call  0 ) block  2 index  7 pos [ 25 ] =  0
+(block kernel call  0 ) after block  3 index  1 pos [ 28 ] =  30
+(block kernel call  0 ) block  0 index  8 pos [ 8 ] =  0
+(block kernel call  0 ) block  1 index  8 pos [ 17 ] =  0
+(block kernel call  0 ) block  2 index  8 pos [ 26 ] =  2
+(block kernel call  0 ) after block  3 index  2 pos [ 29 ] =  1
+(block kernel call  0 ) Block: 0 Thread 0 val:  7.000000
+(block kernel call  0 ) Block: 0 Thread 1 val:  7.000000
+(block kernel call  0 ) Block: 0 Thread 2 val:  5.000000
+(block kernel call  0 ) Block: 0 Thread 3 val:  5.000000
+(block kernel call  0 ) Block: 0 Thread 4 val:  3.000000
+(block kernel call  0 ) Block: 0 Thread 5 val:  4.000000
+(block kernel call  0 ) Block: 0 Thread 6 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 7 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 8 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 9 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 10 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 11 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 12 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 13 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 14 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 15 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 16 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 17 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 18 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 19 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 20 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 21 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 22 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 23 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 24 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 25 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 26 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 27 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 28 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 29 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 30 val:  0.000000
+(block kernel call  0 ) Block: 0 Thread 31 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 0 val:  25.000000
+(block kernel call  0 ) Block: 1 Thread 1 val:  3.000000
+(block kernel call  0 ) Block: 1 Thread 2 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 3 val:  1.000000
+(block kernel call  0 ) Block: 1 Thread 4 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 5 val:  1.000000
+(block kernel call  0 ) Block: 1 Thread 6 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 7 val:  1.000000
+(block kernel call  0 ) Block: 1 Thread 8 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 9 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 10 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 11 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 12 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 13 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 14 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 15 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 16 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 17 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 18 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 19 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 20 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 21 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 22 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 23 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 24 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 25 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 26 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 27 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 28 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 29 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 30 val:  0.000000
+(block kernel call  0 ) Block: 1 Thread 31 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 0 val:  25.000000
+(block kernel call  0 ) Block: 2 Thread 1 val:  1.000000
+(block kernel call  0 ) Block: 2 Thread 2 val:  1.000000
+(block kernel call  0 ) Block: 2 Thread 3 val:  1.000000
+(block kernel call  0 ) Block: 2 Thread 4 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 5 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 6 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 7 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 8 val:  2.000000
+(block kernel call  0 ) Block: 2 Thread 9 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 10 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 11 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 12 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 13 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 14 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 15 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 16 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 17 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 18 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 19 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 20 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 21 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 22 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 23 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 24 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 25 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 26 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 27 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 28 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 29 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 30 val:  0.000000
+(block kernel call  0 ) Block: 2 Thread 31 val:  0.000000
+(block kernel call  0 ) after block  3 index  3 pos [ 30 ] =  0
+(block kernel call  0 ) Block: 0  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  7.000000
+(block kernel call  0 ) Block: 0  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  7.000000
+(block kernel call  0 ) Block: 0  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  5.000000
+(block kernel call  0 ) Block: 0  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  5.000000
+(block kernel call  0 ) Block: 0  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  3.000000
+(block kernel call  0 ) Block: 0  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  4.000000
+(block kernel call  0 ) Block: 0  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  0 ) Block: 0  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  25.000000
+(block kernel call  0 ) Block: 1  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  3.000000
+(block kernel call  0 ) Block: 1  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  1.000000
+(block kernel call  0 ) Block: 1  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  1.000000
+(block kernel call  0 ) Block: 1  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  1.000000
+(block kernel call  0 ) Block: 1  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  0 ) Block: 1  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  25.000000
+(block kernel call  0 ) Block: 2  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  0 ) Block: 2  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  1.000000
+(block kernel call  0 ) Block: 2  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  1.000000
+(block kernel call  0 ) Block: 2  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  2.000000
+(block kernel call  0 ) Block: 2  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  0 ) Block: 2  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  0 ) after block  3 index  4 pos [ 31 ] =  1
+(block kernel call  0 ) after block  1 index  1 pos [ 10 ] =  28
+(block kernel call  0 ) after block  0 index  1 pos [ 1 ] =  14
+(block kernel call  0 ) after block  2 index  1 pos [ 19 ] =  26
+(block kernel call  0 ) after block  1 index  2 pos [ 11 ] =  3
+(block kernel call  0 ) after block  0 index  2 pos [ 2 ] =  12
+(block kernel call  0 ) after block  2 index  2 pos [ 20 ] =  2
+(block kernel call  0 ) after block  1 index  3 pos [ 12 ] =  1
+(block kernel call  0 ) after block  0 index  3 pos [ 3 ] =  10
+(block kernel call  0 ) after block  2 index  3 pos [ 21 ] =  2
+(block kernel call  0 ) after block  1 index  4 pos [ 13 ] =  1
+(block kernel call  0 ) after block  0 index  4 pos [ 4 ] =  8
+(block kernel call  0 ) after block  2 index  4 pos [ 22 ] =  1
+(block kernel call  0 ) after block  1 index  5 pos [ 14 ] =  1
+(block kernel call  0 ) after block  0 index  5 pos [ 5 ] =  7
+(block kernel call  0 ) after block  2 index  5 pos [ 23 ] =  0
+(block kernel call  0 ) after block  1 index  6 pos [ 15 ] =  1
+(block kernel call  0 ) after block  0 index  6 pos [ 6 ] =  4
+(block kernel call  0 ) after block  2 index  6 pos [ 24 ] =  0
+(block kernel call  0 ) after block  1 index  7 pos [ 16 ] =  1
+(block kernel call  0 ) after block  0 index  7 pos [ 7 ] =  0
+(block kernel call  0 ) after block  2 index  7 pos [ 25 ] =  0
+(block kernel call  0 ) after block  1 index  8 pos [ 17 ] =  1
+(block kernel call  0 ) after block  0 index  8 pos [ 8 ] =  0
+(block kernel call  0 ) after block  2 index  8 pos [ 26 ] =  2
+(block kernel call  1 ) block  0  num_vals:  6
+(block kernel call  1 ) block  3  num_vals:  3
+(block kernel call  1 ) block  1  num_vals:  2
+(block kernel call  1 ) block  2  num_vals:  5
+(block kernel call  1 ) block  0 index  1 pos [ 1 ] =  0
+(block kernel call  1 ) block  3 index  1 pos [ 28 ] =  0
+(block kernel call  1 ) block  1 index  1 pos [ 10 ] =  1
+(block kernel call  1 ) block  2 index  1 pos [ 19 ] =  0
+(block kernel call  1 ) block  0 index  2 pos [ 2 ] =  0
+(block kernel call  1 ) block  3 index  2 pos [ 31 ] =  0
+(block kernel call  1 ) Block: 1 Thread 0 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 1 val:  1.000000
+(block kernel call  1 ) Block: 1 Thread 2 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 3 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 4 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 5 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 6 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 7 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 8 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 9 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 10 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 11 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 12 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 13 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 14 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 15 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 16 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 17 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 18 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 19 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 20 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 21 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 22 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 23 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 24 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 25 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 26 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 27 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 28 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 29 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 30 val:  0.000000
+(block kernel call  1 ) Block: 1 Thread 31 val:  0.000000
+(block kernel call  1 ) block  2 index  2 pos [ 20 ] =  0
+(block kernel call  1 ) block  0 index  3 pos [ 3 ] =  0
+(block kernel call  1 ) Block: 3 Thread 0 val:  1.000000
+(block kernel call  1 ) Block: 3 Thread 1 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 2 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 3 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 4 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 5 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 6 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 7 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 8 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 9 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 10 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 11 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 12 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 13 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 14 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 15 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 16 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 17 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 18 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 19 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 20 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 21 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 22 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 23 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 24 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 25 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 26 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 27 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 28 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 29 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 30 val:  0.000000
+(block kernel call  1 ) Block: 3 Thread 31 val:  0.000000
+(block kernel call  1 ) block  2 index  3 pos [ 23 ] =  1
+(block kernel call  1 ) Block: 1  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  1 ) Block: 1  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  1 ) Block: 1  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  1 ) block  0 index  4 pos [ 4 ] =  1
+(block kernel call  1 ) block  2 index  4 pos [ 26 ] =  0
+(block kernel call  1 ) Block: 3  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  1.000000
+(block kernel call  1 ) Block: 3  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  1 ) Block: 3  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  1 ) after block  1 index  1 pos [ 10 ] =  1
+(block kernel call  1 ) block  0 index  5 pos [ 5 ] =  0
+(block kernel call  1 ) Block: 2 Thread 0 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 1 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 2 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 3 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 4 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 5 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 6 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 7 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 8 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 9 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 10 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 11 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 12 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 13 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 14 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 15 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 16 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 17 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 18 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 19 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 20 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 21 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 22 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 23 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 24 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 25 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 26 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 27 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 28 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 29 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 30 val:  0.000000
+(block kernel call  1 ) Block: 2 Thread 31 val:  0.000000
+(block kernel call  1 ) after block  3 index  1 pos [ 28 ] =  1
+(block kernel call  1 ) Block: 0 Thread 0 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 1 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 2 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 3 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 4 val:  1.000000
+(block kernel call  1 ) Block: 0 Thread 5 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 6 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 7 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 8 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 9 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 10 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 11 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 12 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 13 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 14 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 15 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 16 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 17 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 18 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 19 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 20 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 21 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 22 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 23 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 24 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 25 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 26 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 27 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 28 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 29 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 30 val:  0.000000
+(block kernel call  1 ) Block: 0 Thread 31 val:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  1 ) Block: 2  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  1 ) after block  3 index  2 pos [ 31 ] =  0
+(block kernel call  1 ) Block: 0  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  1.000000
+(block kernel call  1 ) Block: 0  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  1 ) Block: 0  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  1 ) after block  2 index  1 pos [ 19 ] =  0
+(block kernel call  1 ) after block  0 index  1 pos [ 1 ] =  0
+(block kernel call  1 ) after block  2 index  2 pos [ 20 ] =  0
+(block kernel call  1 ) after block  0 index  2 pos [ 2 ] =  0
+(block kernel call  1 ) after block  2 index  3 pos [ 23 ] =  1
+(block kernel call  1 ) after block  0 index  3 pos [ 3 ] =  0
+(block kernel call  1 ) after block  2 index  4 pos [ 26 ] =  0
+(block kernel call  1 ) after block  0 index  4 pos [ 4 ] =  1
+(block kernel call  1 ) after block  0 index  5 pos [ 5 ] =  1
+(block kernel call  2 ) block  1  num_vals:  2
+(block kernel call  2 ) block  0  num_vals:  6
+(block kernel call  2 ) block  3  num_vals:  3
+(block kernel call  2 ) block  2  num_vals:  4
+(block kernel call  2 ) block  0 index  1 pos [ 1 ] =  0
+(block kernel call  2 ) block  3 index  1 pos [ 28 ] =  0
+(block kernel call  2 ) block  1 index  1 pos [ 10 ] =  1
+(block kernel call  2 ) block  2 index  1 pos [ 19 ] =  0
+(block kernel call  2 ) block  0 index  2 pos [ 2 ] =  0
+(block kernel call  2 ) block  3 index  2 pos [ 31 ] =  0
+(block kernel call  2 ) Block: 1 Thread 0 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 1 val:  1.000000
+(block kernel call  2 ) Block: 1 Thread 2 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 3 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 4 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 5 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 6 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 7 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 8 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 9 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 10 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 11 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 12 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 13 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 14 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 15 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 16 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 17 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 18 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 19 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 20 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 21 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 22 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 23 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 24 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 25 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 26 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 27 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 28 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 29 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 30 val:  0.000000
+(block kernel call  2 ) Block: 1 Thread 31 val:  0.000000
+(block kernel call  2 ) block  2 index  2 pos [ 20 ] =  0
+(block kernel call  2 ) block  0 index  3 pos [ 3 ] =  0
+(block kernel call  2 ) Block: 3 Thread 0 val:  1.000000
+(block kernel call  2 ) Block: 3 Thread 1 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 2 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 3 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 4 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 5 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 6 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 7 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 8 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 9 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 10 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 11 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 12 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 13 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 14 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 15 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 16 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 17 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 18 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 19 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 20 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 21 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 22 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 23 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 24 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 25 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 26 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 27 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 28 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 29 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 30 val:  0.000000
+(block kernel call  2 ) Block: 3 Thread 31 val:  0.000000
+(block kernel call  2 ) block  2 index  3 pos [ 23 ] =  1
+(block kernel call  2 ) Block: 1  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  2 ) Block: 1  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  2 ) Block: 1  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  2 ) block  0 index  4 pos [ 4 ] =  1
+(block kernel call  2 ) Block: 2 Thread 0 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 1 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 2 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 3 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 4 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 5 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 6 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 7 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 8 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 9 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 10 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 11 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 12 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 13 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 14 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 15 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 16 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 17 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 18 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 19 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 20 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 21 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 22 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 23 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 24 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 25 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 26 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 27 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 28 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 29 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 30 val:  0.000000
+(block kernel call  2 ) Block: 2 Thread 31 val:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  1.000000
+(block kernel call  2 ) Block: 3  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  2 ) Block: 3  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  2 ) after block  1 index  1 pos [ 10 ] =  1
+(block kernel call  2 ) block  0 index  5 pos [ 5 ] =  0
+(block kernel call  2 ) Block: 2  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  2 ) Block: 2  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  2 ) after block  3 index  1 pos [ 28 ] =  1
+(block kernel call  2 ) Block: 0 Thread 0 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 1 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 2 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 3 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 4 val:  1.000000
+(block kernel call  2 ) Block: 0 Thread 5 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 6 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 7 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 8 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 9 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 10 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 11 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 12 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 13 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 14 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 15 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 16 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 17 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 18 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 19 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 20 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 21 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 22 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 23 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 24 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 25 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 26 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 27 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 28 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 29 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 30 val:  0.000000
+(block kernel call  2 ) Block: 0 Thread 31 val:  0.000000
+(block kernel call  2 ) after block  3 index  2 pos [ 31 ] =  0
+(block kernel call  2 ) after block  2 index  1 pos [ 19 ] =  0
+(block kernel call  2 ) Block: 0  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  1.000000
+(block kernel call  2 ) Block: 0  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  2 ) Block: 0  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  2 ) after block  2 index  2 pos [ 20 ] =  0
+(block kernel call  2 ) after block  0 index  1 pos [ 1 ] =  0
+(block kernel call  2 ) after block  2 index  3 pos [ 23 ] =  1
+(block kernel call  2 ) after block  0 index  2 pos [ 2 ] =  0
+(block kernel call  2 ) after block  0 index  3 pos [ 3 ] =  0
+(block kernel call  2 ) after block  0 index  4 pos [ 4 ] =  1
+(block kernel call  2 ) after block  0 index  5 pos [ 5 ] =  1
+(block kernel call  3 ) block  1  num_vals:  2
+(block kernel call  3 ) block  0  num_vals:  2
+(block kernel call  3 ) block  3  num_vals:  1
+(block kernel call  3 ) block  2  num_vals:  2
+(block kernel call  3 ) block  0 index  1 pos [ 4 ] =  1
+(block kernel call  3 ) block  1 index  1 pos [ 10 ] =  1
+(block kernel call  3 ) block  2 index  1 pos [ 23 ] =  1
+(block kernel call  3 ) Block: 3 Thread 0 val:  1.000000
+(block kernel call  3 ) Block: 3 Thread 1 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 2 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 3 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 4 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 5 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 6 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 7 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 8 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 9 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 10 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 11 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 12 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 13 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 14 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 15 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 16 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 17 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 18 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 19 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 20 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 21 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 22 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 23 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 24 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 25 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 26 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 27 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 28 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 29 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 30 val:  0.000000
+(block kernel call  3 ) Block: 3 Thread 31 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 0 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 1 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 2 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 3 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 4 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 5 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 6 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 7 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 8 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 9 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 10 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 11 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 12 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 13 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 14 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 15 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 16 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 17 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 18 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 19 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 20 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 21 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 22 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 23 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 24 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 25 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 26 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 27 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 28 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 29 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 30 val:  0.000000
+(block kernel call  3 ) Block: 0 Thread 31 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 0 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 1 val:  1.000000
+(block kernel call  3 ) Block: 1 Thread 2 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 3 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 4 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 5 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 6 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 7 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 8 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 9 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 10 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 11 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 12 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 13 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 14 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 15 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 16 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 17 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 18 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 19 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 20 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 21 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 22 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 23 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 24 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 25 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 26 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 27 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 28 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 29 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 30 val:  0.000000
+(block kernel call  3 ) Block: 1 Thread 31 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 0 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 1 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 2 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 3 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 4 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 5 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 6 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 7 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 8 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 9 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 10 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 11 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 12 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 13 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 14 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 15 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 16 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 17 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 18 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 19 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 20 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 21 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 22 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 23 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 24 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 25 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 26 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 27 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 28 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 29 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 30 val:  0.000000
+(block kernel call  3 ) Block: 2 Thread 31 val:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  1.000000
+(block kernel call  3 ) Block: 3  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  3 ) Block: 3  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  3 ) Block: 1  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  3 ) Block: 1  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  3 ) Block: 2  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  3 ) Block: 0  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  3 ) after block  0 index  1 pos [ 4 ] =  1
+(block kernel call  3 ) after block  2 index  1 pos [ 23 ] =  1
+(block kernel call  3 ) after block  1 index  1 pos [ 10 ] =  1
+(block kernel call  4 ) block  1  num_vals:  8
+(block kernel call  4 ) block  0  num_vals:  7
+(block kernel call  4 ) block  3  num_vals:  4
+(block kernel call  4 ) block  2  num_vals:  8
+(block kernel call  4 ) block  0 index  1 pos [ 2 ] =  1
+(block kernel call  4 ) block  3 index  1 pos [ 28 ] =  3
+(block kernel call  4 ) block  1 index  1 pos [ 11 ] =  2
+(block kernel call  4 ) block  2 index  1 pos [ 20 ] =  2
+(block kernel call  4 ) block  0 index  2 pos [ 4 ] =  4
+(block kernel call  4 ) block  3 index  2 pos [ 29 ] =  2
+(block kernel call  4 ) block  1 index  2 pos [ 12 ] =  4
+(block kernel call  4 ) block  2 index  2 pos [ 21 ] =  0
+(block kernel call  4 ) block  0 index  3 pos [ 5 ] =  1
+(block kernel call  4 ) block  3 index  3 pos [ 30 ] =  2
+(block kernel call  4 ) block  1 index  3 pos [ 13 ] =  2
+(block kernel call  4 ) block  2 index  3 pos [ 22 ] =  1
+(block kernel call  4 ) block  0 index  4 pos [ 6 ] =  3
+(block kernel call  4 ) Block: 3 Thread 0 val:  12.000000
+(block kernel call  4 ) Block: 3 Thread 1 val:  3.000000
+(block kernel call  4 ) Block: 3 Thread 2 val:  2.000000
+(block kernel call  4 ) Block: 3 Thread 3 val:  2.000000
+(block kernel call  4 ) Block: 3 Thread 4 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 5 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 6 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 7 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 8 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 9 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 10 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 11 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 12 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 13 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 14 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 15 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 16 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 17 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 18 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 19 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 20 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 21 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 22 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 23 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 24 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 25 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 26 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 27 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 28 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 29 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 30 val:  0.000000
+(block kernel call  4 ) Block: 3 Thread 31 val:  0.000000
+(block kernel call  4 ) block  1 index  4 pos [ 14 ] =  1
+(block kernel call  4 ) block  2 index  4 pos [ 23 ] =  3
+(block kernel call  4 ) block  0 index  5 pos [ 7 ] =  3
+(block kernel call  4 ) block  1 index  5 pos [ 15 ] =  4
+(block kernel call  4 ) block  2 index  5 pos [ 24 ] =  1
+(block kernel call  4 ) Block: 3  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  12.000000
+(block kernel call  4 ) Block: 3  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  3.000000
+(block kernel call  4 ) Block: 3  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  2.000000
+(block kernel call  4 ) Block: 3  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  2.000000
+(block kernel call  4 ) Block: 3  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  4 ) Block: 3  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  4 ) block  0 index  6 pos [ 8 ] =  6
+(block kernel call  4 ) block  1 index  6 pos [ 16 ] =  1
+(block kernel call  4 ) block  2 index  6 pos [ 25 ] =  2
+(block kernel call  4 ) after block  3 index  1 pos [ 28 ] =  15
+(block kernel call  4 ) Block: 0 Thread 0 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 1 val:  1.000000
+(block kernel call  4 ) Block: 0 Thread 2 val:  1.000000
+(block kernel call  4 ) Block: 0 Thread 3 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 4 val:  4.000000
+(block kernel call  4 ) Block: 0 Thread 5 val:  1.000000
+(block kernel call  4 ) Block: 0 Thread 6 val:  3.000000
+(block kernel call  4 ) Block: 0 Thread 7 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 8 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 9 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 10 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 11 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 12 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 13 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 14 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 15 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 16 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 17 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 18 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 19 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 20 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 21 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 22 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 23 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 24 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 25 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 26 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 27 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 28 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 29 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 30 val:  0.000000
+(block kernel call  4 ) Block: 0 Thread 31 val:  0.000000
+(block kernel call  4 ) block  1 index  7 pos [ 17 ] =  4
+(block kernel call  4 ) block  2 index  7 pos [ 26 ] =  5
+(block kernel call  4 ) after block  3 index  2 pos [ 29 ] =  5
+(block kernel call  4 ) Block: 1 Thread 0 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 1 val:  1.000000
+(block kernel call  4 ) Block: 1 Thread 2 val:  2.000000
+(block kernel call  4 ) Block: 1 Thread 3 val:  4.000000
+(block kernel call  4 ) Block: 1 Thread 4 val:  2.000000
+(block kernel call  4 ) Block: 1 Thread 5 val:  1.000000
+(block kernel call  4 ) Block: 1 Thread 6 val:  4.000000
+(block kernel call  4 ) Block: 1 Thread 7 val:  1.000000
+(block kernel call  4 ) Block: 1 Thread 8 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 9 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 10 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 11 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 12 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 13 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 14 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 15 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 16 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 17 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 18 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 19 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 20 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 21 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 22 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 23 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 24 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 25 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 26 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 27 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 28 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 29 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 30 val:  0.000000
+(block kernel call  4 ) Block: 1 Thread 31 val:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  4 ) Block: 0  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  1.000000
+(block kernel call  4 ) Block: 0  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  4.000000
+(block kernel call  4 ) Block: 0  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  1.000000
+(block kernel call  4 ) Block: 0  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  3.000000
+(block kernel call  4 ) Block: 0  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  4 ) Block: 0  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  4 ) Block: 2 Thread 0 val:  4.000000
+(block kernel call  4 ) Block: 2 Thread 1 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 2 val:  2.000000
+(block kernel call  4 ) Block: 2 Thread 3 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 4 val:  1.000000
+(block kernel call  4 ) Block: 2 Thread 5 val:  3.000000
+(block kernel call  4 ) Block: 2 Thread 6 val:  1.000000
+(block kernel call  4 ) Block: 2 Thread 7 val:  2.000000
+(block kernel call  4 ) Block: 2 Thread 8 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 9 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 10 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 11 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 12 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 13 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 14 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 15 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 16 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 17 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 18 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 19 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 20 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 21 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 22 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 23 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 24 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 25 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 26 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 27 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 28 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 29 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 30 val:  0.000000
+(block kernel call  4 ) Block: 2 Thread 31 val:  0.000000
+(block kernel call  4 ) after block  3 index  3 pos [ 30 ] =  4
+(block kernel call  4 ) Block: 1  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  4 ) Block: 1  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  2.000000
+(block kernel call  4 ) Block: 1  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  4.000000
+(block kernel call  4 ) Block: 1  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  2.000000
+(block kernel call  4 ) Block: 1  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  1.000000
+(block kernel call  4 ) Block: 1  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  4.000000
+(block kernel call  4 ) Block: 1  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  1.000000
+(block kernel call  4 ) Block: 1  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  4 ) Block: 1  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  4.000000
+(block kernel call  4 ) Block: 2  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  2.000000
+(block kernel call  4 ) Block: 2  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  1.000000
+(block kernel call  4 ) Block: 2  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  3.000000
+(block kernel call  4 ) Block: 2  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  1.000000
+(block kernel call  4 ) Block: 2  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  2.000000
+(block kernel call  4 ) Block: 2  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  4 ) Block: 2  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  4 ) after block  0 index  1 pos [ 2 ] =  2
+(block kernel call  4 ) after block  0 index  2 pos [ 4 ] =  4
+(block kernel call  4 ) after block  1 index  1 pos [ 11 ] =  3
+(block kernel call  4 ) after block  2 index  1 pos [ 20 ] =  2
+(block kernel call  4 ) after block  0 index  3 pos [ 5 ] =  5
+(block kernel call  4 ) after block  1 index  2 pos [ 12 ] =  6
+(block kernel call  4 ) after block  2 index  2 pos [ 21 ] =  2
+(block kernel call  4 ) after block  0 index  4 pos [ 6 ] =  4
+(block kernel call  4 ) after block  1 index  3 pos [ 13 ] =  6
+(block kernel call  4 ) after block  2 index  3 pos [ 22 ] =  1
+(block kernel call  4 ) after block  0 index  5 pos [ 7 ] =  3
+(block kernel call  4 ) after block  1 index  4 pos [ 14 ] =  3
+(block kernel call  4 ) after block  2 index  4 pos [ 23 ] =  4
+(block kernel call  4 ) after block  0 index  6 pos [ 8 ] =  6
+(block kernel call  4 ) after block  1 index  5 pos [ 15 ] =  5
+(block kernel call  4 ) after block  2 index  5 pos [ 24 ] =  4
+(block kernel call  4 ) after block  1 index  6 pos [ 16 ] =  5
+(block kernel call  4 ) after block  2 index  6 pos [ 25 ] =  3
+(block kernel call  4 ) after block  1 index  7 pos [ 17 ] =  4
+(block kernel call  4 ) after block  2 index  7 pos [ 26 ] =  5
+(block kernel call  5 ) block  1  num_vals:  8
+(block kernel call  5 ) block  0  num_vals:  4
+(block kernel call  5 ) block  3  num_vals:  2
+(block kernel call  5 ) block  2  num_vals:  6
+(block kernel call  5 ) block  0 index  1 pos [ 2 ] =  1
+(block kernel call  5 ) block  3 index  1 pos [ 29 ] =  1
+(block kernel call  5 ) block  1 index  1 pos [ 11 ] =  1
+(block kernel call  5 ) block  2 index  1 pos [ 20 ] =  1
+(block kernel call  5 ) block  0 index  2 pos [ 4 ] =  4
+(block kernel call  5 ) block  1 index  2 pos [ 12 ] =  1
+(block kernel call  5 ) Block: 3 Thread 0 val:  6.000000
+(block kernel call  5 ) Block: 3 Thread 1 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 2 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 3 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 4 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 5 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 6 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 7 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 8 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 9 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 10 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 11 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 12 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 13 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 14 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 15 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 16 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 17 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 18 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 19 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 20 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 21 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 22 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 23 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 24 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 25 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 26 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 27 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 28 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 29 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 30 val:  0.000000
+(block kernel call  5 ) Block: 3 Thread 31 val:  0.000000
+(block kernel call  5 ) block  2 index  2 pos [ 21 ] =  0
+(block kernel call  5 ) block  0 index  3 pos [ 5 ] =  1
+(block kernel call  5 ) block  1 index  3 pos [ 13 ] =  1
+(block kernel call  5 ) block  2 index  3 pos [ 23 ] =  2
+(block kernel call  5 ) Block: 3  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  6.000000
+(block kernel call  5 ) Block: 3  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  5 ) Block: 3  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  5 ) block  1 index  4 pos [ 14 ] =  1
+(block kernel call  5 ) Block: 0 Thread 0 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 1 val:  1.000000
+(block kernel call  5 ) Block: 0 Thread 2 val:  1.000000
+(block kernel call  5 ) Block: 0 Thread 3 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 4 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 5 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 6 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 7 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 8 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 9 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 10 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 11 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 12 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 13 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 14 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 15 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 16 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 17 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 18 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 19 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 20 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 21 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 22 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 23 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 24 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 25 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 26 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 27 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 28 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 29 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 30 val:  0.000000
+(block kernel call  5 ) Block: 0 Thread 31 val:  0.000000
+(block kernel call  5 ) block  2 index  4 pos [ 25 ] =  1
+(block kernel call  5 ) after block  3 index  1 pos [ 29 ] =  1
+(block kernel call  5 ) block  1 index  5 pos [ 15 ] =  1
+(block kernel call  5 ) block  2 index  5 pos [ 26 ] =  2
+(block kernel call  5 ) Block: 0  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  5 ) Block: 0  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  1.000000
+(block kernel call  5 ) Block: 0  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  5 ) Block: 0  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  5 ) block  1 index  6 pos [ 16 ] =  0
+(block kernel call  5 ) Block: 2 Thread 0 val:  1.000000
+(block kernel call  5 ) Block: 2 Thread 1 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 2 val:  1.000000
+(block kernel call  5 ) Block: 2 Thread 3 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 4 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 5 val:  2.000000
+(block kernel call  5 ) Block: 2 Thread 6 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 7 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 8 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 9 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 10 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 11 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 12 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 13 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 14 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 15 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 16 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 17 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 18 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 19 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 20 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 21 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 22 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 23 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 24 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 25 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 26 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 27 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 28 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 29 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 30 val:  0.000000
+(block kernel call  5 ) Block: 2 Thread 31 val:  0.000000
+(block kernel call  5 ) after block  0 index  1 pos [ 2 ] =  2
+(block kernel call  5 ) block  1 index  7 pos [ 17 ] =  1
+(block kernel call  5 ) Block: 2  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  1.000000
+(block kernel call  5 ) Block: 2  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  1.000000
+(block kernel call  5 ) Block: 2  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  2.000000
+(block kernel call  5 ) Block: 2  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  5 ) Block: 2  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  5 ) after block  0 index  2 pos [ 4 ] =  4
+(block kernel call  5 ) Block: 1 Thread 0 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 1 val:  1.000000
+(block kernel call  5 ) Block: 1 Thread 2 val:  1.000000
+(block kernel call  5 ) Block: 1 Thread 3 val:  1.000000
+(block kernel call  5 ) Block: 1 Thread 4 val:  1.000000
+(block kernel call  5 ) Block: 1 Thread 5 val:  1.000000
+(block kernel call  5 ) Block: 1 Thread 6 val:  1.000000
+(block kernel call  5 ) Block: 1 Thread 7 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 8 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 9 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 10 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 11 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 12 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 13 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 14 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 15 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 16 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 17 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 18 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 19 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 20 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 21 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 22 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 23 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 24 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 25 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 26 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 27 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 28 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 29 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 30 val:  0.000000
+(block kernel call  5 ) Block: 1 Thread 31 val:  0.000000
+(block kernel call  5 ) after block  0 index  3 pos [ 5 ] =  1
+(block kernel call  5 ) after block  2 index  1 pos [ 20 ] =  1
+(block kernel call  5 ) Block: 1  | Thread 1 aggiorna pos[ 1 ] aggiungendo il valore di pos[ 0 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 2 aggiorna pos[ 2 ] aggiungendo il valore di pos[ 1 ]:  1.000000
+(block kernel call  5 ) Block: 1  | Thread 3 aggiorna pos[ 3 ] aggiungendo il valore di pos[ 2 ]:  1.000000
+(block kernel call  5 ) Block: 1  | Thread 4 aggiorna pos[ 4 ] aggiungendo il valore di pos[ 3 ]:  1.000000
+(block kernel call  5 ) Block: 1  | Thread 5 aggiorna pos[ 5 ] aggiungendo il valore di pos[ 4 ]:  1.000000
+(block kernel call  5 ) Block: 1  | Thread 6 aggiorna pos[ 6 ] aggiungendo il valore di pos[ 5 ]:  1.000000
+(block kernel call  5 ) Block: 1  | Thread 7 aggiorna pos[ 7 ] aggiungendo il valore di pos[ 6 ]:  1.000000
+(block kernel call  5 ) Block: 1  | Thread 8 aggiorna pos[ 8 ] aggiungendo il valore di pos[ 7 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 9 aggiorna pos[ 9 ] aggiungendo il valore di pos[ 8 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 10 aggiorna pos[ 10 ] aggiungendo il valore di pos[ 9 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 11 aggiorna pos[ 11 ] aggiungendo il valore di pos[ 10 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 12 aggiorna pos[ 12 ] aggiungendo il valore di pos[ 11 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 13 aggiorna pos[ 13 ] aggiungendo il valore di pos[ 12 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 14 aggiorna pos[ 14 ] aggiungendo il valore di pos[ 13 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 15 aggiorna pos[ 15 ] aggiungendo il valore di pos[ 14 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 16 aggiorna pos[ 16 ] aggiungendo il valore di pos[ 15 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 17 aggiorna pos[ 17 ] aggiungendo il valore di pos[ 16 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 18 aggiorna pos[ 18 ] aggiungendo il valore di pos[ 17 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 19 aggiorna pos[ 19 ] aggiungendo il valore di pos[ 18 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 20 aggiorna pos[ 20 ] aggiungendo il valore di pos[ 19 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 21 aggiorna pos[ 21 ] aggiungendo il valore di pos[ 20 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 22 aggiorna pos[ 22 ] aggiungendo il valore di pos[ 21 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 23 aggiorna pos[ 23 ] aggiungendo il valore di pos[ 22 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 24 aggiorna pos[ 24 ] aggiungendo il valore di pos[ 23 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 25 aggiorna pos[ 25 ] aggiungendo il valore di pos[ 24 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 26 aggiorna pos[ 26 ] aggiungendo il valore di pos[ 25 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 27 aggiorna pos[ 27 ] aggiungendo il valore di pos[ 26 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 28 aggiorna pos[ 28 ] aggiungendo il valore di pos[ 27 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 29 aggiorna pos[ 29 ] aggiungendo il valore di pos[ 28 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 30 aggiorna pos[ 30 ] aggiungendo il valore di pos[ 29 ]:  0.000000
+(block kernel call  5 ) Block: 1  | Thread 31 aggiorna pos[ 31 ] aggiungendo il valore di pos[ 30 ]:  0.000000
+(block kernel call  5 ) after block  2 index  2 pos [ 21 ] =  1
+(block kernel call  5 ) after block  1 index  1 pos [ 11 ] =  2
+(block kernel call  5 ) after block  2 index  3 pos [ 23 ] =  2
+(block kernel call  5 ) after block  1 index  2 pos [ 12 ] =  2
+(block kernel call  5 ) after block  2 index  4 pos [ 25 ] =  1
+(block kernel call  5 ) after block  1 index  3 pos [ 13 ] =  2
+(block kernel call  5 ) after block  2 index  5 pos [ 26 ] =  2
+(block kernel call  5 ) after block  1 index  4 pos [ 14 ] =  2
+(block kernel call  5 ) after block  1 index  5 pos [ 15 ] =  2
+(block kernel call  5 ) after block  1 index  6 pos [ 16 ] =  1
+(block kernel call  5 ) after block  1 index  7 pos [ 17 ] =  1
+
+% breastw dataset (63, 5)
+Timing summary after 4 loops:
+most:        0.0000s (1.6%)
+split_data:  0.0001s (5.4%)
+learn_rule:  0.0009s (76.9%)
+----learn_rule summary after 4 loops:
+----best_item: 0.0004s (35.9%)
+----cover:     0.0001s (10.9%)
+----fold:      0.0003s (29.3%)
+----Total:     0.0012s
+cover check: 0.0001s (12.7%)
+set op:      0.0000s (3.4%)
+Total:       0.0012s
+% acc 0.9231 # rules 5
+% acc 0.9231 macro p r f1 0.9615 0.9231 0.9342 # rules 5
+
+% breastw dataset (63, 5)
+categorical_cols
+[4]
+Timing summary after 3 loops:
+most:        0.0000s (0.0%)
+split_data:  0.0000s (0.0%)
+learn_rule:  1.9787s (100.0%)
+----learn_rule summary after 3 loops:
+----best_item: 1.1001s (55.6%)
+----cover:     0.0000s (0.0%)
+----fold:      0.8786s (44.4%)
+----Total:     1.9788s
+cover check: 0.0000s (0.0%)
+set op:      0.0000s (0.0%)
+Total:       1.9788s
+Time preprocessing: 0.0961s
+% acc 0.6154 # rules 3
+% acc 0.6154 macro p r f1 0.9487 0.6154 0.7186 # rules 3
+----------------------------------------------------------------
+----------------------------------------------------------------
+[91mtest1 failed[0m
+label(X,'benign') :- cell_size_uniformity(X,N1), N1=<2.0, not ab1(X). 
+label(X,'malignant') :- clump_thickness(X,N0), N0>6.0. 
+label(X,'malignant') :- cell_size_uniformity(X,N2), N2=<10.0. 
+label(X,'benign') :- clump_thickness(X,N0), N0=<6.0. 
+ab1(X) :- clump_thickness(X,N0), N0>1.0, cell_size_uniformity(X,N2), N2>3.0. 
+-----------------------------------
+label(X,'benign') :- cell_size_uniformity(X,N1), N1=<2.0, not ab1(X). 
+label(X,'malignant') :- clump_thickness(X,N0), N0>6.0. 
+ab1(X) :- clump_thickness(X,N0), N0>1.0, cell_size_uniformity(X,N2), N2>2.0, N2=<7.0. 
+[91m1-------------------
+TEST FAILED
+-------------------[0m

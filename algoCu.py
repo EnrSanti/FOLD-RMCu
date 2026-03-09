@@ -500,7 +500,7 @@ def best_item_gpu(embedded_data_original,original_sorted_dev, reverse_index_T_de
     best_ig_gpu[blocks_grid,thread_per_block](categorical_mask_dev, aux_sorted_dev,  embedded_data_original_dev,original_sorted_dev, reverse_index_T_dev,index_e_plus_dev, index_e_minus_dev, categorical_cols_dev,placeholder_nums_dev, global_kernel_call,return_vals_dev, pos_dev, neg_dev, vals_dev,cats_dev,n_max,used_items_dev)
         
         
-        
+    global_kernel_call+=1
         
         
         
@@ -553,6 +553,7 @@ def best_ig_gpu(categorical_mask_dev, aux_sorted, embedded_data_original_dev,ori
     tid = cuda.threadIdx.x
     offset=cuda.blockIdx.x
     i=offset
+    
     is_categorical = categorical_mask_dev[offset] #leva l'offse
     for j in range(tid,n_cols,32):
         pos[offset*n_cols+j] = 0
@@ -611,11 +612,81 @@ def best_ig_gpu(categorical_mask_dev, aux_sorted, embedded_data_original_dev,ori
             unique_cats_present[offset*n_cols+num_cats] = j
             num_cats += 1
     
+    if(tid==0):
+        print("(block kernel call ",kenerl_num,") block ",offset, " num_vals: ",num_vals)
+        for j in range(1, num_vals):
+            print("(block kernel call ",kenerl_num,") block ",offset, "index ", j, "pos [",offset*n_cols+unique_vals_present[offset*n_cols+j],"] = ",pos[offset*n_cols+unique_vals_present[offset*n_cols+j]])
     #--------------------------
+    off_=offset*n_cols
     for j in range(1, num_vals):
-        pos[offset*n_cols+unique_vals_present[offset*n_cols+j]] += pos[offset*n_cols+unique_vals_present[offset*n_cols+j - 1]]
-        neg[offset*n_cols+unique_vals_present[offset*n_cols+j]] += neg[offset*n_cols+unique_vals_present[offset*n_cols+j - 1]]
 
+        pos[off_+unique_vals_present[off_+j]] += pos[off_+unique_vals_present[off_+j - 1]]
+        print("(block kernel call ",kenerl_num,")to ",pos[off_+unique_vals_present[off_+j]], "in pos ", off_+unique_vals_present[off_+j], "adding pos: ", off_+unique_vals_present[off_+j - 1], "value: ",pos[off_+unique_vals_present[off_+j - 1]])
+        neg[off_+unique_vals_present[off_+j]] += neg[off_+unique_vals_present[off_+j - 1]]
+
+    if(tid==0):
+        for j in range(1, num_vals):
+            print("(block kernel call ",kenerl_num,") after block ",offset, "index ", j, "pos [",offset*n_cols+unique_vals_present[offset*n_cols+j],"] = ",pos[offset*n_cols+unique_vals_present[offset*n_cols+j]])
+   
+   
+   
+   
+   
+    '''
+    mask = 0xffffffff
+
+    # These variables will carry the sum from the previous 32-element chunk
+    carry_p = 0.0
+    carry_n = 0.0
+
+    # Loop through the data in chunks of 32
+
+    for chunk_start in range(0, num_vals, 32):
+        position_index = chunk_start + tid
+        idx = offset * n_cols + position_index
+        
+        # 1. Load data (if within bounds, otherwise 0)
+        p_val = pos[idx] if position_index < num_vals else 0.0
+        n_val = neg[idx] if position_index < num_vals else 0.0
+
+        print("(block kernel call ", kenerl_num, ") Block:", cuda.blockIdx.x, "Thread", tid, "p_val[: ", p_val)
+
+        #fin qui ok
+        # 2. Intra-Warp Scan (Kogge-Stone)
+        shift = 1
+        while shift < 2:
+            p_left = cuda.shfl_up_sync(mask, p_val, shift)
+            n_left = cuda.shfl_up_sync(mask, n_val, shift)
+            target_idx = chunk_start + tid
+            source_idx = chunk_start + tid - shift
+            if tid >= shift:
+                p_val += p_left
+                print("(block kernel call ", kenerl_num, ") Block:", cuda.blockIdx.x, 
+                          " | Thread", tid, "aggiorna pos[", target_idx, 
+                          "] aggiungendo il valore di pos[", source_idx, 
+                          "]: ", p_left)
+                n_val += n_left
+            shift *= 2
+
+        # 3. Add the carry from the PREVIOUS chunk
+        p_val += carry_p
+        n_val += carry_n
+
+        # 4. Write results back to global memory
+        if position_index < num_vals:
+            pos[idx] = p_val
+            neg[idx] = n_val
+
+        # 5. Update carry for the NEXT chunk
+        # The last thread (tid 31) in the warp now holds the 
+        # cumulative sum for this entire 32-element window.
+        carry_p = cuda.shfl_sync(mask, p_val, 31)
+        carry_n = cuda.shfl_sync(mask, n_val, 31)
+
+    '''
+   
+   
+   
     #--------------------------------------------------------------------------------------------
 
     bests_sm[tid]= -1e20
