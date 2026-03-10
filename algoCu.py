@@ -571,33 +571,29 @@ def best_ig_gpu(categorical_mask_dev, aux_sorted, embedded_data_original_dev,ori
 
     #formalmente non ok ---------------------------------------------------
     #elements_per_th = (max_range_cols + 32 - 1) // 32
-    for index in index_e_plus: #loop per example (row)
-        index=reverse_index_T_dev[index, i]
-    
-        d=original_sorted_dev[index,i] #get 1 el
+    # ... (Codice precedente: reset pos/neg/unique con tid loop) ...
+    cuda.syncwarp()
 
-        #d[i] is the value of a cell in column i
-        pos[offset*n_cols+d] += 1 
-        if is_categorical or d==placeholder_nums[i]: #se is 
-            unique_cats_present[offset*n_cols+(d)]=1 #add to the unique cat values found
-            cp += 1
-        else: 
-            unique_vals_present[offset*n_cols+(d)]=1 #add to the unique num values found
-            xp += 1
+    # --- FASE 1: Processa INDEX_E_PLUS (per cp, xp) ---
+    cp, xp = warp_process_sorted_column(
+        embedded_data_original_dev, index_e_plus, 
+        unique_cats_present, unique_vals_present, pos, 
+        offset * n_cols, len(index_e_plus), i, 
+        is_categorical, placeholder_nums[i]
+    )
 
-    for index in index_e_minus:
-        index=reverse_index_T_dev[index, i]
-    
-        d=original_sorted_dev[index,i]
-        neg[offset*n_cols+d] += 1
+    # --- FASE 2: Processa INDEX_E_MINUS (per cn, xn) ---
+    # Nota: passiamo 'neg' invece di 'pos', ma gli 'unique' sono gli stessi
+    cn, xn = warp_process_sorted_column(
+        embedded_data_original_dev, index_e_minus, 
+        unique_cats_present, unique_vals_present, neg, 
+        offset * n_cols, len(index_e_minus), i, 
+        is_categorical, placeholder_nums[i]
+    )
 
+    # Sincronizziamo: tutti i thread devono aver finito di marcare unique_...
+    cuda.syncwarp()
 
-        if is_categorical or d==placeholder_nums[i]:
-            unique_cats_present[offset*n_cols+(d)]=1
-            cn += 1
-        else:
-            unique_vals_present[offset*n_cols+(d)]=1
-            xn += 1
     #end of formalmente non ok ---------------------------------------------------
     #------
 
@@ -812,6 +808,113 @@ def warp_compact_indices(unique_vals_present, offset, n_cols):
 
     return total_found
 
+
+@cuda.jit(device=True)
+def warp_reduce_sum(val):
+    """Sum across all threads in a warp"""
+    mask = 0xffffffff
+    for offset in (16, 8, 4, 2, 1):
+        val += cuda.shfl_down_sync(mask, val, offset)
+    return cuda.shfl_sync(mask, val, 0)
+
+@cuda.jit(device=True)
+def warp_process_sorted_column(original_data, index_list,
+                               unique_cats, unique_vals, counts_hist,
+                               off_base, len_indices, col_idx,
+                               is_categorical, placeholder_val):
+    tid = cuda.threadIdx.x
+
+    c_count = 0
+    x_count = 0
+    # Process in warp-sized chunks
+    for chunk_start in range(0, len_indices, 32):
+        '''
+        mask = 0xffffffff
+        pos_in_list = chunk_start + tid
+        active = pos_in_list < num_indices
+        '''
+        if(tid==0):
+            for ind in range(0,32):
+                pos_in_list = chunk_start + ind
+                active = pos_in_list < len_indices
+                if(active):
+                    idx = index_list[pos_in_list]
+                    d = original_data[idx, col_idx]
+                    if is_categorical or d == placeholder_val:
+                        unique_cats[off_base + d] = 1
+                        c_count += 1
+                    else:
+                        unique_vals[off_base + d] = 1
+                        x_count += 1
+                    counts_hist[off_base + d] += 1 #pos/neg
+    cuda.syncwarp()
+    return warp_reduce_sum(c_count), warp_reduce_sum(x_count)
+    '''
+        active_mask = cuda.ballot_sync(mask, active)
+        
+        # Load value or placeholder
+        d = -1
+        if active:
+            idx = index_list[pos_in_list]
+            d = int(original_data[idx, col_idx])
+
+       
+            k = 2
+            while k <= 32:
+                j = k >> 1
+                while j > 0:
+                    other = cuda.shfl_xor_sync(active_mask, d, j)
+
+                    ascending = ((tid & k) == 0)
+
+                    if (ascending and d > other) or (not ascending and d < other):
+                        d = other
+
+                    j >>= 1
+                k <<= 1
+
+            prev = cuda.shfl_up_sync(active_mask, d, 1)
+            if tid == 0:
+                prev = -1
+            
+            is_first = d != prev
+            leaders_mask = cuda.ballot_sync(active_mask, is_first)
+            next_leaders = leaders_mask >> (tid + 1)
+            
+            size = 0
+            if is_first:
+                if next_leaders == 0:
+                    # Non ci sono altri leader dopo di me. 
+                    # La dimensione è la distanza tra me e l'ultimo thread attivo.
+                    last_active_bit = 31 - cuda.clz(active_mask) # Trova l'indice del bit più alto
+                    size = last_active_bit - tid + 1
+                else:
+                    # Trova la posizione del primo bit a 1 (il prossimo leader)
+                    # clz = count leading zeros. ffs = find first set.
+                    # In Numba usiamo un trucco per trovare il bit più a dx:
+                    # (next_leaders & -next_leaders) isola il bit più basso.
+                    
+                    # Calcolo della distanza del bit più a destra (prossimo leader)
+                    # Poiché abbiamo shiftato di (tid + 1), aggiungiamo 1
+                    distance_to_next = 1
+                    temp = next_leaders
+                    while (temp & 1) == 0:
+                        temp >>= 1
+                        distance_to_next += 1
+                    size = distance_to_next
+                
+                if is_categorical or d == placeholder_val:
+                    unique_cats[off_base + d] = 1
+                    c_count += size
+                else:
+                    unique_vals[off_base + d] = 1
+                    x_count += size
+                counts_hist[off_base + d] += size #pos/neg
+            
+    #cuda.syncwarp()
+
+    return warp_reduce_sum(c_count), warp_reduce_sum(x_count)
+    '''
 def split_data_by_item_gpu_dev(embedded_data, l,categorical_cols,placeholder_nums, original_data_indexes):
     data_pos, data_neg = [], []
 
