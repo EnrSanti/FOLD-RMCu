@@ -572,9 +572,9 @@ def best_ig_gpu(categorical_mask_dev, aux_sorted, embedded_data_original_dev,ori
     #formalmente non ok ---------------------------------------------------
     #elements_per_th = (max_range_cols + 32 - 1) // 32
     for index in index_e_plus: #loop per example (row)
-        #index=reverse_index_T_dev[index, i]
+        index=reverse_index_T_dev[index, i]
     
-        d=embedded_data_original_dev[index,i] #get 1 el
+        d=original_sorted_dev[index,i] #get 1 el
 
         #d[i] is the value of a cell in column i
         pos[offset*n_cols+d] += 1 
@@ -586,8 +586,9 @@ def best_ig_gpu(categorical_mask_dev, aux_sorted, embedded_data_original_dev,ori
             xp += 1
 
     for index in index_e_minus:
-        #index=reverse_index_T_dev[index, i]
-        d=embedded_data_original_dev[index,i] #get 1 el
+        index=reverse_index_T_dev[index, i]
+    
+        d=original_sorted_dev[index,i]
         neg[offset*n_cols+d] += 1
 
 
@@ -597,23 +598,15 @@ def best_ig_gpu(categorical_mask_dev, aux_sorted, embedded_data_original_dev,ori
         else:
             unique_vals_present[offset*n_cols+(d)]=1
             xn += 1
+    #end of formalmente non ok ---------------------------------------------------
+    #------
 
-
-    num_vals = 0
-    for j in range(n_cols):
-        if unique_vals_present[offset*n_cols+j] == 1:
-            unique_vals_present[offset*n_cols+num_vals] = j  # overwrite array with only present indices
-            num_vals += 1
+    num_vals = warp_compact_indices(unique_vals_present, offset, n_cols)
+            
     # Now unique_vals_present[:num_vals] contains the indices of present values
 
-    num_cats = 0
-    #print("range",unique_cats_present.size)
-    for j in range(n_cols):
-        if unique_cats_present[offset*n_cols+j] == 1:
-            unique_cats_present[offset*n_cols+num_cats] = j
-            num_cats += 1
+    num_cats = warp_compact_indices(unique_cats_present, offset, n_cols)
 
-    #end of formalmente non ok ---------------------------------------------------
     mask = 0xffffffff
     carry_p = 0.0
     carry_n = 0.0
@@ -772,6 +765,52 @@ def gain_device(tp, fn, tn, fp):
     
     return math.floor(ret / 1e-10) * 1e-10
     
+@cuda.jit(device=True)
+def warp_compact_indices(unique_vals_present, offset, n_cols):
+    tid = cuda.threadIdx.x
+    off_base = offset * n_cols
+    mask = 0xffffffff
+    
+    # Questo manterrà il numero totale di elementi trovati (il vecchio num_vals)
+    total_found = 0
+    
+    # Cicliamo su n_cols in chunk da 32
+    for chunk_start in range(0, n_cols, 32):
+        j = chunk_start + tid
+        
+        # 1. Ogni thread controlla il suo elemento nel chunk attuale
+        is_present = False
+        if j < n_cols:
+            is_present = (unique_vals_present[off_base + j] == 1)
+        
+        # 2. Otteniamo la maschera dei bit per questo chunk
+        ballot = cuda.ballot_sync(mask, is_present)
+        
+        # 3. Calcoliamo l'indice di destinazione LOCALE al chunk e aggiungiamo il totale precedente
+        # (Quanti '1' ci sono prima di me in QUESTO chunk + quanti ne abbiamo trovati PRIMA)
+        lower_mask = (1 << tid) - 1
+        dest_idx = total_found + cuda.popc(ballot & lower_mask)
+        
+        # Salviamo il valore di j prima di rischiare di sovrascrivere l'array
+        val_to_store = j
+        
+        # Sincronizziamo il warp per assicurarci che tutti abbiano letto 
+        # i valori corretti prima di iniziare a scrivere
+        cuda.syncwarp()
+        
+        # 4. Scrittura (Scatter)
+        if is_present:
+            unique_vals_present[off_base + dest_idx] = val_to_store
+            
+        # 5. Aggiorniamo il totale cumulativo per il prossimo chunk
+        # Ogni thread nel warp aggiorna il suo 'total_found' con il numero di bit nel ballot
+        total_found += cuda.popc(ballot)
+        
+        # Sincronizziamo di nuovo prima del prossimo chunk per evitare race conditions
+        # sulla memoria globale 'unique_vals_present'
+        cuda.syncwarp()
+
+    return total_found
 
 def split_data_by_item_gpu_dev(embedded_data, l,categorical_cols,placeholder_nums, original_data_indexes):
     data_pos, data_neg = [], []
