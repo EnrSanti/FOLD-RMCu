@@ -824,97 +824,57 @@ def warp_process_sorted_column(original_data, index_list,
                                is_categorical, placeholder_val):
     tid = cuda.threadIdx.x
 
+    d_sm = cuda.shared.array(32, dtype=int32)
     c_count = 0
     x_count = 0
+
     # Process in warp-sized chunks
     for chunk_start in range(0, len_indices, 32):
-        '''
         mask = 0xffffffff
         pos_in_list = chunk_start + tid
-        active = pos_in_list < num_indices
-        '''
-        if(tid==0):
-            for ind in range(0,32):
-                pos_in_list = chunk_start + ind
-                active = pos_in_list < len_indices
-                if(active):
-                    idx = index_list[pos_in_list]
-                    d = original_data[idx, col_idx]
-                    if is_categorical or d == placeholder_val:
-                        unique_cats[off_base + d] = 1
-                        c_count += 1
-                    else:
-                        unique_vals[off_base + d] = 1
-                        x_count += 1
-                    counts_hist[off_base + d] += 1 #pos/neg
-    cuda.syncwarp()
-    return warp_reduce_sum(c_count), warp_reduce_sum(x_count)
-    '''
+        active = pos_in_list < len_indices
         active_mask = cuda.ballot_sync(mask, active)
-        
+
         # Load value or placeholder
         d = -1
         if active:
             idx = index_list[pos_in_list]
-            d = int(original_data[idx, col_idx])
+            d = original_data[idx, col_idx]
+            d_sm[tid]=d
+        else:
+            d_sm[tid] = 2147483647
+        # --- Bitonic sort for 32 threads ---
+        # Bitonic sort inside a warp (32 threads)
+        if(tid==0):
+            for i in range(1, 32):
+                key = d_sm[i]
+                j = i - 1
+                while j >= 0 and d_sm[j] > key:
+                    d_sm[j + 1] = d_sm[j]
+                    j -= 1
+                d_sm[j + 1] = key
+        
+        cuda.syncwarp()
+        if active:
+            d = d_sm[tid]
+            same_mask = cuda.match_any_sync(active_mask, d)
+            count = cuda.popc(same_mask)
+            mask_before = same_mask & ((1 << tid) - 1)
 
-       
-            k = 2
-            while k <= 32:
-                j = k >> 1
-                while j > 0:
-                    other = cuda.shfl_xor_sync(active_mask, d, j)
-
-                    ascending = ((tid & k) == 0)
-
-                    if (ascending and d > other) or (not ascending and d < other):
-                        d = other
-
-                    j >>= 1
-                k <<= 1
-
-            prev = cuda.shfl_up_sync(active_mask, d, 1)
-            if tid == 0:
-                prev = -1
-            
-            is_first = d != prev
-            leaders_mask = cuda.ballot_sync(active_mask, is_first)
-            next_leaders = leaders_mask >> (tid + 1)
-            
-            size = 0
-            if is_first:
-                if next_leaders == 0:
-                    # Non ci sono altri leader dopo di me. 
-                    # La dimensione è la distanza tra me e l'ultimo thread attivo.
-                    last_active_bit = 31 - cuda.clz(active_mask) # Trova l'indice del bit più alto
-                    size = last_active_bit - tid + 1
-                else:
-                    # Trova la posizione del primo bit a 1 (il prossimo leader)
-                    # clz = count leading zeros. ffs = find first set.
-                    # In Numba usiamo un trucco per trovare il bit più a dx:
-                    # (next_leaders & -next_leaders) isola il bit più basso.
-                    
-                    # Calcolo della distanza del bit più a destra (prossimo leader)
-                    # Poiché abbiamo shiftato di (tid + 1), aggiungiamo 1
-                    distance_to_next = 1
-                    temp = next_leaders
-                    while (temp & 1) == 0:
-                        temp >>= 1
-                        distance_to_next += 1
-                    size = distance_to_next
-                
+            # First thread has no bits set before it
+            is_first = mask_before == 0
+            if(is_first and d!=2147483647):
                 if is_categorical or d == placeholder_val:
                     unique_cats[off_base + d] = 1
-                    c_count += size
+                    c_count += count
                 else:
                     unique_vals[off_base + d] = 1
-                    x_count += size
-                counts_hist[off_base + d] += size #pos/neg
-            
-    #cuda.syncwarp()
+                    x_count += count
+                counts_hist[off_base + d] += count #pos/neg
+        cuda.syncwarp()
 
     return warp_reduce_sum(c_count), warp_reduce_sum(x_count)
-    '''
+
 def split_data_by_item_gpu_dev(embedded_data, l,categorical_cols,placeholder_nums, original_data_indexes):
     data_pos, data_neg = [], []
 
