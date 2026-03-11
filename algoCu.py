@@ -824,7 +824,6 @@ def warp_process_sorted_column(original_data, index_list,
                                is_categorical, placeholder_val):
     tid = cuda.threadIdx.x
 
-    d_sm = cuda.shared.array(32, dtype=int32)
     c_count = 0
     x_count = 0
 
@@ -840,23 +839,10 @@ def warp_process_sorted_column(original_data, index_list,
         if active:
             idx = index_list[pos_in_list]
             d = original_data[idx, col_idx]
-            d_sm[tid]=d
         else:
-            d_sm[tid] = 2147483647
-        # --- Bitonic sort for 32 threads ---
-        # Bitonic sort inside a warp (32 threads)
-        if(tid==0):
-            for i in range(1, 32):
-                key = d_sm[i]
-                j = i - 1
-                while j >= 0 and d_sm[j] > key:
-                    d_sm[j + 1] = d_sm[j]
-                    j -= 1
-                d_sm[j + 1] = key
-        
-        cuda.syncwarp()
+            d=2147483647
+            
         if active:
-            d = d_sm[tid]
             same_mask = cuda.match_any_sync(active_mask, d)
             count = cuda.popc(same_mask)
             mask_before = same_mask & ((1 << tid) - 1)
