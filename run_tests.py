@@ -58,7 +58,6 @@ def run_test1():
             return 0,time_serial,time_parallel,"MNIST"
         else:
             print(f"{RED}test1 failed{RESET}")
-            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
             return 1,-1,-1,"MNIST"
     else:
         print(f"{GREEN}test passed{RESET}")
@@ -125,7 +124,6 @@ def run_test2():
         else:
             print(f"{RED}test failed{RESET}")
             print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
             return 1,-1,-1, "MINITEST"
     else:
         print(f"{GREEN}test passed{RESET}")
@@ -192,7 +190,6 @@ def run_test3():
         else:
             print(f"{RED}test failed{RESET}")
             print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
             return 1,-1,-1,"diabetes"
     else:
         print(f"{GREEN}test passed{RESET}")
@@ -257,7 +254,6 @@ def run_test4():
         else:
             print(f"{RED}test failed{RESET}")
             print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
             return 1,-1,-1, "weather"
     else:
         print(f"{GREEN}test passed{RESET}")
@@ -323,7 +319,6 @@ def run_test6():
         else:
             print(f"{RED}test failed{RESET}")
             print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
             return 1,-1,-1, "smoke_drink"
     else:
         print(f"{GREEN}test passed{RESET}")
@@ -392,7 +387,6 @@ def run_test5():
             return 0,time_serial,time_parallel, "coverType"
         else:
             print(f"{RED}test1 failed{RESET}")
-            print(h_cpu+"\n-----------------------------------\n"+h_gpu)
             return 1,-1,-1, "coverType"
     else:
         print(f"{GREEN}test passed{RESET}")
