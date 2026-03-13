@@ -161,7 +161,7 @@ def best_ig(data_pos, data_neg, i, used_items=[]):
     #print(pos)
     #print("neg prefix:: \n")
     #print(neg)
-    best, v, r = float('-inf'), float('-inf'), ''
+    best, v, r = -1e20, -1e20, ''
     for x in xs:
         if (i, '<=', x) in used_items or (i, '>', x) in used_items:
             continue

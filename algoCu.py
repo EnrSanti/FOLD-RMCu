@@ -55,9 +55,9 @@ def embed_data_global(data):
     
 
     # Encode the data
-    encoded_data,placeholder_numeric, rev_map_numeric,cols_float,range_per_col = encode_data_global_with_placeholder(data,placeholder_numeric, mapping, categorical_cols,num_cols,numeric_cols,range_per_col)
+    encoded_data,placeholder_numeric, rev_map_numeric,range_per_col = encode_data_global_with_placeholder(data,placeholder_numeric, mapping, categorical_cols,num_cols,numeric_cols,range_per_col)
 
-    return encoded_data, mapping, categorical_cols, placeholder_numeric, rev_map_numeric,cols_float,range_per_col
+    return encoded_data, mapping, categorical_cols, placeholder_numeric, rev_map_numeric,range_per_col
 
 
 def encode_data_global_with_placeholder(data,placeholder_numeric, mapping, categorical_cols,num_cols,numeric_cols,range_per_col):
@@ -67,70 +67,35 @@ def encode_data_global_with_placeholder(data,placeholder_numeric, mapping, categ
     map_numeric = [[]]*num_cols
     rev_map_numeric = [[]]*num_cols
     max_values_array=[0]*num_cols
-    cols_float=[]
-    for col in numeric_cols:
-        for row in data:
-            val = row[col]
-
-            # Skip missing
-            if val == '?':
-                continue
-
-            # Strict float check (exclude ints)
-            if not float(val).is_integer() and not col in cols_float:
-                cols_float.append(col)
 
     #print("cols float" + str(cols_float))
     for col in numeric_cols:
-        if(col in cols_float):
-            """
-            data: list of rows
-            col: column index
+        column_copy = [row[col] for row in data]
 
-            Returns:
-            mapping: dict {float_value -> int_rank}
-            reverse_map: list where reverse_map[rank] = float_value
-            """
+        # 2) Keep only numeric values (ignore '?')
+        numeric_vals = [
+            v for v in column_copy
+            if v != '?'
+        ]
 
-            # 1) Copy column (without modifying dataset)
-            column_copy = [row[col] for row in data]
+        unique_vals = set(numeric_vals)
+        range_per_col[col]=len(unique_vals)
 
-            # 2) Keep only numeric values (ignore '?')
-            numeric_vals = [
-                v for v in column_copy
-                if v != '?'
-            ]
+        sorted_unique = sorted(unique_vals)
+        #print(f"sorted_col {col}: {str(sorted_unique)}")
 
-            unique_vals = set(numeric_vals)
-            range_per_col[col]=len(unique_vals)
+        mapping_float = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
+        reverse_map_float = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
+        
+        map_numeric[col]=mapping_float
+        rev_map_numeric[col]=reverse_map_float
 
-            sorted_unique = sorted(unique_vals)
-            #print(f"sorted_col {col}: {str(sorted_unique)}")
+        max_val=max(reverse_map_float)
 
-            mapping_float = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
-            reverse_map_float = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
-            map_numeric[col]=mapping_float
-            rev_map_numeric[col]=reverse_map_float
-            #print("mapping_float"+str(mapping_float))
-            max_val=max(reverse_map_float)
-            placeholder_numeric[col] = max_val + 1
-            placeholder_numeric[num_cols+col] = max_val + 2
-            max_values_array[col]=max_val
-            
-        else:
-            column_copy = [row[col] for row in data]
-            numeric_vals = [v for v in column_copy if v != '?']
-            unique_vals = set(numeric_vals)
-            range_per_col[col]=len(unique_vals)
-            sorted_unique = sorted(unique_vals)
-            mapping_int = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
-            reverse_map_int = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
-            map_numeric[col]=mapping_int
-            rev_map_numeric[col]=reverse_map_int
-            max_val=max(reverse_map_int)
-            placeholder_numeric[col] = max_val + 1
-            placeholder_numeric[num_cols+col] = max_val + 2
-            max_values_array[col]=max_val
+        placeholder_numeric[col] = max_val + 1
+        placeholder_numeric[num_cols+col] = max_val + 2
+        
+        max_values_array[col]=max_val
 
 
     for row in data:
@@ -148,11 +113,10 @@ def encode_data_global_with_placeholder(data,placeholder_numeric, mapping, categ
 
         encoded.append(new_row)
 
-    print(placeholder_numeric)
     #print("Encoded data:", encoded)
     #print("Placeholders for '?':", placeholder_numeric)
     #print(encoded)
-    return encoded,placeholder_numeric, rev_map_numeric,cols_float, range_per_col
+    return encoded,placeholder_numeric, rev_map_numeric, range_per_col
 
 def foldrmGPU(data, ratio=0.5):
     ret = []
@@ -168,9 +132,8 @@ def foldrmGPU(data, ratio=0.5):
     overall_fold = 0 
     total_time = 0 
     learn_rule_loops = 0
-    reverse_index_T=[]
 
-    embedded_data,mapping,categorical_cols,placeholder_nums, rev_map_numeric,float_cols,max_range_cols=embed_data_global(data)
+    embedded_data,mapping,categorical_cols,placeholder_nums, rev_map_numeric,max_range_cols=embed_data_global(data)
 
     #print(mapping) col & str -> int (0,1.. n)
     #i just need to keep track of the size of mapping (n) and a list of strings
@@ -183,8 +146,6 @@ def foldrmGPU(data, ratio=0.5):
 
     minus_1_col=len(data[0])-1
     
-    print("categorical_cols")
-    print(categorical_cols)
     if(minus_1_col in categorical_cols):
         categorical_cols.append(-1)
         categorical_cols.remove(minus_1_col)
@@ -252,14 +213,7 @@ def foldrmGPU(data, ratio=0.5):
 
         start_learn = timer()
         rule,best_item, coversTime,foldTime,timeTotal,loops = learn_rule_gpu(embedded_data_original,index_e_plus, index_e_minus , categorical_cols,categorical_cols_dev,categorical_mask_dev, placeholder_nums,placeholder_nums_dev, max_range_cols,embedded_data_original_dev,neg_dev, pos_dev, vals_dev, cats_dev ,[], ratio)
-        '''                                                   
-        print("type emmbedded data "+str(type(embedded_data_original)))
-        print("index e plus "+str(type(index_e_plus)))
-        print("reverse_index_T "+str(type(reverse_index_T)))
-        print("reverse map"+ str(type(reverse_map)))
-        print("categorical_cols "+str(type(categorical_cols)))
-        print("placeholder_nums "+str(type(placeholder_nums))) 
-        '''
+
         overall_best_item+=best_item
         overall_covers+=coversTime
         overall_fold+=foldTime
@@ -298,7 +252,7 @@ def foldrmGPU(data, ratio=0.5):
         # Append rule with selected literal
         #print("to print -> " + str(rule_to_print))
         rule = l, rule[1], rule[2], rule[3]
-        rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, placeholder_nums, rev_map_numeric,float_cols)
+        rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, placeholder_nums, rev_map_numeric)
         ret.append(rule)
         
         #print("rule -> "+str(rule))
@@ -317,7 +271,7 @@ def foldrmGPU(data, ratio=0.5):
     print(f"----best_item: {overall_best_item:.4f}s ({100 * overall_best_item/total_time:.1f}%)")
     print(f"----cover:     {overall_covers:.4f}s ({100 * overall_covers/total_time:.1f}%)")
     print(f"----fold:      {overall_fold:.4f}s ({100 * overall_fold/total_time:.1f}%)")
-    print(f"----Total:     {total_time:.4f}s")
+
 
     print(f"cover check: {overall_covers1:.4f}s ({100 * overall_covers1/total_time:.1f}%)")
     print(f"set op:      {overall_setop:.4f}s ({100 * overall_setop/total_time:.1f}%)")
@@ -327,7 +281,7 @@ def foldrmGPU(data, ratio=0.5):
     return ret
 
 
-def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, reverse_map_numeric, float_cols):
+def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, reverse_map_numeric):
     
     #print("ramapping on obj" + str(obj))
     # Case 1: literal (INT, OP, VALUE)
@@ -356,7 +310,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, rever
     if isinstance(obj, tuple):
         #print("TUPLE calling it on \n", [x for x in obj])
         return tuple(
-            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums,reverse_map_numeric, float_cols)
+            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums,reverse_map_numeric)
             for x in obj
         )
 
@@ -365,7 +319,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map,placeholder_nums, rever
         
         #print("TUPLE calling it on \n", [x for x in obj])
         return [
-            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums, reverse_map_numeric, float_cols)
+            remap_to_cat_rule(x, categorical_cols, reverse_map,placeholder_nums, reverse_map_numeric)
             for x in obj
         ]
 
@@ -414,7 +368,6 @@ def learn_rule_gpu(embedded_data_original,   index_e_plus,       index_e_minus, 
             if len(index_e_minus) > 0 and t[0] != -1:
                 # ===== fold timing =====
                 start_fold = timer()
-                #SISTEMA
                 ab = fold_gpu(embedded_data_original,index_e_minus,index_e_plus ,categorical_cols,categorical_cols_dev,categorical_mask,placeholder_nums,placeholder_nums_dev,max_range_cols, embedded_data_original_dev, neg_dev, pos_dev, vals_dev, cats_dev ,used_items + items,  ratio)
                 end_fold = timer()
                 overall_fold += end_fold - start_fold
@@ -551,8 +504,6 @@ def best_ig_gpu(categorical_mask_dev, embedded_data_original_dev,index_e_plus, i
     # Sincronizziamo: tutti i thread devono aver finito di marcare unique_...
     cuda.syncwarp()
 
-    #end of formalmente non ok ---------------------------------------------------
-    #------
 
     num_vals = warp_compact_indices(unique_vals_present, block_id, n_cols)
             
@@ -712,7 +663,7 @@ def gain_device(tp, fn, tn, fp):
     if fn > 0.0:
         ret += fn / tot * math.log(fn / tot_n)
     
-    return math.floor(ret / 1e-10) * 1e-10
+    return math.floor(ret / 1e-8) * 1e-8
     
 @cuda.jit(device=True)
 def warp_compact_indices(unique_vals_present, offset, n_cols):

@@ -3390,6 +3390,29 @@ def australia():
     print('\n% weight lifting dataset', np.shape(data))
     return model, data
 
+def stars():
+    attrs = ['alpha',	'delta',	'u',	'g', 	'r',	'i  ',	'z',	'run_ID'	,'rerun_ID',	'cam_col',	'field_ID'	,'spec_obj_ID',	'redshift'	,'plate',	'MJD', 'fiber_ID']
+    nums = ['alpha',	'delta',	'u',	'g', 	'r',	'i',	'z',	'run_ID'	,'rerun_ID',	'cam_col',	'field_ID',	'redshift'	,'plate',	'MJD', 'fiber_ID']
+    model = Classifier(attrs=attrs, numeric=nums, label='class')
+    data = model.load_data('data/stellar/star_classification.csv')
+    print('\n% weight lifting dataset', np.shape(data))
+    return model, data
+
+def weather():
+    attrs = ['temperature_2m','relative_humidity_2m','dew_point_2m','precipitation','rain','surface_pressure','cloud_cover','cloud_cover_low','wind_speed_10m','wind_direction_10m','city']
+    nums = ['temperature_2m','relative_humidity_2m','dew_point_2m','precipitation','rain','surface_pressure','cloud_cover','cloud_cover_low','wind_speed_10m','wind_direction_10m']
+    model = Classifier(attrs=attrs, numeric=nums, label='rain_tomorrow')
+    data = model.load_data('data/TN_weather/TNweather_1.8M.csv')
+    print('\n% weight lifting dataset', np.shape(data))
+    return model, data
+
+def smoke_drink():
+    attrs = ['sex', 'age', 'height', 'weight', 'waistline', 'sight_left', 'sight_right', 'hear_left', 'hear_right', 'SBP', 'DBP', 'BLDS', 'tot_chole', 'HDL_chole', 'LDL_chole', 'triglyceride', 'hemoglobin', 'urine_protein', 'serum_creatinine', 'SGOT_AST', 'SGOT_ALT', 'gamma_GTP', 'SMK_stat_type_cd']
+    nums = ['age', 'height', 'weight', 'waistline', 'sight_left', 'sight_right', 'hear_left', 'hear_right', 'SBP', 'DBP', 'BLDS', 'tot_chole', 'HDL_chole', 'LDL_chole', 'triglyceride', 'hemoglobin', 'urine_protein', 'serum_creatinine', 'SGOT_AST', 'SGOT_ALT', 'gamma_GTP']
+    model = Classifier(attrs=attrs, numeric=nums, label='DRK_YN')
+    data = model.load_data('data/smoker_drinker/smoke_dring.csv')
+    print('\n% weight lifting dataset', np.shape(data))
+    return model, data
 
 def coverType():
     attrs = ['Elevation','Aspect','Slope','Horizontal_Distance_To_Hydrology','Vertical_Distance_To_Hydrology','Horizontal_Distance_To_Roadways','Hillshade_9am','Hillshade_Noon','Hillshade_3pm','Horizontal_Distance_To_Fire_Points','Wilderness_Area1','Wilderness_Area2','Wilderness_Area3','Wilderness_Area4','Soil_Type1','Soil_Type2','Soil_Type3','Soil_Type4','Soil_Type5','Soil_Type6','Soil_Type7','Soil_Type8','Soil_Type9','Soil_Type10','Soil_Type11','Soil_Type12','Soil_Type13','Soil_Type14','Soil_Type15','Soil_Type16','Soil_Type17','Soil_Type18','Soil_Type19','Soil_Type20','Soil_Type21','Soil_Type22','Soil_Type23','Soil_Type24','Soil_Type25','Soil_Type26','Soil_Type27','Soil_Type28','Soil_Type29','Soil_Type30','Soil_Type31','Soil_Type32','Soil_Type33','Soil_Type34','Soil_Type35','Soil_Type36','Soil_Type37','Soil_Type38','Soil_Type39','Soil_Type40']
