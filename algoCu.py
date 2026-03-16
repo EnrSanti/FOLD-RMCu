@@ -30,17 +30,19 @@ def embed_data_global(data):
     # Collect all unique values across all categorical columns
   
     mapping={}
+    data_np = np.array(data)
     for col in categorical_cols:
-        col_uniques = set()
-        for row in data:
-            val = row[col]
-            col_uniques.add(val)
-            mapping[col]={val: i for i, val in enumerate(sorted(col_uniques))}
-        range_per_col[col]=len(col_uniques)
-        unused_val = range_per_col[col] + 1
-        placeholder_numeric[col+num_cols]=unused_val
+        # np.unique restituisce già i valori ordinati
+        uniques = np.unique(data_np[:, col])
+        
+        mapping[col] = {val: i for i, val in enumerate(uniques)}
+        
+        n_uniques = len(uniques)
+        range_per_col[col] = n_uniques
+        placeholder_numeric[col + num_cols] = n_uniques + 1
 
     
+    print("here2")
 
     minus_1_col=len(data[0])-1
     if(minus_1_col in categorical_cols):
@@ -53,7 +55,7 @@ def embed_data_global(data):
     numeric_cols = [col for col in range(num_cols) if col not in categorical_cols]
 
     
-
+    print("here")
     # Encode the data
     encoded_data,placeholder_numeric, rev_map_numeric,range_per_col = encode_data_global_with_placeholder(data,placeholder_numeric, mapping, categorical_cols,num_cols,numeric_cols,range_per_col)
 
@@ -120,9 +122,10 @@ def foldrmGPU(data, ratio=0.5):
     overall_fold = 0 
     total_time = 0 
     learn_rule_loops = 0
-
+    print("fold started")
     embedded_data,mapping,categorical_cols,placeholder_nums, rev_map_numeric,max_range_cols=embed_data_global(data)
 
+    print("embed over started")
     #print(mapping) col & str -> int (0,1.. n)
     #i just need to keep track of the size of mapping (n) and a list of strings
     #reverse_map = {v: k for k, v in mapping.items()}

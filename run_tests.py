@@ -68,14 +68,14 @@ def run_test1():
         return 0,time_serial,time_parallel, "MNIST"
 
 def run_test2():
-    model,data = MINITEST()  
+    model,data = enterprise()  
 
     data_train, data_test = split_data_deterministically(data, ratio=0.8)
 
 
     #sposta dati su gpu
     start = timer()
-    model.fit(data_train, ratio=0.5)
+    model.fit(data_train, ratio=0.1)
     end = timer()
 
     h_cpu=model.get_asp(simple=True)
@@ -94,12 +94,12 @@ def run_test2():
     del(data_train)
     del(data_test)
 
-    model,data = MINITEST()  
+    model,data = enterprise()  
 
     data_train, data_test = split_data_deterministically(data, ratio=0.8)
 
     start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.5)
+    model.fitGPU(data_train, ratio=0.1)
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
@@ -401,10 +401,10 @@ def run_test5():
 
 def compare_times():
     tests = [
+        run_test2,
         run_test3,
         run_test4,
         run_test6,
-        #run_test2,
         run_test5,
         run_test1,
     ]
