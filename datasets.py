@@ -3401,6 +3401,14 @@ def stars():
 def weather():
     attrs = ['temperature_2m','relative_humidity_2m','dew_point_2m','precipitation','rain','surface_pressure','cloud_cover','cloud_cover_low','wind_speed_10m','wind_direction_10m','city']
     nums = ['temperature_2m','relative_humidity_2m','dew_point_2m','precipitation','rain','surface_pressure','cloud_cover','cloud_cover_low','wind_speed_10m','wind_direction_10m']
+    model = Classifier(attrs=attrs, numeric=nums, label='fraud_type')
+    data = model.load_data('data/enterprise/enterprise_fraud_dataset.csv')
+    print('\n% weight lifting dataset', np.shape(data))
+    return model, data
+
+def enterprise():
+    attrs = ['customer_id', 'merchant_id',	'hour',	'day' ,	'weekday' , 'is_weekend', 	'is_night',	'customer_segment',	'avg_spend_profile',	'home_lat',	'home_lon',	'past_fraud_history',	'credit_score',	'account_age_days',	'merchant_category',	'merchant_risk_score',	'merchant_lat',	'merchant_lon',	'transaction_amount',	'txn_lat',	'txn_lon',	'distance_from_home_km',	'is_foreign',	'high_risk_country',	'device_type',	'channel',	'is_new_device',	'vpn_detected',	'tor_detected',	'device_id',	'transaction_velocity_1h', 	'transaction_velocity_24h',	'transaction_velocity_7d',	'seconds_since_last_txn',	'avg_amount_30d',	'amount_deviation_ratio',	'merchant_ring_id',	'shared_device_count',	'customer_merchant_txn_count',	'label',	'fraud_type',	'financial_loss']
+    nums = []
     model = Classifier(attrs=attrs, numeric=nums, label='rain_tomorrow')
     data = model.load_data('data/TN_weather/TNweather_1.8M.csv')
     print('\n% weight lifting dataset', np.shape(data))
