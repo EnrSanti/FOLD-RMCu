@@ -401,8 +401,8 @@ def run_test5():
 
 def compare_times():
     tests = [
-        run_test2,
         run_test3,
+        run_test2,
         run_test4,
         run_test6,
         run_test5,
