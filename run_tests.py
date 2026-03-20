@@ -69,18 +69,20 @@ def run_test1():
         time_parallel=end_gpu - start_gpu
         return 0,time_serial,time_parallel, "MNIST"
 
-def run_test2():
-    model,data = enterprise()  
 
-    data_train, data_test = split_data_deterministically(data, ratio=0.9)
+
+def run_test2():
+    model, data = nepal_earthquake() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
+
+    data_train, data_test = split_data_deterministically(data, ratio=0.7)
 
 
     #sposta dati su gpu
     start = timer()
-    model.fit(data_train, ratio=0.05)
+    model.fit(data_train, ratio=0.2)
     end = timer()
-
     h_cpu=model.get_asp(simple=True)
+
     Y = [d[-1] for d in data_test]
     Y_test_hat = model.predict(data_test)
     accuracy_cpu = get_scores(Y_test_hat, data_test)
@@ -90,18 +92,18 @@ def run_test2():
 
 
 
-
     del(model)
     del(data)
     del(data_train)
     del(data_test)
 
-    model,data = enterprise()  
 
-    data_train, data_test = split_data_deterministically(data, ratio=0.9)
+    model, data = nepal_earthquake() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
+
+    data_train, data_test = split_data_deterministically(data, ratio=0.7)
 
     start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.05)
+    model.fitGPU(data_train, ratio=0.2)
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
@@ -122,17 +124,18 @@ def run_test2():
             print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
             time_serial=end - start
             time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "MINITEST"
+            return 0,time_serial,time_parallel,"earthquake"
         else:
             print(f"{RED}test failed{RESET}")
             print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            return 1,-1,-1, "MINITEST"
+            return 1,-1,-1,"earthquake"
     else:
         print(f"{GREEN}test passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
+
         time_serial=end - start
         time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "MINITEST"
+        return 0,time_serial,time_parallel, "earthquake"
 
 def run_test3():
     model, data = diabetes() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
@@ -529,13 +532,13 @@ def run_test8():
 
 def run_test9():
 
-    model, data = swat() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.9)
+    model, data = crops() #16 mine 20 a 0.2 ratio 
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
 
 
     #sposta dati su gpu
     start = timer()
-    model.fit(data_train, ratio=0.05)
+    model.fit(data_train, ratio=0.3)
     end = timer()
 
 
@@ -555,13 +558,13 @@ def run_test9():
     del(data_train)
     del(data_test)
     
-    model, data = swat() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.9)
+    model, data = crops() #16 mine 20 a 0.2 ratio 
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
 
 
 
     start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.05)
+    model.fitGPU(data_train, ratio=0.3)
     end_gpu = timer()
 
     h_gpu=model.get_asp(simple=True)
@@ -582,17 +585,17 @@ def run_test9():
             print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
             time_serial=end - start
             time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "swat"
+            return 0,time_serial,time_parallel, "crops"
         else:
-            print(f"{RED}test1 failed{RESET}")
-            return 1,-1,-1, "swat"
+            print(f"{RED}test failed{RESET}")
+            return 1,-1,-1, "crops"
     else:
         print(f"{GREEN}test passed{RESET}")
         print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
 
         time_serial=end - start
         time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "swat"
+        return 0,time_serial,time_parallel, "crops"
 
 def run_test10():
 
@@ -663,8 +666,6 @@ def run_test10():
 
 def compare_times():
     tests = [
-        #run_test2,
-        #run_test9,
         run_test8,
         run_test10,
         run_test7,
@@ -673,6 +674,8 @@ def compare_times():
         run_test6,
         run_test5,
         run_test1,
+        run_test9,
+        run_test2,
     ]
 
     errors = 0
@@ -840,7 +843,7 @@ def fast_check():
 
 def main():
     
-    #compare_times()
+    compare_times()
     fast_check()
 
 if __name__ == '__main__':

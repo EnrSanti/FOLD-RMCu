@@ -72,9 +72,11 @@ def encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mappin
         numeric_vals = [v for v in column_copy]
         unique_vals = set(numeric_vals)
         range_per_col[col]=len(unique_vals)
-
-        sorted_unique = sorted(unique_vals)
-
+        try:
+            sorted_unique = sorted(unique_vals)
+        except:
+            print(unique_vals)
+            print(col)
         mapping_direct = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
         reverse_map = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
         map_numeric[col]=mapping_direct
@@ -146,8 +148,9 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map, reverse_map_numeric):
     return obj
 
 
-#######################################               ##########################################
-#######################################  MAIN METHODS  #########################################
+#######################################                ##########################################
+#######################################  MAIN METHODS  ##########################################
+
 def foldrmGPU(data, ratio=0.5):
     ret = []
     # Accumulators for timings
@@ -319,7 +322,8 @@ def cover_(rule, embedded_data_original, i,categorical_cols):
 def cover_on_gpu(items_dev, embedded_data_original_dev, categorical_cols_dev,index_e_plus_dev,index_e_minus_dev,size_plus,size_minus,index_sizes_dev):
     
     #SI, TEMPORANEAMENTE SOLO CON 2 BLOCCHI, con più blocchi servono 2 kernel diversi lanciati uno dopo l'altro
-    update_e_plus_min_dev[2,32](index_sizes_dev,items_dev, embedded_data_original_dev, categorical_cols_dev,index_e_plus_dev,size_plus,index_e_minus_dev,size_minus)
+    update_e_plus_min_dev[1,32](index_sizes_dev,items_dev, embedded_data_original_dev, categorical_cols_dev,index_e_minus_dev,size_minus,1)
+    update_e_plus_min_dev[1,32](index_sizes_dev,items_dev, embedded_data_original_dev, categorical_cols_dev,index_e_plus_dev,size_plus,0)
 
     host_counts = index_sizes_dev.copy_to_host()
 
@@ -944,60 +948,34 @@ def evaluate_dev(items, dataset_example, categorical_cols):
 
     return 1
 
-#molto temporanamente solo con due blocchi, con più blocchi servono 2 lanci di kernel diversi
 @cuda.jit
-def update_e_plus_min_dev(index_sizes,items, embedded_data_original, categorical_cols,index_plus,len_index_plus, index_minus,len_index_minus):
+def update_e_plus_min_dev(index_sizes,items, embedded_data_original, categorical_cols,index,len_index,pos):
     #molto temporanamente solo con due blocchi, con più blocchi servono 2 lanci di kernel diversi    
-    tid = cuda.threadIdx.x
+    tid = cuda.grid(1)
     total_found = 0
-    if(cuda.blockIdx.x==0):
-        for chunk_start in range(0, len_index_plus, 32):
-            pos_in_list = chunk_start + tid
-            mask = 0xffffffff
-            active = pos_in_list < len_index_plus
-            active_mask = cuda.ballot_sync(mask, active)
-            # Load value or placeholder
-            remove = -1
-            i=-1
-            if active:
-                remove=0
-                i=index_plus[pos_in_list]
-                covered=evaluate_dev(items,embedded_data_original[i],categorical_cols)
-                if(not covered):
-                    remove=1
-            ballot = cuda.ballot_sync(active_mask, remove==0)
-            lower_mask = (1 << tid) - 1
-            dest_idx = total_found + cuda.popc(ballot & lower_mask)
-            cuda.syncwarp()
+    for chunk_start in range(0, len_index, 32):
+        pos_in_list = chunk_start + tid
+        mask = 0xffffffff
+        active = pos_in_list < len_index
+        active_mask = cuda.ballot_sync(mask, active)
+        # Load value or placeholder
+        remove = -1
+        i=-1
+        if active:
+            remove=0
+            i=index[pos_in_list]
+            covered=evaluate_dev(items,embedded_data_original[i],categorical_cols)
+            if(not covered):
+                remove=1
+        ballot = cuda.ballot_sync(active_mask, remove==0)
+        lower_mask = (1 << tid) - 1
+        dest_idx = total_found + cuda.popc(ballot & lower_mask)
+        cuda.syncwarp()
 
-            if(remove==0): #keep
-                index_plus[dest_idx]=i
-            total_found += cuda.popc(ballot)
-            cuda.syncwarp()
-    else:
-        for chunk_start in range(0, len_index_minus, 32):
-            pos_in_list = chunk_start + tid
-            mask = 0xffffffff
-            active = pos_in_list < len_index_minus
-            active_mask = cuda.ballot_sync(mask, active)
-            # Load value or placeholder
-            remove = -1
-            i=-1
-            if active:
-                remove=0
-                i=index_minus[pos_in_list]
-                covered=evaluate_dev(items,embedded_data_original[i],categorical_cols)
-                if(not covered):
-                    remove=1
-            ballot = cuda.ballot_sync(active_mask, remove==0)
-            lower_mask = (1 << tid) - 1
-            dest_idx = total_found + cuda.popc(ballot & lower_mask)
-            cuda.syncwarp()
-
-            if(remove==0): #keep
-                index_minus[dest_idx]=i
-            total_found += cuda.popc(ballot)
-            cuda.syncwarp()
+        if(remove==0): #keep
+            index[dest_idx]=i
+        total_found += cuda.popc(ballot)
+        cuda.syncwarp()
     
-    if(tid%32==0):
-        index_sizes[cuda.blockIdx.x]=total_found
+    if(tid==0):
+        index_sizes[pos]=total_found
