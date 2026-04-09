@@ -663,9 +663,154 @@ def run_test10():
         time_serial=end - start
         time_parallel=end_gpu - start_gpu
         return 0,time_serial,time_parallel, "lifestyle"
+    
+
+
+def run_test11():
+
+    model, data = jannis() #16 mine 20 a 0.2 ratio 
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+
+
+    #sposta dati su gpu
+    start = timer()
+    model.fit(data_train, ratio=0.2)
+    end = timer()
+
+
+    h_cpu=model.get_asp(simple=True)
+    Y = [d[-1] for d in data_test]
+    Y_test_hat = model.predict(data_test)
+    accuracy_cpu = get_scores(Y_test_hat, data_test)
+    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
+    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
+    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+
+
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+    
+    model, data = jannis() #16 mine 20 a 0.2 ratio 
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+
+
+
+    start_gpu = timer()
+    model.fitGPU(data_train, ratio=0.2)
+    end_gpu = timer()
+
+    h_gpu=model.get_asp(simple=True)
+    Y = [d[-1] for d in data_test]
+    Y_test_hat = model.predict(data_test)
+    accuracy_gpu = get_scores(Y_test_hat, data_test)
+    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
+    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
+    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+    print("----------------------------------------------------------------")
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    RESET = "\033[0m"
+    YELLOW = "\033[33m"
+    if h_cpu != h_gpu:
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            time_serial=end - start
+            time_parallel=end_gpu - start_gpu
+            return 0,time_serial,time_parallel, "lifestyle"
+        else:
+            print(f"{RED}test1 failed{RESET}")
+            return 1,-1,-1, "lifestyle"
+    else:
+        print(f"{GREEN}test passed{RESET}")
+        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
+
+        time_serial=end - start
+        time_parallel=end_gpu - start_gpu
+        return 0,time_serial,time_parallel, "lifestyle"
+
+
+
+def run_test12():
+
+    model, data = MiniBooNE() #16 mine 20 a 0.2 ratio 
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+
+
+    #sposta dati su gpu
+    start = timer()
+    model.fit(data_train, ratio=0.2)
+    end = timer()
+
+
+    h_cpu=model.get_asp(simple=True)
+    Y = [d[-1] for d in data_test]
+    Y_test_hat = model.predict(data_test)
+    accuracy_cpu = get_scores(Y_test_hat, data_test)
+    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
+    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
+    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+
+
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+    
+    model, data = MiniBooNE() #16 mine 20 a 0.2 ratio 
+    data_train, data_test = split_data_deterministically(data, ratio=0.8)
+
+
+
+    start_gpu = timer()
+    model.fitGPU(data_train, ratio=0.2)
+    end_gpu = timer()
+
+    h_gpu=model.get_asp(simple=True)
+    Y = [d[-1] for d in data_test]
+    Y_test_hat = model.predict(data_test)
+    accuracy_gpu = get_scores(Y_test_hat, data_test)
+    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
+    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
+    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+    print("----------------------------------------------------------------")
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    RESET = "\033[0m"
+    YELLOW = "\033[33m"
+    if h_cpu != h_gpu:
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            time_serial=end - start
+            time_parallel=end_gpu - start_gpu
+            return 0,time_serial,time_parallel, "lifestyle"
+        else:
+            print(f"{RED}test1 failed{RESET}")
+            return 1,-1,-1, "lifestyle"
+    else:
+        print(f"{GREEN}test passed{RESET}")
+        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
+
+        time_serial=end - start
+        time_parallel=end_gpu - start_gpu
+        return 0,time_serial,time_parallel, "lifestyle"
+
+import threading
+import time
+from datetime import datetime
+import os
 
 def compare_times():
     tests = [
+        run_test11,
+        run_test12,
         run_test8,
         run_test10,
         run_test7,
@@ -678,38 +823,68 @@ def compare_times():
         run_test2,
     ]
 
+    n_runs = 5  # Numero di ripetizioni
     errors = 0
-    lock = threading.Lock()
-    serial_times=[-1]*len(tests)
-    parallel_times=[-1]*len(tests)
-    names=[""]*len(tests)
-    # Sequential execution
-    for idx, test in enumerate(tests):
-        try:
-            print(f"[Test {idx}] starting")
-            result = test()
-            result,time_serial,time_parallel, name = result
-            if result:  # test reported failure
-                errors += 1
-                serial_times[idx]=None
-                parallel_times[idx]=None
-            else:
-                serial_times[idx]=time_serial
-                parallel_times[idx]=time_parallel
-            names[idx]=name
-        except Exception as e:
-            import traceback
-            print(f"[Test {idx}] crashed:", e)
-            print(traceback.format_exc()) 
-            print("-" * 30)
-            errors += 1
 
-    # Final summary
+    serial_times_all = [[] for _ in tests]
+    parallel_times_all = [[] for _ in tests]
+    names = [""]*len(tests)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"benchmark_{timestamp}.txt"
+    
+    with open(filename, "w") as f:
+        f.write("Test,Run,Name,SerialTime,ParallelTime,Speedup\n")
+
+        for idx, test in enumerate(tests):
+            try:
+                for run_idx in range(n_runs):
+                    print(f"[Test {idx}] Run {run_idx+1} starting")
+                    result = test()
+                    result_flag, time_serial, time_parallel, name = result
+                    names[idx] = name
+
+                    if result_flag:  # test ha fallito
+                        errors += 1
+                        serial_times_all[idx].append(None)
+                        parallel_times_all[idx].append(None)
+                        f.write(f"{idx+1},{run_idx+1},{name},ERROR,ERROR,ERROR\n")
+                    else:
+                        serial_times_all[idx].append(time_serial)
+                        parallel_times_all[idx].append(time_parallel)
+                        speedup = time_serial / time_parallel if time_parallel else None
+                        f.write(f"{idx+1},{run_idx+1},{name},{time_serial},{time_parallel},{speedup}\n")
+            except Exception as e:
+                import traceback
+                print(f"[Test {idx}] crashed:", e)
+                print(traceback.format_exc())
+                print("-" * 30)
+                errors += 1
+
+    # Calcolo medie ignorando None
+    def mean_ignore_none(lst):
+        valid = [x for x in lst if x is not None]
+        return sum(valid)/len(valid) if valid else None
+
+    avg_serial = [mean_ignore_none(times) for times in serial_times_all]
+    avg_parallel = [mean_ignore_none(times) for times in parallel_times_all]
+    avg_speedup = [s/p if s is not None and p is not None else None 
+                    for s,p in zip(avg_serial, avg_parallel)]
+
+    # Stampa risultati medi
+    print("\n--- Averages ---")
+    for idx, name in enumerate(names):
+        print(f"{name}: Serial={avg_serial[idx]:.3f}, Parallel={avg_parallel[idx]:.3f}, Speedup={avg_speedup[idx]:.3f}")
+
+    # Plot finale
+    plot_test_results(names, avg_serial, avg_parallel)
+
+    # Summary finale
     if errors == 0:
         print("\033[92mALL TESTS PASSED\033[0m")
     else:
         print(f"\033[91m{errors} TESTS FAILED\033[0m")
-    plot_test_results(names,serial_times,parallel_times)
+    print(f"Results saved to {filename}")
 
 def plot_test_results(names, serial_times, parallel_times):
     # 1. Filter out tests that failed

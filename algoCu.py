@@ -72,11 +72,9 @@ def encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mappin
         numeric_vals = [v for v in column_copy]
         unique_vals = set(numeric_vals)
         range_per_col[col]=len(unique_vals)
-        try:
-            sorted_unique = sorted(unique_vals)
-        except:
-            print(unique_vals)
-            print(col)
+
+        sorted_unique = sorted(unique_vals)
+
         mapping_direct = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
         reverse_map = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
         map_numeric[col]=mapping_direct
@@ -948,6 +946,7 @@ def evaluate_dev(items, dataset_example, categorical_cols):
 
     return 1
 
+#molto temporanamente solo con due blocchi, con più blocchi servono 2 lanci di kernel diversi
 @cuda.jit
 def update_e_plus_min_dev(index_sizes,items, embedded_data_original, categorical_cols,index,len_index,pos):
     #molto temporanamente solo con due blocchi, con più blocchi servono 2 lanci di kernel diversi    

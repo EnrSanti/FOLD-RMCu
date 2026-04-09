@@ -3333,6 +3333,23 @@ def loan():
     print('\n% pendigits train dataset', np.shape(data_train), 'test', np.shape(data_test))
     return model, data_train, data_test
 
+def jannis():
+    attrs = ['V1','V2,''V3,''V4,''V5,''V6,''V7,''V8,''V9,''V10','V11','V12','V13','V14','V15','V16','V17','V18','V19','V20','V21','V22','V23','V24','V25','V26','V27','V28','V29','V30','V31','V32','V33','V34','V35','V36','V37','V38','V39','V40','V41','V42','V43','V44','V45','V46','V47','V48','V49','V50','V51','V52','V53','V54']
+    nums = attrs
+    model = Classifier(attrs=attrs, numeric=nums, label='class')
+    data = model.load_data('data/jannis_cleaned.csv')
+    print('\n% weight lifting dataset', np.shape(data))
+    return model, data
+
+def MiniBooNE():
+    attrs = ['ParticleID_0','ParticleID_1','ParticleID_2','ParticleID_3','ParticleID_4','ParticleID_5','ParticleID_6','ParticleID_7','ParticleID_8','ParticleID_9','ParticleID_10','ParticleID_11','ParticleID_12','ParticleID_13','ParticleID_14','ParticleID_15','ParticleID_16','ParticleID_17','ParticleID_18','ParticleID_19','ParticleID_20','ParticleID_21','ParticleID_22','ParticleID_23','ParticleID_24','ParticleID_25','ParticleID_26','ParticleID_27','ParticleID_28','ParticleID_29','ParticleID_30','ParticleID_31','ParticleID_32','ParticleID_33','ParticleID_34','ParticleID_35','ParticleID_36','ParticleID_37','ParticleID_38','ParticleID_39','ParticleID_40','ParticleID_41','ParticleID_42','ParticleID_43','ParticleID_44','ParticleID_45','ParticleID_46','ParticleID_47','ParticleID_48','ParticleID_49']
+    nums = attrs
+    model = Classifier(attrs=attrs, numeric=nums, label='signal')
+    data = model.load_data('data/MiniBooNE.csv')
+    print('\n% weight lifting dataset', np.shape(data))
+    return model, data
+
+
 def diabetes():
     attrs = ['HighBP',	
             'HighChol',	
