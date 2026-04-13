@@ -14,7 +14,7 @@ import ast
 #From the dataset (matrix) return a matrix of the same size with only integer values and a dictionary provinding a mapping (and reverse mapping) between the two matrices
 
 def embed_data_global(data):
-
+    timer_t = timer()
     num_cols = len(data[0])
     placeholder_numeric = [0]*num_cols
     categorical_cols = []
@@ -53,12 +53,15 @@ def embed_data_global(data):
 
     
     # Encode the data
+    timer2 = timer()
+    print(f"Time for global embedding 1: {timer2 - timer_t:.4f}s")
     encoded_data,placeholder_numeric, rev_map_numeric,range_per_col = encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mapping, categorical_cols,num_cols,numeric_cols,range_per_col)
-
+    timer3 = timer()
+    print(f"Time for global embedding 2: {timer3 - timer2:.4f}s")
     return encoded_data, mapping, categorical_cols, placeholder_numeric, rev_map_numeric,range_per_col
 
 def encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mapping, categorical_cols,num_cols,numeric_cols,range_per_col):
-    encoded = []
+
 
     # Find a safe placeholder for each numeric column
     map_numeric = [[]]*num_cols
@@ -83,18 +86,18 @@ def encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mappin
         placeholder_numeric[col] = max_val + 1
         max_values_array[col]=max_val
 
+    encoded = np.empty_like(data_np, dtype=np.int64)
 
-    for row in data:
-        new_row = list(row)
-        for col in range(len(row)):
-            val = new_row[col]
-            if col in categorical_cols:
-                new_row[col] = mapping[col][val]
-            else:
-                new_row[col] = map_numeric[col][val]
+    # categorical columns
+    for col in categorical_cols:
+        col_data = data_np[:, col]
+        encoded[:, col] = np.array([mapping[col][v] for v in col_data])
 
-        encoded.append(new_row)
-
+    # numeric columns
+    for col in numeric_cols:
+        col_data = data_np[:, col]
+        encoded[:, col] = np.array([map_numeric[col][float(v)] for v in col_data])
+        
     return encoded,placeholder_numeric, rev_map_numeric, range_per_col
 
 #######################################                ##########################################
@@ -164,6 +167,7 @@ def foldrmGPU(data, ratio=0.5):
     total_time = 0 
     learn_rule_loops = 0
 
+    begin_preprocess = timer()
     embedded_data,mapping,categorical_cols,fst_unused_num, rev_map_numeric,max_range_cols=embed_data_global(data)
 
 
@@ -197,13 +201,14 @@ def foldrmGPU(data, ratio=0.5):
 
     #print("categorical cols"+str(categorical_cols))
     #print("last col"+str(minus_1_col))
-    begin_preprocess = timer()
 
     
     cp.cuda.Stream.null.synchronize()
 
     end_preprocess = timer()
     overall_preprocess = end_preprocess - begin_preprocess
+
+
     #orignal_training_data=data
     original_data_indexes = list(range(len(data)))
     embedded_data_original=embedded_data
@@ -221,6 +226,7 @@ def foldrmGPU(data, ratio=0.5):
     vals_dev = cuda.device_array(max(max_range_cols)*num_blocks, dtype=np.int32)
     cats_dev = cuda.device_array(max(max_range_cols)*num_blocks, dtype=np.int32)
     index_sizes_dev = cuda.device_array(2, dtype=np.int32) #e+ e-
+    post_time=0
     while len(original_data_indexes) > 0:
         total_loops += 1
 
@@ -284,7 +290,11 @@ def foldrmGPU(data, ratio=0.5):
         # Append rule with selected literal
         #print("to print -> " + str(rule_to_print))
         rule = l, rule[1], rule[2], rule[3]
+        
+        begin_post = timer()
         rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, rev_map_numeric)
+        end_post = timer()
+        post_time = end_post - begin_post + post_time
         ret.append(rule)
         
         #print("rule -> "+str(rule))
@@ -310,6 +320,8 @@ def foldrmGPU(data, ratio=0.5):
     print(f"Total:       {total_time:.4f}s")
 
     print(f"Time preprocessing: {overall_preprocess:.4f}s")
+    
+    print(f"Time postprocessing: {post_time:.4f}s")
     return ret
 
 

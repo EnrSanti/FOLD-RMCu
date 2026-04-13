@@ -7,885 +7,262 @@ import threading
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
-
-#si, molto alla buona, ma per ora va bene, con più test serve il refactor
-
-def run_test1():
-    model,data_train, data_test = MNIST()  #c.a. 6 min e 30 a 0.2 di ratio
-
-    start = timer()
-    model.fit(data_train, ratio=0.5)
-    end = timer()
-
-    h_cpu=model.get_asp(simple=True)
-
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-    del(model)
-    del(data_train)
-    del(data_test)
-
-    model,data_train, data_test = MNIST()  #c.a. 6 min e 30 a 0.2 di ratio
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.5)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel,"MNIST"
-        else:
-            print(f"{RED}test1 failed{RESET}")
-            return 1,-1,-1,"MNIST"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "MNIST"
-
-
-
-def run_test2():
-    model, data = nepal_earthquake() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
-
-    data_train, data_test = split_data_deterministically(data, ratio=0.7)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.2)
-    end = timer()
-    h_cpu=model.get_asp(simple=True)
-
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-
-
-    model, data = nepal_earthquake() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
-
-    data_train, data_test = split_data_deterministically(data, ratio=0.7)
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel,"earthquake"
-        else:
-            print(f"{RED}test failed{RESET}")
-            print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            return 1,-1,-1,"earthquake"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "earthquake"
-
-def run_test3():
-    model, data = diabetes() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
-
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.25)
-    end = timer()
-    h_cpu=model.get_asp(simple=True)
-
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-
-
-    model, data = diabetes() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
-
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.25)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel,"diabetes"
-        else:
-            print(f"{RED}test failed{RESET}")
-            print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            return 1,-1,-1,"diabetes"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "diabetes"
-
-def run_test4():
-    model, data = weather() 
-    
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.25)
-    end = timer()
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-
-    model, data = weather() # 6 min a 0.1 di ratio 
-    
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-    
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.25)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "weather"
-        else:
-            print(f"{RED}test failed{RESET}")
-            print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            return 1,-1,-1, "weather"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "weather"
-
-def run_test6():
-    model, data = smoke_drink() # 6 min a 0.1 di ratio 
-    
-    data_train, data_test = split_data_deterministically(data, ratio=0.7)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.4)
-    end = timer()
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-
-    model, data = smoke_drink() # 6 min a 0.1 di ratio 
-    
-    data_train, data_test = split_data_deterministically(data, ratio=0.7)
-    
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.4)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "smoke_drink"
-        else:
-            print(f"{RED}test failed{RESET}")
-            print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
-            return 1,-1,-1, "smoke_drink"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "smoke_drink"
-
-def run_test5():
-
-    model, data = coverType() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.2)
-    end = timer()
-
-
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-    
-    model, data = coverType() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "coverType"
-        else:
-            print(f"{RED}test1 failed{RESET}")
-            return 1,-1,-1, "coverType"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "coverType"
-
-def run_test7():
-
-    model, data = sloan() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.9)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.3)
-    end = timer()
-
-
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-    
-    model, data = sloan() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.9)
-
-
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.3)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "sloan"
-        else:
-            print(f"{RED}test1 failed{RESET}")
-            return 1,-1,-1, "sloan"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "sloan"
-
-def run_test8():
-
-    model, data = human_activity() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.9)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.3)
-    end = timer()
-
-
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-    
-    model, data = human_activity() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.9)
-
-
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.3)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "human"
-        else:
-            print(f"{RED}test1 failed{RESET}")
-            return 1,-1,-1, "human"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "human"
-
-def run_test9():
-
-    model, data = crops() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.3)
-    end = timer()
-
-
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-    
-    model, data = crops() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.3)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "crops"
-        else:
-            print(f"{RED}test failed{RESET}")
-            return 1,-1,-1, "crops"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "crops"
-
-def run_test10():
-
-    model, data = lifestyle() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.2)
-    end = timer()
-
-
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-    
-    model, data = lifestyle() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "lifestyle"
-        else:
-            print(f"{RED}test1 failed{RESET}")
-            return 1,-1,-1, "lifestyle"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "lifestyle"
-    
-
-
-def run_test11():
-
-    model, data = jannis() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.2)
-    end = timer()
-
-
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-    
-    model, data = jannis() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "lifestyle"
-        else:
-            print(f"{RED}test1 failed{RESET}")
-            return 1,-1,-1, "lifestyle"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "lifestyle"
-
-
-
-def run_test12():
-
-    model, data = MiniBooNE() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-    #sposta dati su gpu
-    start = timer()
-    model.fit(data_train, ratio=0.2)
-    end = timer()
-
-
-    h_cpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_cpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-
-
-
-    del(model)
-    del(data)
-    del(data_train)
-    del(data_test)
-    
-    model, data = MiniBooNE() #16 mine 20 a 0.2 ratio 
-    data_train, data_test = split_data_deterministically(data, ratio=0.8)
-
-
-
-    start_gpu = timer()
-    model.fitGPU(data_train, ratio=0.2)
-    end_gpu = timer()
-
-    h_gpu=model.get_asp(simple=True)
-    Y = [d[-1] for d in data_test]
-    Y_test_hat = model.predict(data_test)
-    accuracy_gpu = get_scores(Y_test_hat, data_test)
-    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
-    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
-    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
-
-    print("----------------------------------------------------------------")
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    YELLOW = "\033[33m"
-    if h_cpu != h_gpu:
-        if(accuracy_cpu == accuracy_gpu):
-            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
-            time_serial=end - start
-            time_parallel=end_gpu - start_gpu
-            return 0,time_serial,time_parallel, "lifestyle"
-        else:
-            print(f"{RED}test1 failed{RESET}")
-            return 1,-1,-1, "lifestyle"
-    else:
-        print(f"{GREEN}test passed{RESET}")
-        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
-
-        time_serial=end - start
-        time_parallel=end_gpu - start_gpu
-        return 0,time_serial,time_parallel, "lifestyle"
-
-import threading
-import time
-from datetime import datetime
 import os
 
-def compare_times():
-    tests = [
-        run_test11,
-        run_test12,
-        run_test8,
-        run_test10,
-        run_test7,
-        run_test3,
-        run_test4,
-        run_test6,
-        run_test5,
-        run_test1,
-        run_test9,
-        run_test2,
-    ]
 
-    n_runs = 5  # Numero di ripetizioni
+
+
+def run_test_split(test_func,name,ratio):
+    model,data_train, data_test = test_func()  #c.a. 6 min e 30 a 0.2 di ratio
+    
+    start = timer()
+    model.fit(data_train, ratio=ratio)
+    end = timer()
+
+    h_cpu=model.get_asp(simple=True)
+
+    Y = [d[-1] for d in data_test]
+    Y_test_hat = model.predict(data_test)
+    accuracy_cpu = get_scores(Y_test_hat, data_test)
+    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
+    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
+    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+
+
+    del(model)
+    del(data_train)
+    del(data_test)
+
+    model,data_train, data_test = test_func()  #c.a. 6 min e 30 a 0.2 di ratio
+
+    start_gpu = timer()
+    model.fitGPU(data_train, ratio=ratio)
+    end_gpu = timer()
+
+
+    h_gpu=model.get_asp(simple=True)
+    Y = [d[-1] for d in data_test]
+    Y_test_hat = model.predict(data_test)
+    accuracy_gpu = get_scores(Y_test_hat, data_test)
+    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
+    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
+    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+    print("----------------------------------------------------------------")
+
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    RESET = "\033[0m"
+    YELLOW = "\033[33m"
+    if h_cpu != h_gpu:
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            time_serial=end - start
+            time_parallel=end_gpu - start_gpu
+            return 0,time_serial,time_parallel,name
+        else:
+            print(f"{RED}test1 failed{RESET}")
+            return 1,-1,-1,name
+    else:
+        print(f"{GREEN}test passed{RESET}")
+        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
+
+        time_serial=end - start
+        time_parallel=end_gpu - start_gpu
+        return 0,time_serial,time_parallel, name
+    
+def run_test_to_split_ds(test_func,name, ratio,ds_ratio):
+    model, data = test_func() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
+
+    data_train, data_test = split_data_deterministically(data, ratio=ds_ratio)
+
+
+    #sposta dati su gpu
+
+    start = timer()
+    model.fit(data_train, ratio=ratio)
+    end = timer()
+
+    h_cpu=model.get_asp(simple=True)
+    Y = [d[-1] for d in data_test]
+    Y_test_hat = model.predict(data_test)
+    accuracy_cpu = get_scores(Y_test_hat, data_test)
+    print('% acc', round(accuracy_cpu, 4), '# rules', len(model.crs))
+    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
+    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+
+
+    del(model)
+    del(data)
+    del(data_train)
+    del(data_test)
+
+
+    model, data = test_func() #11 sec a 0.5 o 10 min & 30 a 0.2 di ratio
+
+    data_train, data_test = split_data_deterministically(data, ratio=ds_ratio)
+
+    start_gpu = timer()
+    model.fitGPU(data_train, ratio=ratio)
+    end_gpu = timer()
+
+    h_gpu=model.get_asp(simple=True)
+    Y = [d[-1] for d in data_test]
+    Y_test_hat = model.predict(data_test)
+    accuracy_gpu = get_scores(Y_test_hat, data_test)
+    print('% acc', round(accuracy_gpu, 4), '# rules', len(model.crs))
+    acc, p, r, f1 = scores(Y_test_hat, Y, weighted=True)
+    print('% acc', round(acc, 4), 'macro p r f1', round(p, 4), round(r, 4), round(f1, 4), '# rules', len(model.crs))
+
+    print("----------------------------------------------------------------")
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    RESET = "\033[0m"
+    YELLOW = "\033[33m"
+    if h_cpu != h_gpu:
+        if(accuracy_cpu == accuracy_gpu):
+            print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            time_serial=end - start
+            time_parallel=end_gpu - start_gpu
+            return 0,time_serial,time_parallel, name
+        else:
+            print(f"{RED}test failed{RESET}")
+            print("ACCURACIES ", accuracy_cpu, " vs ", accuracy_gpu)
+            return 1,-1,-1, name
+    else:
+        print(f"{GREEN}test passed{RESET}")
+        print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
+
+        time_serial=end - start
+        time_parallel=end_gpu - start_gpu
+        return 0,time_serial,time_parallel, name
+
+datasets_split = {
+    "mnist": (MNIST,"MNIST",0.5)}
+datasets_to_split = {
+    "human_activity": (human_activity,"human_activity",0.9,0.3)}
+    
+
+
+def compare_times():
+
+    benchmark_tasks = []
+
+    # --- no split datasets ---
+    for name, (fn, pretty_name, ratio) in datasets_split.items():
+        benchmark_tasks.append(
+            (run_test_split, fn, pretty_name, ratio, None)
+        )
+
+    # --- split datasets ---
+    for name, (fn, pretty_name, ds_ratio, fit_ratio) in datasets_to_split.items():
+        benchmark_tasks.append(
+            (run_test_to_split_ds, fn, pretty_name, fit_ratio,ds_ratio)
+        )
+
+    n_runs = 5
     errors = 0
 
-    serial_times_all = [[] for _ in tests]
-    parallel_times_all = [[] for _ in tests]
-    names = [""]*len(tests)
+    serial_times_all = [[] for _ in benchmark_tasks]
+    parallel_times_all = [[] for _ in benchmark_tasks]
+    names = [""] * len(benchmark_tasks)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"benchmark_{timestamp}.txt"
-    
-    with open(filename, "w") as f:
+
+    all_filename = f"benchmark_all_{timestamp}.txt"
+
+    with open(all_filename, "w") as f:
         f.write("Test,Run,Name,SerialTime,ParallelTime,Speedup\n")
 
-        for idx, test in enumerate(tests):
+        for idx, task in enumerate(benchmark_tasks):
+            runner = task[0]
+            fn = task[1]
+            name = task[2]
+            ratio1 = task[3]
+            ratio2 = task[4]
+
             try:
                 for run_idx in range(n_runs):
-                    print(f"[Test {idx}] Run {run_idx+1} starting")
-                    result = test()
-                    result_flag, time_serial, time_parallel, name = result
+                    print(f"[Test {name}] Run {run_idx+1}")
+
+                    # ---- dispatch correctly ----
+                    if ratio2 is None:
+                        result_flag, t_ser, t_par, name = runner(fn, name, ratio1)
+                    else:
+                        result_flag, t_ser, t_par, name = runner(fn, name, ratio1, ratio2)
+
                     names[idx] = name
 
-                    if result_flag:  # test ha fallito
+                    if result_flag:
                         errors += 1
                         serial_times_all[idx].append(None)
                         parallel_times_all[idx].append(None)
-                        f.write(f"{idx+1},{run_idx+1},{name},ERROR,ERROR,ERROR\n")
+                        f.write(f"{name},{run_idx+1},ERROR,ERROR,ERROR\n")
                     else:
-                        serial_times_all[idx].append(time_serial)
-                        parallel_times_all[idx].append(time_parallel)
-                        speedup = time_serial / time_parallel if time_parallel else None
-                        f.write(f"{idx+1},{run_idx+1},{name},{time_serial},{time_parallel},{speedup}\n")
+                        serial_times_all[idx].append(t_ser)
+                        parallel_times_all[idx].append(t_par)
+
+                        speedup = t_ser / t_par if t_par else None
+                        f.write(f"{name},{run_idx+1},{name},{t_ser},{t_par},{speedup}\n")
+
             except Exception as e:
                 import traceback
-                print(f"[Test {idx}] crashed:", e)
+                print(f"[Test {name}] crashed:", e)
                 print(traceback.format_exc())
-                print("-" * 30)
                 errors += 1
 
-    # Calcolo medie ignorando None
+    # ---------- stats ----------
     def mean_ignore_none(lst):
         valid = [x for x in lst if x is not None]
-        return sum(valid)/len(valid) if valid else None
+        return sum(valid) / len(valid) if valid else None
 
-    avg_serial = [mean_ignore_none(times) for times in serial_times_all]
-    avg_parallel = [mean_ignore_none(times) for times in parallel_times_all]
-    avg_speedup = [s/p if s is not None and p is not None else None 
-                    for s,p in zip(avg_serial, avg_parallel)]
+    avg_serial = [mean_ignore_none(x) for x in serial_times_all]
+    avg_parallel = [mean_ignore_none(x) for x in parallel_times_all]
 
-    # Stampa risultati medi
-    print("\n--- Averages ---")
-    for idx, name in enumerate(names):
-        print(f"{name}: Serial={avg_serial[idx]:.3f}, Parallel={avg_parallel[idx]:.3f}, Speedup={avg_speedup[idx]:.3f}")
+    avg_speedup = [
+        (s / p if s is not None and p is not None else None)
+        for s, p in zip(avg_serial, avg_parallel)
+    ]
 
-    # Plot finale
-    plot_test_results(names, avg_serial, avg_parallel)
+    long_idx = [i for i, t in enumerate(avg_serial) if t and t > 300]
+    short_idx = [i for i, t in enumerate(avg_serial) if t and t <= 300]
 
-    # Summary finale
+    def save_and_plot(group_idx, group_name):
+        if not group_idx:
+            print(f"No {group_name} tests to plot.")
+            return
+
+        fname = f"benchmark_{group_name}_{timestamp}.txt"
+
+        with open(fname, "w") as f:
+            f.write("Test,AvgSerial,AvgParallel,AvgSpeedup\n")
+            for i in group_idx:
+                f.write(f"{names[i]},{avg_serial[i]},{avg_parallel[i]},{avg_speedup[i]}\n")
+
+        plot_filename = f"benchmark_{group_name}_{timestamp}.png"
+
+        labels = [names[i] for i in group_idx]
+        serial_vals = [avg_serial[i] for i in group_idx]
+        parallel_vals = [avg_parallel[i] for i in group_idx]
+
+
+        plot_test_results(labels,serial_vals,parallel_vals)
+
+        print(f"{group_name} saved → {plot_filename}")
+
+    save_and_plot(long_idx, "long")
+    save_and_plot(short_idx, "short")
+
     if errors == 0:
         print("\033[92mALL TESTS PASSED\033[0m")
     else:
         print(f"\033[91m{errors} TESTS FAILED\033[0m")
-    print(f"Results saved to {filename}")
 
+    print(f"All raw results saved to {all_filename}")
+
+    
 def plot_test_results(names, serial_times, parallel_times):
     # 1. Filter out tests that failed
     plot_data = [
