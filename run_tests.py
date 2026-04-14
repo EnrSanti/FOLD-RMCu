@@ -56,8 +56,12 @@ def run_test_split(test_func,name,ratio):
     RESET = "\033[0m"
     YELLOW = "\033[33m"
     if h_cpu != h_gpu:
+        print(h_cpu)
+        print("-----")
+        print(h_gpu)
         if(accuracy_cpu == accuracy_gpu):
             print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
             time_serial=end - start
             time_parallel=end_gpu - start_gpu
             return 0,time_serial,time_parallel,name
@@ -122,8 +126,12 @@ def run_test_to_split_ds(test_func,name, ratio,ds_ratio):
     RESET = "\033[0m"
     YELLOW = "\033[33m"
     if h_cpu != h_gpu:
+        print(h_cpu)
+        print("-----")
+        print(h_gpu)
         if(accuracy_cpu == accuracy_gpu):
             print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+            print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
             time_serial=end - start
             time_parallel=end_gpu - start_gpu
             return 0,time_serial,time_parallel, name
@@ -175,7 +183,7 @@ def compare_times():
             (run_test_split, fn, pretty_name, ratio, None)
         )
 
-    n_runs = 1
+    n_runs = 5
     errors = 0
 
     serial_times_all = [[] for _ in benchmark_tasks]
@@ -388,7 +396,8 @@ def fast_check():
         YELLOW = "\033[33m"
         if h_cpu != h_gpu:
             if(accuracy_cpu == accuracy_gpu):
-                print(f"{YELLOW}OK WORKS, != hyp = accuracy{RESET}")
+                print(f"{YELLOW}OK WORKS (!= hyp = accuracy){RESET}")
+                print(f"Serial: {timedelta(seconds=end - start)} Parallel: {timedelta(seconds=end_gpu - start_gpu)}")
             else:
                 print(f"{RED}test1 failed{RESET}")
                 print(h_cpu+"\n-----------------------------------\n"+h_gpu)

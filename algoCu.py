@@ -15,105 +15,89 @@ import ast
 
 def embed_data_global(data):
     timer_t = timer()
-    num_cols = len(data[0])
-    placeholder_numeric = [0]*num_cols
+
     categorical_cols = []
-    range_per_col=[0]*num_cols
+    
 
     # Detect categorical columns
-    for col in range(num_cols):
+    for col in range(len(data[0])):
         val = data[0][col]
         if isinstance(val, str):
             categorical_cols.append(col)
 
     # Collect all unique values across all categorical columns
-  
-    mapping={}
     data_np = np.array(data)
-    for col in categorical_cols:
-        # np.unique restituisce già i valori ordinati
-        uniques = np.unique(data_np[:, col])
-        
-        mapping[col] = {val: i for i, val in enumerate(uniques)}
-        
-        n_uniques = len(uniques)
-        range_per_col[col] = n_uniques
-        placeholder_numeric[col] = n_uniques + 1
-
-    
-    minus_1_col=len(data[0])-1
-    if(minus_1_col in categorical_cols):
-        mapping[-1]=mapping[minus_1_col]
-    # Create a global mapping: str -> unique int
-    #print(global_uniques)
-    #print(categorical_cols)
-
-    # Detect numeric columns
-    numeric_cols = [col for col in range(num_cols) if col not in categorical_cols]
-
+     
     
     # Encode the data
     timer2 = timer()
     print(f"Time for global embedding 1: {timer2 - timer_t:.4f}s")
-    encoded_data,placeholder_numeric, rev_map_numeric,range_per_col = encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mapping, categorical_cols,num_cols,numeric_cols,range_per_col)
+    encoded_data,placeholder_numeric, rev_map,range_per_col = encode_data_global_with_placeholder(data_np, categorical_cols)
+    rev_map[-1]=rev_map[len(data[0])-1]
     timer3 = timer()
     print(f"Time for global embedding 2: {timer3 - timer2:.4f}s")
-    return encoded_data, mapping, categorical_cols, placeholder_numeric, rev_map_numeric,range_per_col
+    return encoded_data, categorical_cols, placeholder_numeric, rev_map,range_per_col
 
-def encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mapping, categorical_cols,num_cols,numeric_cols,range_per_col):
+def encode_data_global_with_placeholder(data_np, categorical_cols):
+    n_rows, n_cols = data_np.shape
+    encoded = np.empty((n_rows, n_cols), dtype=np.int64)
 
+    rev_map = {}
+    max_values_array = {}
 
-    # Find a safe placeholder for each numeric column
-    map_numeric = [[]]*num_cols
-    rev_map_numeric = [[]]*num_cols
-    max_values_array=[0]*num_cols
-    
-    timer_part1 = timer()
+    placeholder_numeric = [0]*n_cols
+    range_per_col=[0]*n_cols
 
-    #print("cols float" + str(cols_float))
+    numeric_cols = [col for col in range(n_cols) if col not in categorical_cols]
+
+    # ---------------------------
+    # NUMERIC COLUMNS
+    # ---------------------------
     for col in numeric_cols:
-        column_copy = [row[col] for row in data]
-        numeric_vals = [v for v in column_copy]
-        unique_vals = set(numeric_vals)
-        range_per_col[col]=len(unique_vals)
 
-        sorted_unique = sorted(unique_vals)
 
-        mapping_direct = {val: idx for idx, val in enumerate(sorted_unique)} #float -> int
-        reverse_map = {idx: val for idx, val in enumerate(sorted_unique)} #int -> float
-        map_numeric[col]=mapping_direct
-        rev_map_numeric[col]=reverse_map
-        max_val=max(reverse_map)
-        placeholder_numeric[col] = max_val + 1
-        max_values_array[col]=max_val
+        col_data = data_np[:, col].astype(np.float64)
 
-    encoded = np.empty_like(data_np, dtype=np.int64)
+        # C-speed unique + inverse mapping
+        uniques, inv = np.unique(col_data, return_inverse=True)
 
-    timer_part2 = timer()
-    print(f"encoding 2, part 1 took:{timer_part1 - timer_part2:.4f}s")
+        encoded[:, col] = inv
 
-    timer_part1 = timer()
-    # categorical columns
+        rev_map[col] = uniques
+        range_per_col[col] = len(uniques)
+
+        # placeholder = max index + 1
+        placeholder_numeric[col] = len(uniques)
+
+        max_values_array[col] = len(uniques) - 1
+
+    # ---------------------------
+    # CATEGORICAL COLUMNS
+    # ---------------------------
     for col in categorical_cols:
         col_data = data_np[:, col]
-        encoded[:, col] = np.array([mapping[col][v] for v in col_data])
 
-    # numeric columns
-    for col in numeric_cols:
-        col_data = data_np[:, col]
-        encoded[:, col] = np.array([map_numeric[col][float(v)] for v in col_data])
-    
-    timer_part2 = timer()
-    print(f"encoding 2, part 1 took:{timer_part1 - timer_part2:.4f}s")
-    
-    return encoded,placeholder_numeric, rev_map_numeric, range_per_col
+        # string/object safe encoding
+        uniques, inv = np.unique(col_data, return_inverse=True)
+        rev_map[col] = uniques
+        encoded[:, col] = inv
+
+        # build mapping only once (for interpretability)
+       
+        range_per_col[col] = len(uniques)
+
+        placeholder_numeric[col] = len(uniques)
+
+        max_values_array[col] = len(uniques) - 1
+
+    return encoded, placeholder_numeric, rev_map, range_per_col
 
 #######################################                ##########################################
 ####################################### POSTPROCESSING ##########################################
 
 #From the learned rules in the hypotesis i translate back the int values back to strings and floats
 
-def remap_to_cat_rule(obj, categorical_cols, reverse_map, reverse_map_numeric):
+def remap_to_cat_rule(obj, categorical_cols, reverse_map):
     
     #print("ramapping on obj" + str(obj))
     # Case 1: literal (INT, OP, VALUE)
@@ -128,10 +112,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map, reverse_map_numeric):
     ):
         col, op, val = obj
         #print("base canse \n")
-        if col in categorical_cols:
-            val = reverse_map[col][val]
-        else:
-            val=reverse_map_numeric[col][val]
+        val = reverse_map[col][val]
         
         m_op=MAPPED_OPS[op]
         return (col, m_op, val)
@@ -140,7 +121,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map, reverse_map_numeric):
     if isinstance(obj, tuple):
         #print("TUPLE calling it on \n", [x for x in obj])
         return tuple(
-            remap_to_cat_rule(x, categorical_cols, reverse_map,reverse_map_numeric)
+            remap_to_cat_rule(x, categorical_cols, reverse_map)
             for x in obj
         )
 
@@ -149,7 +130,7 @@ def remap_to_cat_rule(obj, categorical_cols, reverse_map, reverse_map_numeric):
         
         #print("TUPLE calling it on \n", [x for x in obj])
         return [
-            remap_to_cat_rule(x, categorical_cols, reverse_map, reverse_map_numeric)
+            remap_to_cat_rule(x, categorical_cols, reverse_map)
             for x in obj
         ]
 
@@ -176,14 +157,12 @@ def foldrmGPU(data, ratio=0.5):
     learn_rule_loops = 0
 
     begin_preprocess = timer()
-    embedded_data,mapping,categorical_cols,fst_unused_num, rev_map_numeric,max_range_cols=embed_data_global(data)
-
-
+    embedded_data,categorical_cols,fst_unused_num, rev_map,max_range_cols=embed_data_global(data)
+    
     #print(mapping) col & str -> int (0,1.. n)
     #i just need to keep track of the size of mapping (n) and a list of strings
     #reverse_map = {v: k for k, v in mapping.items()}
 
-    reverse_map = {}
 
 
 
@@ -202,10 +181,6 @@ def foldrmGPU(data, ratio=0.5):
     categorical_mask_dev = cuda.to_device(np.array(categorical_mask, dtype=np.int32))
     
     
-    for key, value in mapping.items():
-        reverse_map[key] = {}
-        for key_, value_ in value.items():
-            reverse_map[key][value_] = key_ #array of strings
 
     #print("categorical cols"+str(categorical_cols))
     #print("last col"+str(minus_1_col))
@@ -300,7 +275,7 @@ def foldrmGPU(data, ratio=0.5):
         rule = l, rule[1], rule[2], rule[3]
         
         begin_post = timer()
-        rule=remap_to_cat_rule((rule), categorical_cols, reverse_map, rev_map_numeric)
+        rule=remap_to_cat_rule((rule), categorical_cols, rev_map)
         end_post = timer()
         post_time = end_post - begin_post + post_time
         ret.append(rule)
