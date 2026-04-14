@@ -140,9 +140,20 @@ def run_test_to_split_ds(test_func,name, ratio,ds_ratio):
         return 0,time_serial,time_parallel, name
 
 datasets_split = {
-    "mnist": (MNIST,"MNIST",0.5)}
+    "MNIST": (MNIST,"MNIST",0.5)}
 datasets_to_split = {
-    "human_activity": (human_activity,"human_activity",0.9,0.3)}
+    "jannis": (jannis,"jannis",0.8,0.2),
+    "MiniBooNE": (MiniBooNE,"MiniBooNE",0.8,0.2),
+    "human_activity": (human_activity,"human_activity",0.9,0.3),
+    "lifestyle": (lifestyle,"lifestyle",0.8,0.2),
+    "sloan": (sloan,"sloan",0.9,0.3),
+    "diabetes": (diabetes,"diabetes",0.8,0.25),
+    "smoke_drink": (smoke_drink,"smoke_drink",0.7,0.4),
+    "covertype": (coverType,"covertype",0.8,0.2),
+    "crops": (crops,"crops",0.8,0.3),
+    "nepal_earthquake": (nepal_earthquake,"nepal_earthquake",0.7,0.3),
+    "weather": (weather,"weather",0.8,0.25)
+    }
     
 
 
@@ -150,16 +161,18 @@ def compare_times():
 
     benchmark_tasks = []
 
-    # --- no split datasets ---
-    for name, (fn, pretty_name, ratio) in datasets_split.items():
-        benchmark_tasks.append(
-            (run_test_split, fn, pretty_name, ratio, None)
-        )
+    
 
     # --- split datasets ---
     for name, (fn, pretty_name, ds_ratio, fit_ratio) in datasets_to_split.items():
         benchmark_tasks.append(
             (run_test_to_split_ds, fn, pretty_name, fit_ratio,ds_ratio)
+        )
+
+    # --- no split datasets ---
+    for name, (fn, pretty_name, ratio) in datasets_split.items():
+        benchmark_tasks.append(
+            (run_test_split, fn, pretty_name, ratio, None)
         )
 
     n_runs = 5
