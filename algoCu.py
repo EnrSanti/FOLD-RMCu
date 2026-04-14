@@ -67,7 +67,8 @@ def encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mappin
     map_numeric = [[]]*num_cols
     rev_map_numeric = [[]]*num_cols
     max_values_array=[0]*num_cols
-
+    
+    timer_part1 = timer()
 
     #print("cols float" + str(cols_float))
     for col in numeric_cols:
@@ -88,6 +89,10 @@ def encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mappin
 
     encoded = np.empty_like(data_np, dtype=np.int64)
 
+    timer_part2 = timer()
+    print(f"encoding 2, part 1 took:{timer_part1 - timer_part2:.4f}s")
+
+    timer_part1 = timer()
     # categorical columns
     for col in categorical_cols:
         col_data = data_np[:, col]
@@ -97,7 +102,10 @@ def encode_data_global_with_placeholder(data,data_np,placeholder_numeric, mappin
     for col in numeric_cols:
         col_data = data_np[:, col]
         encoded[:, col] = np.array([map_numeric[col][float(v)] for v in col_data])
-        
+    
+    timer_part2 = timer()
+    print(f"encoding 2, part 1 took:{timer_part1 - timer_part2:.4f}s")
+    
     return encoded,placeholder_numeric, rev_map_numeric, range_per_col
 
 #######################################                ##########################################
@@ -332,9 +340,7 @@ def cover_(rule, embedded_data_original, i,categorical_cols):
 def cover_on_gpu(items_dev, embedded_data_original_dev, categorical_cols_dev,index_e_plus_dev,index_e_minus_dev,size_plus,size_minus,index_sizes_dev):
     
     #SI, TEMPORANEAMENTE SOLO CON 2 BLOCCHI, con più blocchi servono 2 kernel diversi lanciati uno dopo l'altro
-    update_e_plus_min_dev[1,32](index_sizes_dev,items_dev, embedded_data_original_dev, categorical_cols_dev,index_e_minus_dev,size_minus,1)
-    update_e_plus_min_dev[1,32](index_sizes_dev,items_dev, embedded_data_original_dev, categorical_cols_dev,index_e_plus_dev,size_plus,0)
-
+    update_e_plus_min_dev[2,32](index_sizes_dev,items_dev, embedded_data_original_dev, categorical_cols_dev,index_e_plus_dev,size_plus,index_e_minus_dev,size_minus)
     host_counts = index_sizes_dev.copy_to_host()
 
     size_plus = int(host_counts[0])
@@ -960,33 +966,58 @@ def evaluate_dev(items, dataset_example, categorical_cols):
 
 #molto temporanamente solo con due blocchi, con più blocchi servono 2 lanci di kernel diversi
 @cuda.jit
-def update_e_plus_min_dev(index_sizes,items, embedded_data_original, categorical_cols,index,len_index,pos):
+def update_e_plus_min_dev(index_sizes,items, embedded_data_original, categorical_cols,index_pos,len_index_pos,index_neg,len_index_neg):
     #molto temporanamente solo con due blocchi, con più blocchi servono 2 lanci di kernel diversi    
-    tid = cuda.grid(1)
+    tid = cuda.threadIdx.x
+    block_id = cuda.blockIdx.x
     total_found = 0
-    for chunk_start in range(0, len_index, 32):
-        pos_in_list = chunk_start + tid
-        mask = 0xffffffff
-        active = pos_in_list < len_index
-        active_mask = cuda.ballot_sync(mask, active)
-        # Load value or placeholder
-        remove = -1
-        i=-1
-        if active:
-            remove=0
-            i=index[pos_in_list]
-            covered=evaluate_dev(items,embedded_data_original[i],categorical_cols)
-            if(not covered):
-                remove=1
-        ballot = cuda.ballot_sync(active_mask, remove==0)
-        lower_mask = (1 << tid) - 1
-        dest_idx = total_found + cuda.popc(ballot & lower_mask)
-        cuda.syncwarp()
+    if(block_id==0):
+        for chunk_start in range(0, len_index_pos, 32):
+            pos_in_list = chunk_start + tid
+            mask = 0xffffffff
+            active = pos_in_list < len_index_pos
+            active_mask = cuda.ballot_sync(mask, active)
+            # Load value or placeholder
+            remove = -1
+            i=-1
+            if active:
+                remove=0
+                i=index_pos[pos_in_list]
+                covered=evaluate_dev(items,embedded_data_original[i],categorical_cols)
+                if(not covered):
+                    remove=1
+            ballot = cuda.ballot_sync(active_mask, remove==0)
+            lower_mask = (1 << tid) - 1
+            dest_idx = total_found + cuda.popc(ballot & lower_mask)
+            cuda.syncwarp()
 
-        if(remove==0): #keep
-            index[dest_idx]=i
-        total_found += cuda.popc(ballot)
-        cuda.syncwarp()
-    
+            if(remove==0): #keep
+                index_pos[dest_idx]=i
+            total_found += cuda.popc(ballot)
+            cuda.syncwarp()
+    else:
+        for chunk_start in range(0, len_index_neg, 32):
+            pos_in_list = chunk_start + tid
+            mask = 0xffffffff
+            active = pos_in_list < len_index_neg
+            active_mask = cuda.ballot_sync(mask, active)
+            # Load value or placeholder
+            remove = -1
+            i=-1
+            if active:
+                remove=0
+                i=index_neg[pos_in_list]
+                covered=evaluate_dev(items,embedded_data_original[i],categorical_cols)
+                if(not covered):
+                    remove=1
+            ballot = cuda.ballot_sync(active_mask, remove==0)
+            lower_mask = (1 << tid) - 1
+            dest_idx = total_found + cuda.popc(ballot & lower_mask)
+            cuda.syncwarp()
+
+            if(remove==0): #keep
+                index_neg[dest_idx]=i
+            total_found += cuda.popc(ballot)
+            cuda.syncwarp()
     if(tid==0):
-        index_sizes[pos]=total_found
+        index_sizes[block_id]=total_found

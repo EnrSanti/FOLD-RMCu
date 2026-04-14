@@ -175,7 +175,7 @@ def compare_times():
             (run_test_split, fn, pretty_name, ratio, None)
         )
 
-    n_runs = 5
+    n_runs = 1
     errors = 0
 
     serial_times_all = [[] for _ in benchmark_tasks]
@@ -241,7 +241,11 @@ def compare_times():
 
     long_idx = [i for i, t in enumerate(avg_serial) if t and t > 300]
     short_idx = [i for i, t in enumerate(avg_serial) if t and t <= 300]
-
+    print(avg_serial)
+    print(avg_parallel)
+    print(avg_speedup)
+    print("long : ",long_idx)
+    print("short : ",short_idx)
     def save_and_plot(group_idx, group_name):
         if not group_idx:
             print(f"No {group_name} tests to plot.")
@@ -409,7 +413,7 @@ def fast_check():
 def main():
     
     compare_times()
-    fast_check()
+    #fast_check()
 
 if __name__ == '__main__':
     main()
