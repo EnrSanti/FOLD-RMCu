@@ -1,2 +1,7 @@
-debug.txt
-2.txt
+# Ignore all text logs
+*.txt
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+old/
